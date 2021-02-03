@@ -15,6 +15,9 @@ class _HomeMockState extends State<HomeMock> {
         centerTitle: true,
       ),
       body: Center(
+
+
+
         child: Text('Hello'),
       ),
     );
