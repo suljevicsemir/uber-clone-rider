@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class HomeMock extends StatefulWidget {
   @override
@@ -6,6 +8,9 @@ class HomeMock extends StatefulWidget {
 }
 
 class _HomeMockState extends State<HomeMock> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FacebookAuth facebookAuth = FacebookAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
