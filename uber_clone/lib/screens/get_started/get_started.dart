@@ -17,12 +17,9 @@ class _GetStartedState extends State<GetStarted> {
   @override
   void initState()  {
     super.initState();
-    //getCountries();
+
   }
 
-  Future<void> getCountries() async {
-     await provider.getCountries();
-  }
 
 
 

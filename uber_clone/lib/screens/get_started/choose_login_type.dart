@@ -7,6 +7,11 @@ class LoginTypePicker extends StatefulWidget {
 }
 
 class _LoginTypePickerState extends State<LoginTypePicker> {
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,6 +22,7 @@ class _LoginTypePickerState extends State<LoginTypePicker> {
             children: [
               Text('Enter your mobile number'),
               Row(
+
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Container(
@@ -59,5 +65,11 @@ class _LoginTypePickerState extends State<LoginTypePicker> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
   }
 }
