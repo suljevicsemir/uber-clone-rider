@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:uber_clone/mock_home.dart';
+import 'package:uber_clone/screens/get_started/get_started.dart';
 
 void main()  async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -9,12 +9,11 @@ void main()  async{
 }
 
 class MyApp extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomeMock(),
+      debugShowCheckedModeBanner: false,
+      home: GetStarted()
     );
   }
 }
