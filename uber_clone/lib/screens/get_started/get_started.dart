@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
+import 'package:uber_clone/screens/get_started/choose_login_type.dart';
+import 'package:uber_clone/services/secure_storage.dart';
 
 class GetStarted extends StatefulWidget {
   @override
@@ -9,7 +11,18 @@ class GetStarted extends StatefulWidget {
 
 class _GetStartedState extends State<GetStarted> {
 
+  CallNumbersProvider provider = CallNumbersProvider();
 
+
+  @override
+  void initState()  {
+    super.initState();
+    //getCountries();
+  }
+
+  Future<void> getCountries() async {
+     await provider.getCountries();
+  }
 
 
 
@@ -35,7 +48,9 @@ class _GetStartedState extends State<GetStarted> {
                   Text('Move with Safety', style: TextStyle(color: Colors.white, fontSize: 30),),
                   Spacer(),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginTypePicker()));
+                    },
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                         padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(top: 8, bottom: 8))
@@ -60,4 +75,6 @@ class _GetStartedState extends State<GetStarted> {
       ),
     );
   }
+
+
 }

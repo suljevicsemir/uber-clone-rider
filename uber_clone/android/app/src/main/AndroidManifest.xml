@@ -2,7 +2,6 @@
     package="com.semirsuljevic.uber_clone">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-
         android:label="uber_clone"
         android:icon="@mipmap/ic_launcher">
         <activity
