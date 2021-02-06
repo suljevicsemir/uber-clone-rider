@@ -17,11 +17,7 @@ class _GetStartedState extends State<GetStarted> {
   @override
   void initState()  {
     super.initState();
-
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -37,21 +33,26 @@ class _GetStartedState extends State<GetStarted> {
             color: const Color(0xff286ef0),
               child: Column(
                 children: [
-                  Spacer(),
-                  Text('Uber', style: TextStyle(color: Colors.white, fontSize: 30),),
-                  Spacer(),
-                  Image.asset('assets/images/driver_rider_mask.png', height: 400,),
-                  Spacer(),
-                  Text('Move with Safety', style: TextStyle(color: Colors.white, fontSize: 30),),
+                  Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05),
+                      child: Text('Uber', style: TextStyle(color: Colors.white, fontSize: 30))
+                  ),
+                  Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.07),
+                      child: Image.asset('assets/images/driver_rider_mask.png', fit: BoxFit.cover,)
+                  ),
+                  //Spacer(),
+                  Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
+                    child: Text('Move with Safety', style: TextStyle(color: Colors.white, fontSize: 30)),
+                  ),
                   Spacer(),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginTypePicker()));
-                    },
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(top: 8, bottom: 8))
-                    ),
+                    onPressed: () =>
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => LoginTypePicker())),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

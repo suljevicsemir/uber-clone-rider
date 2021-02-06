@@ -1,6 +1,7 @@
+import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-
 class LoginTypePicker extends StatefulWidget {
   @override
   _LoginTypePickerState createState() => _LoginTypePickerState();
@@ -14,42 +15,98 @@ class _LoginTypePickerState extends State<LoginTypePicker> {
 
   @override
   Widget build(BuildContext context) {
+    Locale myLocale = Localizations.localeOf(context);
+    print(Platform.localeName);
     return Scaffold(
       body: SafeArea(
         child: Container(
-          margin: EdgeInsets.only(left: 20, right: 20),
+          margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Enter your mobile number'),
-              Row(
-
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
-                    height: 20,
-                    width: 20,
-                    color: Colors.red,
+              Container(
+                margin: EdgeInsets.only(left: 10),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.zero,
+                    icon: Transform.rotate(
+                        angle: math.pi,
+                        child: Icon(Icons.arrow_right_alt, size: 34,)),
+                    onPressed: ()  {
+                      Navigator.of(context).pop();
+                    },
                   ),
-                  Icon(Icons.keyboard_arrow_down, color: Colors.grey,),
-                  Text('+387'),
-                  Flexible(
-                    child: Container(
-                        margin: EdgeInsets.only(left: 20,right: 20),
-                        child: TextField()),
-                  )
-                ],
+                ),
               ),
-              Text('Or connect with social'),
+              Container(
+                margin: EdgeInsets.only(left: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FittedBox(
+                        child: Text('Enter your mobile number', style: Theme.of(context).textTheme.headline5.copyWith(fontWeight: FontWeight.w700, letterSpacing: 2))
+                    ),
+                    Container(
+                      //color: Colors.red,
+                      margin: EdgeInsets.only(top: 30),
+                      child: Row(
+                        //crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Image.asset('icons/flags/png/ba.png', package: 'country_icons', scale: 2,),
+                          Icon(Icons.keyboard_arrow_down, color: Colors.grey,),
+                          Text('+387'),
+                          Flexible(
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Container(
+                                  margin: EdgeInsets.only(left: 20,right: 20, bottom: 8),
+                                  child: TextField(
+                                    cursorColor: Colors.black,
+                                    scrollPadding: EdgeInsets.zero,
+                                    style: TextStyle(color: Colors.black),
+                                    decoration: InputDecoration(
+                                            hintText: '061 123 456',
+
+                                            border: UnderlineInputBorder(
+                                                borderSide: BorderSide(color: Colors.black)
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(color: Colors.black, width: 3),
+                                            )
+                                        ),
+                                  )
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20,),
+                    GestureDetector(
+                      onTap: () {
+
+                      },
+                      child: Row(
+                        children: [
+                          Text('Or connect with social', style: TextStyle(color: Colors.indigoAccent[700], fontWeight: FontWeight.w600),),
+                          Icon(Icons.arrow_right_alt, color: Colors.indigoAccent[700], size: 34,)
+                        ],
+                      ),
+                    )
+
+
+                  ],
+                ),
+              ),
               Spacer(),
               Text('By continuing you may receive an SMS for verification. Message and data rates may apply.'),
+              SizedBox(height: 10,),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginTypePicker()));
+                  //Navigator.push(context, MaterialPageRoute(builder: (context) => LoginTypePicker()));
                 },
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                    padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(top: 8, bottom: 8))
-                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
