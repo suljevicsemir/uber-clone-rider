@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:uber_clone/screens/get_started/choose_account.dart';
 class LoginTypePicker extends StatefulWidget {
   @override
   _LoginTypePickerState createState() => _LoginTypePickerState();
@@ -9,9 +9,19 @@ class LoginTypePicker extends StatefulWidget {
 
 class _LoginTypePickerState extends State<LoginTypePicker> {
 
+  final numberController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
 
-
+  @override
+  void dispose() {
+    numberController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,22 +34,7 @@ class _LoginTypePickerState extends State<LoginTypePicker> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: EdgeInsets.only(left: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: IconButton(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.zero,
-                    icon: Transform.rotate(
-                        angle: math.pi,
-                        child: Icon(Icons.arrow_right_alt, size: 34,)),
-                    onPressed: ()  {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ),
-              ),
+              BackButton(),
               Container(
                 margin: EdgeInsets.only(left: 20),
                 child: Column(
@@ -63,6 +58,7 @@ class _LoginTypePickerState extends State<LoginTypePicker> {
                               child: Container(
                                   margin: EdgeInsets.only(left: 20,right: 20, bottom: 8),
                                   child: TextField(
+                                    controller: numberController,
                                     cursorColor: Colors.black,
                                     scrollPadding: EdgeInsets.zero,
                                     style: TextStyle(color: Colors.black),
@@ -84,9 +80,10 @@ class _LoginTypePickerState extends State<LoginTypePicker> {
                       ),
                     ),
                     SizedBox(height: 20,),
+
                     GestureDetector(
                       onTap: () {
-
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ChooseAccount()));
                       },
                       child: Row(
                         children: [
@@ -106,6 +103,14 @@ class _LoginTypePickerState extends State<LoginTypePicker> {
               ElevatedButton(
                 onPressed: () {
                   //Navigator.push(context, MaterialPageRoute(builder: (context) => LoginTypePicker()));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.redAccent[700],
+                        padding: EdgeInsets.only(bottom: 10, top: 10),
+                        duration: const Duration(seconds: 3),
+                        content: Text('Not implemented!'),
+                      )
+                  );
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -124,9 +129,5 @@ class _LoginTypePickerState extends State<LoginTypePicker> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
 
-  }
 }
