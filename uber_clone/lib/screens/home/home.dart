@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:uber_clone/services/authentication_service.dart';
+import 'package:flutter/services.dart';
+import 'package:uber_clone/screens/home/drawer_menu_icon.dart';
+import 'package:uber_clone/screens/home/pick_destination.dart';
+import 'package:uber_clone/screens/home/ride_now.dart';
+
 
 class Home extends StatefulWidget {
   @override
@@ -8,38 +11,48 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  final globalKey = GlobalKey<ScaffoldState>();
+
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          child: Column(
+   // SystemChrome.setEnabledSystemUIOverlays([]);
+    var x= MediaQuery.of(context).size.height;
+    print(x.toString());
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent
+      ),
+      child: Scaffold(
+        key: globalKey,
+        backgroundColor: Colors.grey,
+        body: SafeArea(
+          child: Stack(
+            fit: StackFit.loose,
             children: [
-              Center(
-                  child: Text('This is home')
-              ),
-              GestureDetector(
-                onTap: () async{
-                  await Provider.of<AuthenticationService>(context, listen: false).signOutGoogle();
-                },
-                child: Text('Sign out with google'),
-              ),
-              GestureDetector(
-                onTap: () async {
-                  await Provider.of<AuthenticationService>(context, listen: false).signOutWithFacebook();
-                },
-                child: Text('Sign out with facebook'),
-              ),
-              GestureDetector(
-                onTap: () {
-                  print(Provider.of<AuthenticationService>(context, listen: false).getUserData());
-                },
-                child: Text("PRINT USER DATA TO CONSOLE"),
-              )
-            ],
-          ),
+
+              //BOTTOM WHERE TO AND SAVED PLACE PART
+              PickDestination(),
+              //BLUE RIDE NOW PART
+              RideNow(),
+              //Drawer Menu Icon
+              DrawerMenu(),
+            ]
+          )
         ),
+        drawer: Drawer(),
       ),
     );
   }
+
+
 }
