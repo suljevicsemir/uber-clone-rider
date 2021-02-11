@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:uber_clone/screens/home/drawer/drawer.dart';
 import 'package:uber_clone/screens/home/drawer_menu_icon.dart';
 import 'package:uber_clone/screens/home/pick_destination.dart';
 import 'package:uber_clone/screens/home/ride_now.dart';
-
 
 class Home extends StatefulWidget {
   @override
@@ -18,6 +18,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
   }
 
 
@@ -25,9 +26,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-   // SystemChrome.setEnabledSystemUIOverlays([]);
-    var x= MediaQuery.of(context).size.height;
-    print(x.toString());
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent
@@ -49,7 +47,12 @@ class _HomeState extends State<Home> {
             ]
           )
         ),
-        drawer: Drawer(),
+        drawer: AnnotatedRegion(
+          value: SystemUiOverlayStyle(
+            statusBarColor: Colors.black
+          ),
+          child: HomeDrawer(),
+        ),
       ),
     );
   }
