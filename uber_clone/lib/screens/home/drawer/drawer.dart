@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+import 'package:uber_clone/screens/home/drawer/drawer_header.dart';
 import 'package:uber_clone/screens/home/drawer/drawer_item.dart';
-import 'package:uber_clone/services/authentication_service.dart';
 class HomeDrawer extends StatefulWidget {
 
   @override
@@ -13,7 +11,6 @@ class HomeDrawer extends StatefulWidget {
 class _HomeDrawerState extends State<HomeDrawer> {
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<AuthenticationService>(context, listen: false).currentUser;
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.black
@@ -26,55 +23,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
             children: [
               Container(
                 height: 200,
-                child: DrawerHeader(
-                  margin: EdgeInsets.zero,
-                  padding: EdgeInsets.zero,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                    ),
-
-                    child: Container(
-                      margin: EdgeInsets.only(left: 20, top: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 30.0,
-                                backgroundImage: NetworkImage(user.photoURL),
-                                backgroundColor: Colors.transparent,
-                              ),
-                              Container(
-                                  margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
-                                  child: Text(user.displayName, style: TextStyle(color: Colors.white),))
-                            ],
-                          ),
-                          Divider(color: Colors.grey, height: 50,),
-                          Row(
-                            children: [
-                              Text('Messages', style: TextStyle(color: Colors.white),),
-                              Container(
-                                margin: EdgeInsets.only(left: 10),
-                                child: ClipOval(
-                                  child: Container(
-                                    color: Colors.blue,
-                                    width: 10,
-                                    height: 10,
-                                  ),
-                                ),
-                              ),
-                              Spacer(),
-                              Icon(Icons.keyboard_arrow_right, color: Colors.white,)
-                            ],
-                          ),
-
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                child: HomeDrawerHeader(),
               ),
               Container(
                 margin: EdgeInsets.only(top: 10),
@@ -91,7 +40,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
             ],
           ),
         ),
-      )
+      ),
     );
   }
 }

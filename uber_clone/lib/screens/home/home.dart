@@ -47,12 +47,7 @@ class _HomeState extends State<Home> {
             ]
           )
         ),
-        drawer: AnnotatedRegion(
-          value: SystemUiOverlayStyle(
-            statusBarColor: Colors.black
-          ),
-          child: HomeDrawer(),
-        ),
+        drawer: HomeDrawer(),
       ),
     );
   }
