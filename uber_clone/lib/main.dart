@@ -1,11 +1,16 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
+import 'package:uber_clone/screens/help/help.dart';
+import 'package:uber_clone/screens/home/home.dart';
+import 'package:uber_clone/screens/settings/settings.dart';
+import 'package:uber_clone/screens/user trips/trips.dart';
+import 'package:uber_clone/screens/wallet/wallet.dart';
 import 'package:uber_clone/services/authentication_service.dart';
 import 'package:uber_clone/theme/theme.dart';
+
 void main()  async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -29,7 +34,16 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: AppTheme.appTheme(),
-        home: AuthenticationWrapper()
+        home: AuthenticationWrapper(),
+        //za sada neka bude home, treba dodati u auth wrapper
+        initialRoute: '/home',
+        routes: {
+          Home.route : (context) => Home(),
+          UserTrips.route : (context) => UserTrips(),
+          Help.route : (context) => Help(),
+          Wallet.route : (context) => Wallet(),
+          Settings.route : (context) => Settings()
+        },
       ),
     );
   }

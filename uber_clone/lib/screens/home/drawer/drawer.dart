@@ -30,10 +30,15 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    DrawerItem(itemTitle: 'Your Trips',),
-                    DrawerItem(itemTitle: 'Help',),
-                    DrawerItem(itemTitle: 'Waller',),
-                    DrawerItem(itemTitle: 'Settings',),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushNamed('/userTrips');
+                        print('sjdak');
+                        },
+                        child : DrawerItem(itemTitle: 'Your Trips', route: '/userTrips', )),
+                    DrawerItem(itemTitle: 'Help', route: '/help',),
+                    DrawerItem(itemTitle: 'Wallet', route: '/wallet',),
+                    DrawerItem(itemTitle: 'Settings', route: '/settings',),
                   ],
                 ),
               )

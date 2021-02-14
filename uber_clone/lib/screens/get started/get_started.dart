@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
-import 'package:uber_clone/screens/get_started/choose_login_type.dart';
+import 'package:uber_clone/screens/get started/choose_login_type.dart';
 import 'package:uber_clone/services/secure_storage.dart';
 
 class GetStarted extends StatefulWidget {

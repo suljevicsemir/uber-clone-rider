@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 
 class DrawerItem extends StatelessWidget {
 
-  final String itemTitle;
+  final String itemTitle, route;
 
-
-  DrawerItem({this.itemTitle});
+  DrawerItem({@required this.itemTitle, @required this.route});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       child: InkWell(
-        onTap: () {},
+
         splashColor: Colors.grey[900],
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 10),

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:uber_clone/screens/get_started/choose_account.dart';
+import 'package:uber_clone/screens/get started/choose_account.dart';
 class LoginTypePicker extends StatefulWidget {
   @override
   _LoginTypePickerState createState() => _LoginTypePickerState();

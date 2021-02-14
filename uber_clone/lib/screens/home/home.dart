@@ -6,6 +6,7 @@ import 'package:uber_clone/screens/home/pick_destination.dart';
 import 'package:uber_clone/screens/home/ride_now.dart';
 
 class Home extends StatefulWidget {
+  static const route = '/home';
   @override
   _HomeState createState() => _HomeState();
 }

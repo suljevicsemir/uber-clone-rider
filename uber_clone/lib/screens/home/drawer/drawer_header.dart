@@ -3,6 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/services/authentication_service.dart';
 
+
+class FoodItem {
+
+  String x,y;
+
+  FoodItem(String x, String y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+
 class HomeDrawerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
