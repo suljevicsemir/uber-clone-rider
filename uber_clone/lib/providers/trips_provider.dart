@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-enum TripTypes {
+enum TripType {
   Past,
   Business,
   Upcoming
@@ -8,9 +8,9 @@ enum TripTypes {
 
 class TripsProvider extends ChangeNotifier{
 
-  TripTypes _type = TripTypes.Past;
+  TripType _type = TripType.Past;
   bool shown = false;
-
+  TripType tripType = TripType.Past;
 
   void changeShown() {
     shown = !shown;
@@ -18,8 +18,13 @@ class TripsProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  TripTypes get type => _type;
-  set type(TripTypes value) {
+  void changeTripType(TripType tripType) {
+    this.tripType = tripType;
+    notifyListeners();
+  }
+
+  TripType get type => _type;
+  set type(TripType value) {
     _type = value;
     notifyListeners();
   }

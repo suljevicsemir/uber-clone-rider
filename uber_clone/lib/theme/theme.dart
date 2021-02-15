@@ -21,6 +21,16 @@ class AppTheme extends StatelessWidget  {
       ),
       textTheme: TextTheme(
 
+        headline5: TextStyle(
+          color: Colors.grey[600],
+          fontSize: 18
+        ),
+        headline6: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.w400,
+          fontFamily: 'BenneRegular'
+        )
 
       ),
       appBarTheme: AppBarTheme(
