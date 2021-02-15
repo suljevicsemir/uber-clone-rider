@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
+import 'package:uber_clone/providers/trips_provider.dart';
 import 'package:uber_clone/screens/help/help.dart';
 import 'package:uber_clone/screens/home/home.dart';
 import 'package:uber_clone/screens/settings/settings.dart';
@@ -39,7 +40,9 @@ class MyApp extends StatelessWidget {
         initialRoute: '/home',
         routes: {
           Home.route : (context) => Home(),
-          UserTrips.route : (context) => UserTrips(),
+          UserTrips.route : (context) => ChangeNotifierProvider(
+              create: (context) => TripsProvider(),
+              child: UserTrips()),
           Help.route : (context) => Help(),
           Wallet.route : (context) => Wallet(),
           Settings.route : (context) => Settings()

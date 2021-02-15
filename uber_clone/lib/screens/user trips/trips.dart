@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:uber_clone/screens/user trips/sliver app bar/ride_types.dart';
-import 'package:uber_clone/theme/palette.dart';
+import 'package:provider/provider.dart';
+import 'package:uber_clone/providers/trips_provider.dart';
+import 'package:uber_clone/screens/user trips/sliver app bar/ride_type_picker.dart';
+import 'package:uber_clone/screens/user%20trips/ride_type.dart';
+import 'package:uber_clone/screens/user%20trips/ride_type_divider.dart';
 class UserTrips extends StatefulWidget {
   static const route = '/userTrips';
   @override
@@ -15,14 +18,12 @@ class _UserTripsState extends State<UserTrips> with TickerProviderStateMixin {
   )*/
 
  double height = 0;
-
+bool isVisible = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Colors.grey,
       body: NestedScrollView(
         headerSliverBuilder: (context, isScrolled) {
-          print(isScrolled.toString());
           return<Widget>[
             SliverOverlapAbsorber(
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
@@ -32,7 +33,7 @@ class _UserTripsState extends State<UserTrips> with TickerProviderStateMixin {
                   pinned: true,
                   expandedHeight: 100,
                   actions: [
-                    PickRideTypes()
+                    RideTypePicker()
                   ],
                   flexibleSpace: LayoutBuilder(
                     builder: (context, constraints) {
@@ -55,110 +56,43 @@ class _UserTripsState extends State<UserTrips> with TickerProviderStateMixin {
 
           ];
         },
-        body: Center(
-          child: Column(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    if( height == 0) height = 200;
-                    else height = 0;
-                  });
-                },
-                child: Text('sadkjasd'),
-              ),
-              AnimatedSize(
-                vsync: this,
-                duration: const Duration(milliseconds: 200),
-                child: Container(
-                  height: height,
+        body: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+
+            AnimatedSize(
+              vsync: this,
+                duration: const Duration(milliseconds: 300),
+                child: Provider.of<TripsProvider>(context).shown ?
+                Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        color: Colors.white,
-                        child: Container(
-                            margin: EdgeInsets.only(left: 20),
-                            child: Text('Past')),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        height: 0.5,
-                        color: Colors.grey,
-                      ),
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        color: Colors.white,
-                        child: Container(
-                            margin: EdgeInsets.only(left: 20),
-                            child: Text('Business')),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        height: 0.5,
-                        color: Colors.grey,
-                      ),
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        color: Colors.white,
-                        child: Container(
-                            margin: EdgeInsets.only(left: 20),
-                            child: Text('Upcoming')),
-                      )
+                      RideType(rideType: 'Past',),
+                      RideTypeDivider(),
+                      RideType(rideType: 'Business',),
+                      RideTypeDivider(),
+                      RideType(rideType: 'Upcoming',)
                     ],
                   ),
+                ) : Container()
+            ),
+            Expanded(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 100),
+                color: Provider.of<TripsProvider>(context,listen: false).shown ?  const Color(0xff2e2e2e) : Theme.of(context).scaffoldBackgroundColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text('You havent taken a trip yet', style: TextStyle(fontSize: 26),)
+                  ],
                 ),
               ),
-              Container(
-                height: 200,
-                width: 200,
-                color: Colors.red,
-              ),
-              InkWell(
-                onTap: () {},
-                borderRadius: BorderRadius.circular(20),
+            ),
 
-                child: Container(
-                  margin: EdgeInsets.only(top: 8, bottom: 8, right: 20),
-
-                  decoration: BoxDecoration(
-                      color: Palette.dropdownGrey,
-                      //borderRadius: BorderRadius.circular(20)
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Past', style: TextStyle(color: Colors.white, fontSize: 18),),
-                      Container(
-                          margin: EdgeInsets.only(left: 3),
-                          child: Icon(Icons.keyboard_arrow_down_outlined, color: Colors.white,))
-                    ],
-                  ),
-                ),
-              ),
-
-              Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.red,
-                  onTap: () {},
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30)
-                    ),
-                    child: Text('Semir'),
-                  ),
-                ),
-              )
-
-
-            ],
-          ),
+          ],
         )
       ),
     );

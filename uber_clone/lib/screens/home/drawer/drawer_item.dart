@@ -11,7 +11,7 @@ class DrawerItem extends StatelessWidget {
     return Container(
       width: double.infinity,
       child: InkWell(
-
+        onTap: () => Navigator.pushNamed(context, route),
         splashColor: Colors.grey[900],
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 10),

@@ -42,7 +42,6 @@ class AuthenticationService {
   }
 
   Future<bool> signInWithFacebook() async {
-
     try {
        final  accessToken = await FacebookAuth.instance.login();
        final AuthCredential credential = FacebookAuthProvider.credential(accessToken.token);
