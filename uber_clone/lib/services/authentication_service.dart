@@ -9,7 +9,7 @@ enum SignedInType {
 }
 
 
-class AuthenticationService {
+class AuthenticationService{
 
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -34,6 +34,7 @@ class AuthenticationService {
         await _firebaseAuth.signInWithCredential(credential);
         return true;
       }
+
       return false;
     } on Exception catch(_) {
       print("Error login with google!");
@@ -47,6 +48,7 @@ class AuthenticationService {
        final AuthCredential credential = FacebookAuthProvider.credential(accessToken.token);
        await _firebaseAuth.signInWithCredential(credential);
        final Map<String, dynamic> facebookUserData = await FacebookAuth.instance.getUserData();
+
         return true;
      } on FacebookAuthException catch(error) {
         print(error.errorCode);
@@ -80,15 +82,17 @@ class AuthenticationService {
 
 
   Future<void> signOutGoogle() async {
-
-    await _googleSignIn.signOut();
     await _firebaseAuth.signOut();
+    await _googleSignIn.signOut();
+
+
 
   }
 
   Future<void> signOutWithFacebook() async {
     await FacebookAuth.instance.logOut();
     await FirebaseAuth.instance.signOut();
+
   }
 
   GoogleSignIn get googleSignIn => _googleSignIn;

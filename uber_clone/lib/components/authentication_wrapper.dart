@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:uber_clone/screens/get started/get_started.dart';
 import 'package:uber_clone/screens/home/home.dart';
 
+bool loggedIn = false;
 
 
 class AuthenticationWrapper extends StatelessWidget {
@@ -13,6 +14,7 @@ class AuthenticationWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final User user = Provider.of<User>(context);
     return user != null ? Home() : GetStarted();
 
