@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:uber_clone/screens/driver_profile/driver_contact_types/call_driver.dart';
-import 'package:uber_clone/screens/driver_profile/driver_contact_types/schedule_ride_with_driver.dart';
-import 'package:uber_clone/screens/driver_profile/driver_contact_types/sms_driver.dart';
-class DriverProfile extends StatefulWidget {
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import 'package:uber_clone/screens/driver_contact//driver_contact_types/call_driver.dart';
+import 'package:uber_clone/screens/driver_contact/driver_contact_types/schedule_ride_with_driver.dart';
+import 'package:uber_clone/screens/driver_contact/driver_contact_types/sms_driver.dart';
+
+class DriverContact extends StatefulWidget {
 
   static const route = '/driverProfile';
 
 
   @override
-  _DriverProfileState createState() => _DriverProfileState();
+  _DriverContactState createState() => _DriverContactState();
 }
 
-class _DriverProfileState extends State<DriverProfile> with TickerProviderStateMixin{
+class _DriverContactState extends State<DriverContact> with TickerProviderStateMixin{
 
   double top = 0;
 
@@ -29,7 +31,14 @@ class _DriverProfileState extends State<DriverProfile> with TickerProviderStateM
         duration: const Duration(milliseconds: 300),
         vsync: this
     );
+
+    //changeStatusBarColor();
   }
+
+  Future<void> changeStatusBarColor() async {
+    await FlutterStatusbarcolor.setStatusBarColor(Colors.pink, animate: true);
+  }
+
 
   void rotateIcon() {
     clickedController.reset();
@@ -59,10 +68,9 @@ class _DriverProfileState extends State<DriverProfile> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
+        statusBarColor: Colors.transparent
       ),
       child: Scaffold(
         body: NestedScrollView(
@@ -80,7 +88,6 @@ class _DriverProfileState extends State<DriverProfile> with TickerProviderStateM
                     elevation: 0.0,
                     expandedHeight: MediaQuery.of(context).size.height * 0.45,
                     pinned: true,
-                    //backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     actions: [
                       IconButton(
                         icon: Icon(Icons.star_border),
@@ -120,8 +127,6 @@ class _DriverProfileState extends State<DriverProfile> with TickerProviderStateM
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      //Spacer(),
-                      //SizedBox(width: width * 0.1,),
                       Spacer(),
                       MaterialButton(
                         minWidth: 150,
@@ -135,7 +140,6 @@ class _DriverProfileState extends State<DriverProfile> with TickerProviderStateM
                         splashColor: Colors.white,
                       ),
                       Spacer(),
-                      //SizedBox(width: width * 0.05,),
                       MaterialButton(
                         minWidth: 150,
                         height: 50,
@@ -148,25 +152,22 @@ class _DriverProfileState extends State<DriverProfile> with TickerProviderStateM
                         splashColor: Colors.white,
                       ),
                       Spacer()
-                      //SizedBox(width: width * 0.1),
                     ],
                   ),
                   SizedBox(height: 20,),
                   Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          rotateIcon();
-                        });
-                      },
-                      //splashColor: Colors.red,
+                      onTap: rotateIcon,
+                      splashColor: Colors.grey,
                       child: Container(
+                        padding: EdgeInsets.only(top: 10, bottom: 10),
                         margin: EdgeInsets.only(left: 20, right: 20),
                         child: Row(
                           children: [
                             Text('062 923 491', style: TextStyle(fontSize: 18),),
                             Spacer(),
+
                             RotationTransition(
                                 turns: Tween<double>(begin: begin, end: end).animate(clickedController),
                                 child: Icon(Icons.keyboard_arrow_down_outlined, color: Colors.black,))

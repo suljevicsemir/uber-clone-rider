@@ -34,8 +34,7 @@ class AppTheme extends StatelessWidget  {
 
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: Colors.black,
-        //color: Colors.white,
+        color: Colors.black,
         centerTitle: false,
         elevation: 0.0,
         brightness: Brightness.dark

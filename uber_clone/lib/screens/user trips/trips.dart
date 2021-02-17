@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/providers/trips_provider.dart';
 import 'package:uber_clone/screens/user trips/sliver_app_bar/ride_type_picker.dart';
@@ -14,12 +15,23 @@ class UserTrips extends StatefulWidget {
 
 class _UserTripsState extends State<UserTrips> with TickerProviderStateMixin {
 
-  /*EdgeInsetsDirectional beforeIcon = EdgeInsetsDirectional.only(
 
-  )*/
+  @override
+  void initState() {
+    super.initState();
+    //changeStatusBarColor();
+  }
 
- double height = 0;
-bool isVisible = false;
+
+  void changeStatusBarColor() async {
+    await FlutterStatusbarcolor.setStatusBarColor(Colors.blue);
+  }
+
+
+
+  double height = 0;
+  bool isVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,4 +106,6 @@ bool isVisible = false;
       ),
     );
   }
+
+
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 class CallDriver extends StatefulWidget {
   @override
   _CallDriverState createState() => _CallDriverState();
@@ -15,17 +15,26 @@ class _CallDriverState extends State<CallDriver> {
     setState(() {
       pressed = !pressed;
     });
-    // TODO call number
+  }
+
+  Future<void> onTap() async {
+    changePressedValue();
+    await Future.delayed(const Duration(milliseconds: 250), () {
+      launch("tel://062923491");
+      changePressedValue();
+    });
+  }
+
+  Future<void> onLongPress() async {
+    changePressedValue();
+    Timer(const Duration(milliseconds: 450), () => changePressedValue());
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: changePressedValue,
-      onLongPress: () async{
-        changePressedValue();
-        Timer(const Duration(milliseconds: 450), () => changePressedValue());
-      },
+      onTap: onTap,
+      onLongPress: onLongPress,
       child: AnimatedContainer(
           padding: EdgeInsets.only(top: 15, bottom: 15, left: 5),
           duration: const Duration(milliseconds: 300),

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
-import 'package:uber_clone/screens/get started/choose_login_type.dart';
 import 'package:uber_clone/services/secure_storage.dart';
 
 class GetStarted extends StatefulWidget {
+
+  static const String route = '/getStarted';
+
   @override
   _GetStartedState createState() => _GetStartedState();
 }
@@ -53,7 +55,7 @@ class _GetStartedState extends State<GetStarted> {
                   Spacer(),
                   ElevatedButton(
                     onPressed: () =>
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => LoginTypePicker())),
+                        Navigator.pushNamed(context, '/pickLoginType'),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
