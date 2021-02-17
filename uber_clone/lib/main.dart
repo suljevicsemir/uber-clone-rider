@@ -10,11 +10,12 @@ import 'package:uber_clone/screens/get%20started/choose_login_type.dart';
 import 'package:uber_clone/screens/get%20started/get_started.dart';
 import 'package:uber_clone/screens/help/help.dart';
 import 'package:uber_clone/screens/home/home.dart';
-import 'package:uber_clone/screens/settings/settings.dart';
+import 'package:uber_clone/screens/edit_account/edit_account.dart';
 import 'package:uber_clone/screens/user trips/trips.dart';
 import 'package:uber_clone/screens/wallet/wallet.dart';
 import 'package:uber_clone/services/authentication_service.dart';
 import 'package:uber_clone/theme/theme.dart';
+import 'package:uber_clone/screens/account_settings/account_settings.dart';
 
 void main()  async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,8 +52,9 @@ class MyApp extends StatelessWidget {
               child: UserTrips()),
           Help.route : (context) => Help(),
           Wallet.route : (context) => Wallet(),
-          Settings.route : (context) => Settings(),
-          DriverContact.route: (context) => DriverContact()
+          EditAccount.route : (context) => EditAccount(),
+          DriverContact.route: (context) => DriverContact(),
+          AccountSettings.route : (context) => AccountSettings()
         },
       ),
     );

@@ -7,15 +7,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/services/authentication_service.dart';
 
-class Settings extends StatefulWidget {
+class EditAccount extends StatefulWidget {
 
-  static const route = '/settings';
+  static const route = '/editAccount';
 
   @override
-  _SettingsState createState() => _SettingsState();
+  _EditAccountState createState() => _EditAccountState();
 }
 
-class _SettingsState extends State<Settings> {
+class _EditAccountState extends State<EditAccount> {
 
   final globalKey = GlobalKey<ScaffoldState>();
 
