@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uber_clone/components/authentication_wrapper.dart';
 import 'package:uber_clone/services/authentication_service.dart';
 
 class AccountSettings extends StatefulWidget {
@@ -255,7 +256,10 @@ class _AccountSettingsState extends State<AccountSettings> {
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.only(left: 20, bottom: 10, top: 10)
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  await Provider.of<AuthenticationService>(context, listen: false).signOutGoogle();
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
+                },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
