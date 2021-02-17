@@ -15,7 +15,7 @@ class _RideTypePickerState extends State<RideTypePicker>  with TickerProviderSta
   bool isClicked = false;
   double begin = 0, end = 0.5;
 
-  var provider;
+
 
   @override
   void initState() {

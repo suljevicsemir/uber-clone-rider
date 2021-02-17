@@ -6,6 +6,10 @@ import 'package:uber_clone/components/authentication_wrapper.dart';
 import 'package:uber_clone/services/authentication_service.dart';
 
 class ChooseAccount extends StatefulWidget {
+
+  static const String route = '/chooseAccount';
+
+
   @override
   _ChooseAccountState createState() => _ChooseAccountState();
 }

@@ -1,9 +1,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.semirsuljevic.uber_clone">
+
     <uses-permission android:name="android.permission.INTERNET"/>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.NEW_OUTGOING_CALL">
+            </action>
+            <data android:mimeType="*/*"/>
+        </intent>
+    </queries>
     <application
         android:label="uber_clone"
         android:icon="@mipmap/ic_launcher">
+
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

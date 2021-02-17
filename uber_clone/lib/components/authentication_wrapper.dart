@@ -7,6 +7,10 @@ import 'package:uber_clone/screens/home/home.dart';
 
 
 class AuthenticationWrapper extends StatelessWidget {
+
+  static const String route = '/';
+
+
   @override
   Widget build(BuildContext context) {
     final User user = Provider.of<User>(context);

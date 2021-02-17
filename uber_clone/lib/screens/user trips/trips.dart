@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/providers/trips_provider.dart';
-import 'package:uber_clone/screens/user trips/sliver app bar/ride_type_picker.dart';
-import 'package:uber_clone/screens/user%20trips/ride_type.dart';
-import 'package:uber_clone/screens/user%20trips/ride_type_divider.dart';
+import 'package:uber_clone/screens/user trips/sliver_app_bar/ride_type_picker.dart';
+
+import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/screens/user%20trips/ride_types_overlay/ride_type.dart';
+import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/screens/user%20trips/ride_types_overlay/ride_type_divider.dart';
 class UserTrips extends StatefulWidget {
   static const route = '/userTrips';
   @override
@@ -13,12 +15,23 @@ class UserTrips extends StatefulWidget {
 
 class _UserTripsState extends State<UserTrips> with TickerProviderStateMixin {
 
-  /*EdgeInsetsDirectional beforeIcon = EdgeInsetsDirectional.only(
 
-  )*/
+  @override
+  void initState() {
+    super.initState();
+    //changeStatusBarColor();
+  }
 
- double height = 0;
-bool isVisible = false;
+
+  void changeStatusBarColor() async {
+    await FlutterStatusbarcolor.setStatusBarColor(Colors.blue);
+  }
+
+
+
+  double height = 0;
+  bool isVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,9 +54,6 @@ bool isVisible = false;
                       return FlexibleSpaceBar(
                         titlePadding: EdgeInsetsDirectional.only(start: 100 - constraints.biggest.height * 0.4, bottom: 18),
                           title: Text('Choose a trip'),
-                          stretchModes: [
-                            StretchMode.zoomBackground
-                          ],
                         background: Container(
                           color: Colors.black,
                         ),
@@ -60,7 +70,6 @@ bool isVisible = false;
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-
             AnimatedSize(
               vsync: this,
                 duration: const Duration(milliseconds: 300),
@@ -97,4 +106,6 @@ bool isVisible = false;
       ),
     );
   }
+
+
 }

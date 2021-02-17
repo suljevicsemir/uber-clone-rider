@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:uber_clone/screens/get started/choose_account.dart';
 class LoginTypePicker extends StatefulWidget {
+
+  static const String route = '/pickLoginType';
+
+
   @override
   _LoginTypePickerState createState() => _LoginTypePickerState();
 }
@@ -83,7 +86,7 @@ class _LoginTypePickerState extends State<LoginTypePicker> {
 
                     GestureDetector(
                       onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => ChooseAccount()));
+                          Navigator.pushNamed(context, '/chooseAccount');
                       },
                       child: Row(
                         children: [
