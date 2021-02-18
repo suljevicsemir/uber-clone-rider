@@ -10,6 +10,15 @@ extension tripTypeToString on TripType {
   String parseTripType() {
     return this.toString().split(".").last;
   }
+
+  int typeToIndex() {
+    if(this == TripType.Past)
+      return 0;
+    if( this == TripType.Upcoming)
+      return 1;
+    return 2;
+
+  }
 }
 
 class TripsProvider extends ChangeNotifier{

@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:uber_clone/providers/trips_provider.dart';
 import 'package:uber_clone/screens/user_trips/ride_types_overlay/ride_types_overlap.dart';
 import 'package:uber_clone/screens/user_trips/sliver_app_bar/ride_type_picker.dart';
-import 'package:uber_clone/screens/user_trips/trips_body/past_trips/past_trip.dart';
+import 'package:uber_clone/screens/user_trips/trips_body/trips_body_builder.dart';
 class UserTrips extends StatefulWidget {
   static const route = '/userTrips';
   @override
@@ -73,27 +73,12 @@ class _UserTripsState extends State<UserTrips> with TickerProviderStateMixin {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  bool isShown = Provider.of<TripsProvider>(context ,listen: false).shown;
+                  bool isShown = Provider.of<TripsProvider>(context, listen: false).shown;
                   if( isShown) {
                     Provider.of<TripsProvider>(context, listen: false).shown = false;
                   }
-
                 },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 100),
-                  color: Provider.of<TripsProvider>(context).shown ?  const Color(0xff2e2e2e) : const Color(0xff3c4154),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Text('You havent taken a trip yet', style: TextStyle(fontSize: 26),),
-                      PastTrip(),
-                      SizedBox(height: 20,),
-                      PastTrip()
-
-                    ],
-                  ),
-                ),
+                child: TripsBodyBuilder()
               ),
             ),
 
