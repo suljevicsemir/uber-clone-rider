@@ -6,33 +6,35 @@ enum TripType {
   Upcoming
 }
 
+extension tripTypeToString on TripType {
+  String parseTripType() {
+    return this.toString().split(".").last;
+  }
+}
+
 class TripsProvider extends ChangeNotifier{
 
-  TripType _type = TripType.Past;
-  bool shown = false;
-  TripType tripType = TripType.Past;
+
+  bool _shown = false;
+  TripType _tripType = TripType.Past;
+
+
+  bool get shown => _shown;
 
   void changeShown() {
-    shown = !shown;
-    print('its called');
+    _shown = !_shown;
     notifyListeners();
   }
 
-  void changeTripType(TripType tripType) {
-    this.tripType = tripType;
+  set shown(bool value) {
+    _shown = value;
     notifyListeners();
   }
 
-  TripType get type => _type;
-  set type(TripType value) {
-    _type = value;
+  TripType get tripType => _tripType;
+
+  set tripType(TripType value) {
+    _tripType = value;
     notifyListeners();
-  }
-
-
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

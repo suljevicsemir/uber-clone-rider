@@ -19,7 +19,7 @@ class _AccountSettingsState extends State<AccountSettings> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        titleTextStyle: TextStyle(fontSize: 20),
+        //titleTextStyle: TextStyle(fontSize: 20),
         title: Text('Account settings'),
       ),
       body: SafeArea(
@@ -263,7 +263,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Sign out', style: Theme.of(context).textTheme.headline3,)
+                    Text('Sign out', style: Theme.of(context).textTheme.headline3,),
                   ],
                 )
             ),

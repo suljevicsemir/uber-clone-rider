@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:uber_clone/providers/trips_provider.dart';
 
-import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/screens/user%20trips/ride_types_overlay/ride_type.dart';
-import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/screens/user%20trips/ride_types_overlay/ride_type_divider.dart';
+import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/screens/user_trips/ride_types_overlay/ride_type.dart';
+import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/screens/user_trips/ride_types_overlay/ride_type_divider.dart';
 class RideTypesOverlap extends StatefulWidget {
 
 
@@ -21,18 +23,16 @@ class _RideTypesOverlapState extends State<RideTypesOverlap> with SingleTickerPr
       vsync: this,
       duration: const Duration(milliseconds: 300),
       child:  Container(
-        child: Column(
+        child: Provider.of<TripsProvider>(context).shown ?    Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            RideType(rideType: 'Past',),
+            RideType(tripType: TripType.Past,),
             RideTypeDivider(),
-            RideType(rideType: 'Business',),
+            RideType(tripType: TripType.Business,),
             RideTypeDivider(),
-            RideType(rideType: 'Upcoming',)
-
-
+            RideType(tripType: TripType.Upcoming,)
           ],
-        ),
+        ) : Container(),
       )
     );
   }

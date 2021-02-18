@@ -48,8 +48,11 @@ class _HomeState extends State<Home> {
 
               //BOTTOM WHERE TO AND SAVED PLACE PART
               PickDestination(),
+
               //BLUE RIDE NOW PART
               RideNow(),
+
+
               //Drawer Menu Icon
               DrawerMenu(),
             ]
