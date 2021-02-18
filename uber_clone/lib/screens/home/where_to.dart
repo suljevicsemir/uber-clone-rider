@@ -4,7 +4,7 @@ class WhereTo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
       decoration: BoxDecoration(
           color: const Color(0xffededed)

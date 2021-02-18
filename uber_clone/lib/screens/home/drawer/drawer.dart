@@ -29,15 +29,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      elevation: 16.0,
+      //elevation: 16.0,
       child: Container(
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            Container(
-              height: 200,
-              child: HomeDrawerHeader(),
-            ),
+            HomeDrawerHeader(),
             Container(
               margin: EdgeInsets.only(top: 10),
               child: Column(

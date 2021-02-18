@@ -12,9 +12,9 @@ class DrawerMenu extends StatelessWidget {
             child: InkWell(
               splashColor: Colors.black,
               child: SizedBox(
-                height: 45,
-                width: 45,
-                child: Icon(Icons.menu, size: 25,),
+                height: 55,
+                width: 55,
+                child: Icon(Icons.menu, size: 30,),
               ),
               onTap: () => Scaffold.of(context).openDrawer(),
             ),

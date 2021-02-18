@@ -11,7 +11,7 @@ class PickDestination extends StatelessWidget {
         height: 0.2 * MediaQuery.of(context).size.height,
         color: Colors.white,
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 10),
+         // margin: EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: [
               Container(

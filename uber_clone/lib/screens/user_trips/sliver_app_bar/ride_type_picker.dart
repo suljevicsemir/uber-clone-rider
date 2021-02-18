@@ -64,7 +64,7 @@ class _RideTypePickerState extends State<RideTypePicker>  with TickerProviderSta
       child: ElevatedButton(
         child: Row(
           children: [
-            Text('Past', style: TextStyle(color: Colors.white, fontSize: 16),),
+            Text(Provider.of<TripsProvider>(context).tripType.parseTripType(), style: TextStyle(color: Colors.white, fontSize: 16),),
             RotationTransition(
               turns: Tween<double>(begin: begin, end: end).animate(clickedController),
               child: Container(
@@ -75,9 +75,7 @@ class _RideTypePickerState extends State<RideTypePicker>  with TickerProviderSta
         ),
         onPressed: () {
           rotateIcon();
-          print(Provider.of<TripsProvider>(context, listen: false).shown.toString());
           Provider.of<TripsProvider>(context, listen: false).changeShown();
-
         },
         style: ElevatedButton.styleFrom(
           primary: Palette.dropdownGrey,

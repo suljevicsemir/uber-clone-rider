@@ -9,6 +9,7 @@ class PickSavedPlace extends StatelessWidget {
         onTap: () {},
         splashColor: Colors.grey,
         child: Container(
+          margin: EdgeInsets.only(left: 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -19,11 +20,15 @@ class PickSavedPlace extends StatelessWidget {
                   child: Icon(Icons.star, color: Colors.black,),
                 ),
               ),
-              Container(
-                  margin: EdgeInsets.only(left: 10),
-                  child: Text('Choose a saved place', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),)),
+              FittedBox(
+                child: Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: Text('Choose a saved place', style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.06, fontWeight: FontWeight.w600),)),
+              ),
               Spacer(),
-              Icon(Icons.keyboard_arrow_right_sharp, color: Colors.black, size: 35,)
+              Container(
+                margin: EdgeInsets.only(right: 10),
+                  child: Icon(Icons.keyboard_arrow_right_sharp, color: Colors.black, size: 35,))
             ],
           ),
         ),
