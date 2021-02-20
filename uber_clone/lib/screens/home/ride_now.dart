@@ -23,7 +23,7 @@ class RideNow extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text("Ready when you are", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w400, letterSpacing: 1.0),),
-              Text('Here to help you move safely in the new every day', style: TextStyle(color: Colors.white, fontSize: 16)),
+              Text('Here to help you move safely in the new every day', style: TextStyle(color: Colors.white, fontSize: 18)),
               Row(
                 children: [
                   Text('Ride now', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w400)),

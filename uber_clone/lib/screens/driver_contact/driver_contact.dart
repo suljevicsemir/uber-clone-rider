@@ -102,12 +102,12 @@ class _DriverContactState extends State<DriverContact> with TickerProviderStateM
                       builder: (context, constraints) {
                         return  FlexibleSpaceBar(
                           centerTitle: false,
-                          title: Text('John', style: TextStyle(color: Colors.white),),
+                          title: Text('John', style: TextStyle(color: Colors.white, fontSize: 22),),
                           background: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage('assets/images/new_york.jpg'),
-                                    fit: BoxFit.cover
+                                    fit: BoxFit.cover,
                                 )
                             ),
                           ),
@@ -119,85 +119,82 @@ class _DriverContactState extends State<DriverContact> with TickerProviderStateM
               )
             ];
           },
-          body: SafeArea(
-            child: Container(
-              //margin: EdgeInsets.only(top: 20),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Spacer(),
-                      MaterialButton(
-                        minWidth: 150,
-                        height: 50,
-                        color: Colors.black,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)
-                        ),
-                        onPressed: () {},
-                        child: Text('Phone call', style: TextStyle(color: Colors.white, fontSize: 16),),
-                        splashColor: Colors.white,
-                      ),
-                      Spacer(),
-                      MaterialButton(
-                        minWidth: 150,
-                        height: 50,
-                        color: Colors.black,
-                        shape: RoundedRectangleBorder(
+          body: SingleChildScrollView(
+            padding: EdgeInsets.only(top: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Spacer(),
+                    MaterialButton(
+                      minWidth: 150,
+                      height: 50,
+                      color: Colors.black,
+                      shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)
-                        ),
-                        onPressed: () {},
-                        child: Text('Send message', style: TextStyle(color: Colors.white, fontSize: 16),),
-                        splashColor: Colors.white,
                       ),
-                      Spacer()
-                    ],
-                  ),
-                  SizedBox(height: 20,),
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: rotateIcon,
-                      splashColor: Colors.grey,
-                      child: Container(
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
-                        margin: EdgeInsets.only(left: 20, right: 20),
-                        child: Row(
-                          children: [
-                            Text('062 923 491', style: TextStyle(fontSize: 18),),
-                            Spacer(),
-
-                            RotationTransition(
-                                turns: Tween<double>(begin: begin, end: end).animate(clickedController),
-                                child: Icon(Icons.keyboard_arrow_down_outlined, color: Colors.black,))
-                          ],
-                        ),
+                      onPressed: () {},
+                      child: Text('Phone call', style: TextStyle(color: Colors.white, fontSize: 16),),
+                      splashColor: Colors.white,
+                    ),
+                    Spacer(),
+                    MaterialButton(
+                      minWidth: 150,
+                      height: 50,
+                      color: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)
+                      ),
+                      onPressed: () {},
+                      child: Text('Send message', style: TextStyle(color: Colors.white, fontSize: 16),),
+                      splashColor: Colors.white,
+                    ),
+                    Spacer()
+                  ],
+                ),
+                SizedBox(height: 20,),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: rotateIcon,
+                    splashColor: Colors.grey,
+                    child: Container(
+                      padding: EdgeInsets.only(top: 10, bottom: 10),
+                      margin: EdgeInsets.only(left: 20, right: 20),
+                      child: Row(
+                        children: [
+                          Text('062 923 491', style: TextStyle(fontSize: 18),),
+                          Spacer(),
+                          RotationTransition(
+                              turns: Tween<double>(begin: begin, end: end).animate(clickedController),
+                              child: Icon(Icons.keyboard_arrow_down_outlined, color: Colors.black,))
+                        ],
                       ),
                     ),
                   ),
+                ),
+                Container(
+                    margin: EdgeInsets.only(left: 20, right: 20),
+                    child: Divider(height: 30, color: Colors.grey, thickness: 0.5,)),
+                AnimatedSize(
+                  vsync: this,
+                  duration: const Duration(milliseconds: 200),
+                  child: showContactTypes ?
                   Container(
-                      margin: EdgeInsets.only(left: 20, right: 20),
-                      child: Divider(height: 30, color: Colors.grey, thickness: 0.5,)),
-                  AnimatedSize(
-                    vsync: this,
-                    duration: const Duration(milliseconds: 200),
-                    child: showContactTypes ?
-                    Container(
-                      child: Column(
-                        children: [
-                          SMSDriver(),
-                          CallDriver(),
-                          ScheduleRide(),
-                        ],
-                      ),
-                    ) : Container(),
+                    child: Column(
+                      children: [
+                        SMSDriver(),
+                        CallDriver(),
+                        ScheduleRide(),
+                      ],
+                    ),
+                  ) : Container(),
 
-                  ),
-
-
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
