@@ -12,6 +12,7 @@ class PickSavedPlace extends StatelessWidget {
           margin: EdgeInsets.only(left: 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               ClipOval(
                 child: Container(
@@ -20,12 +21,17 @@ class PickSavedPlace extends StatelessWidget {
                   child: Icon(Icons.star, color: Colors.black,),
                 ),
               ),
-              FittedBox(
+              Expanded(
                 child: Container(
-                    margin: EdgeInsets.only(left: 10),
-                    child: Text('Choose a saved place', style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.06, fontWeight: FontWeight.w600),)),
+                  margin: EdgeInsets.only(left: 10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text('Choose a saved place', style: TextStyle(fontSize: 24),)),
+                  ),
+                ),
               ),
-              Spacer(),
               Container(
                 margin: EdgeInsets.only(right: 10),
                   child: Icon(Icons.keyboard_arrow_right_sharp, color: Colors.black, size: 35,))

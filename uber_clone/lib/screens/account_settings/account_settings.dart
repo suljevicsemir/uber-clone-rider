@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
 import 'package:uber_clone/services/authentication_service.dart';
+import 'package:uber_clone/theme/palette.dart';
 
 class AccountSettings extends StatefulWidget {
 
@@ -13,42 +14,53 @@ class AccountSettings extends StatefulWidget {
 }
 
 class _AccountSettingsState extends State<AccountSettings> {
+
+
+  final TextStyle accountInfoStyle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w300,
+    color: Colors.black
+  );
+
   @override
   Widget build(BuildContext context) {
     final User user = Provider.of<AuthenticationService>(context, listen: false).currentUser;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        //titleTextStyle: TextStyle(fontSize: 20),
         title: Text('Account settings'),
       ),
       body: SafeArea(
         child: ListView(
           children: [
-            Container(
-              margin: EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundImage: NetworkImage(user.photoURL),
-                    backgroundColor: Colors.transparent,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(user.displayName),
-                        Text('+387 62 972 494'),
-                        Text(user.email)
-                      ],
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/editAccount'),
+              style: Palette.greyElevatedStyleLeftPadding,
+              child: Container(
+                margin: EdgeInsets.only(top: 20, bottom: 20),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(user.photoURL),
+                      backgroundColor: Colors.transparent,
                     ),
-                  )
-                ],
+                    Container(
+                      margin: EdgeInsets.only(left: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(user.displayName, style: accountInfoStyle,),
+                          Text('+387 62 972 494', style: accountInfoStyle,),
+                          Text(user.email, style: accountInfoStyle,)
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-            Divider(color: Colors.grey, height: 20, thickness: 1,),
+            Divider(color: Colors.grey, height: 20, thickness: 0.5,),
             Container(
                 margin: EdgeInsets.only(top: 20),
                 child: Column(
@@ -64,40 +76,19 @@ class _AccountSettingsState extends State<AccountSettings> {
                       physics: NeverScrollableScrollPhysics(),
                       children: [
                         ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                              primary: Theme.of(context).scaffoldBackgroundColor,
-                              elevation: 0,
-                              onPrimary: Colors.black,
-                              minimumSize: Size(double.infinity, 40),
-                              alignment: Alignment.centerLeft,
-                              padding: EdgeInsets.only(left: 20)
-                          ),
+                          style: Palette.greyElevatedStyleLeftPadding,
                           onPressed: () {},
                           icon: Icon(Icons.home_filled, color: Colors.black,),
                           label: Text('Add Home', style: Theme.of(context).textTheme.headline3.copyWith(fontWeight: FontWeight.w400)),
                         ),
                         ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                              primary: Theme.of(context).scaffoldBackgroundColor,
-                              elevation: 0,
-                              onPrimary: Colors.black,
-                              minimumSize: Size(double.infinity, 40),
-                              alignment: Alignment.centerLeft,
-                              padding: EdgeInsets.only(left: 20)
-                          ),
+                          style: Palette.greyElevatedStyleLeftPadding,
                           onPressed: () {},
                           icon: Icon(Icons.work, color: Colors.black,),
                           label: Text('Add Work', style: Theme.of(context).textTheme.headline3.copyWith(fontWeight: FontWeight.w400)),
                         ),
                         ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Theme.of(context).scaffoldBackgroundColor,
-                              elevation: 0,
-                              onPrimary: Colors.black,
-                              minimumSize: Size(double.infinity, 40),
-                              alignment: Alignment.centerLeft,
-                              padding: EdgeInsets.only(left: 20)
-                          ),
+                          style: Palette.greyElevatedStyleLeftPadding,
                           onPressed: () {},
                           child: Text('More Saved places', style: TextStyle(fontSize: 18, color: Colors.blue, fontWeight: FontWeight.w400),),
                         )
@@ -107,7 +98,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                   ],
                 )
             ),
-            Divider(color: Colors.grey, height: 30, thickness: 1,),
+            Divider(color: Colors.grey, height: 30, thickness: 0.5,),
             Container(
                 margin: EdgeInsets.only(top: 20),
                 child: Column(
@@ -123,14 +114,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                       shrinkWrap: true,
                       children: [
                         ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                                primary: Theme.of(context).scaffoldBackgroundColor,
-                                elevation: 0,
-                                onPrimary: Colors.black,
-                                minimumSize: Size(double.infinity, 40),
-                                alignment: Alignment.centerLeft,
-                                padding: EdgeInsets.only(left: 20, top: 10, bottom: 10)
-                            ),
+                            style: Palette.greyElevatedStyleAllPadding,
                             onPressed: () {},
                             icon: Icon(Icons.quick_contacts_dialer_rounded, color: Colors.black,),
                             label: Container(
@@ -149,14 +133,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                             )
                         ),
                         ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                                primary: Theme.of(context).scaffoldBackgroundColor,
-                                elevation: 0,
-                                onPrimary: Colors.black,
-                                minimumSize: Size(double.infinity, 40),
-                                alignment: Alignment.centerLeft,
-                                padding: EdgeInsets.only(left: 20, top: 10, bottom: 10)
-                            ),
+                            style: Palette.greyElevatedStyleAllPadding,
                             onPressed: () {},
                             icon: Icon(Icons.fiber_pin, color: Colors.black,),
                             label: Container(
@@ -175,14 +152,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                             )
                         ),
                         ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                                primary: Theme.of(context).scaffoldBackgroundColor,
-                                elevation: 0,
-                                onPrimary: Colors.black,
-                                minimumSize: Size(double.infinity, 40),
-                                alignment: Alignment.centerLeft,
-                                padding: EdgeInsets.only(left: 20, top: 10, bottom: 10)
-                            ),
+                            style: Palette.greyElevatedStyleAllPadding,
                             onPressed: () {},
                             //TODO import custom icon
                             icon: Icon(Icons.car_rental, color: Colors.black,),
@@ -206,16 +176,9 @@ class _AccountSettingsState extends State<AccountSettings> {
                   ],
                 )
             ),
-            Divider(height: 30, thickness: 1, color: Colors.grey,),
+            Divider(height: 30, thickness: 0.5, color: Colors.grey,),
             ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).scaffoldBackgroundColor,
-                      elevation: 0,
-                      onPrimary: Colors.black,
-                      minimumSize: Size(double.infinity, 40),
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.only(left: 20, bottom: 10, top: 10)
-                  ),
+                  style: Palette.greyElevatedStyleAllPadding,
                   onPressed: () {},
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,16 +188,9 @@ class _AccountSettingsState extends State<AccountSettings> {
                     ],
                   )
               ),
-
+            Divider(height: 30, color: Colors.grey, thickness: 0.5,),
             ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).scaffoldBackgroundColor,
-                    elevation: 0,
-                    onPrimary: Colors.black,
-                    minimumSize: Size(double.infinity, 40),
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(left: 20, bottom: 10, top: 10)
-                ),
+                style: Palette.greyElevatedStyleAllPadding,
                 onPressed: () {},
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,16 +202,9 @@ class _AccountSettingsState extends State<AccountSettings> {
                   ],
                 )
             ),
-
+            Divider(height: 30, color: Colors.grey, thickness: 0.5,),
             ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).scaffoldBackgroundColor,
-                    elevation: 0,
-                    onPrimary: Colors.black,
-                    minimumSize: Size(double.infinity, 40),
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(left: 20, bottom: 10, top: 10)
-                ),
+                style: Palette.greyElevatedStyleAllPadding,
                 onPressed: () async {
                   await Provider.of<AuthenticationService>(context, listen: false).signOutGoogle();
                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);

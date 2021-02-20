@@ -1,9 +1,6 @@
-
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/services/authentication_service.dart';
 
@@ -24,10 +21,9 @@ class _EditAccountState extends State<EditAccount> {
     final User user = Provider.of<AuthenticationService>(context, listen: false).currentUser;
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
-        statusBarColor: Theme.of(context).scaffoldBackgroundColor,
+        statusBarColor: Colors.transparent,
       ),
       child : Scaffold(
-        key: globalKey,
         body: NestedScrollView(
           headerSliverBuilder: (context, isScrolled) {
             return [
@@ -36,41 +32,38 @@ class _EditAccountState extends State<EditAccount> {
                 sliver: SliverSafeArea(
                   top: false,
                   sliver: SliverAppBar(
-
-                    stretch: true,
-                    brightness: Brightness.dark,
-                    iconTheme: IconThemeData(
-                      color: Colors.white,
-                      size: 34
-                    ),
-                    elevation: 0.0,
-                    expandedHeight: 400,
-                    pinned: true,
-                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                    actions: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.edit),
+                      iconTheme: IconThemeData(
+                          color: Colors.white
                       ),
-                    ],
-                    flexibleSpace: FlexibleSpaceBar(
-                      //titlePadding: EdgeInsets.only(),
-                      centerTitle: true,
-
-                      title: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text('sahjdhasjhdkajs', style: TextStyle(color: Colors.black),),
-                          Text('sahjdhasjhdkajs', style: TextStyle(color: Colors.black),),
-                        ],
-                      ),
-                      background:Image.asset('assets/images/new_york.jpg', fit: BoxFit.cover,),
-                    ),
+                      brightness: Brightness.dark,
+                      elevation: 0.0,
+                      expandedHeight: MediaQuery.of(context).size.height * 0.45,
+                      pinned: true,
+                      actions: [
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {},
+                        ),
+                      ],
+                      flexibleSpace: LayoutBuilder(
+                        builder: (context, constraints) {
+                          return  FlexibleSpaceBar(
+                            centerTitle: false,
+                            title: Text('John', style: TextStyle(color: Colors.white, fontSize: 22),),
+                            background: Container(
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/images/new_york.jpg'),
+                                    fit: BoxFit.cover,
+                                  )
+                              ),
+                            ),
+                          );
+                        },
+                      )
                   ),
                 ),
-              ),
-
+              )
             ];
           },
           body: SingleChildScrollView(
@@ -104,7 +97,7 @@ class _EditAccountState extends State<EditAccount> {
                       Spacer(),
                       Container(
                           margin: EdgeInsets.only(bottom: 10),
-                          child: Text('Verified' ,style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.green),))
+                          child: Text('Verified' ,style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.green, fontWeight: FontWeight.w300),))
                     ],
                   ),
                   SizedBox(height: 40,),
@@ -112,21 +105,25 @@ class _EditAccountState extends State<EditAccount> {
                   SizedBox(height: 5,),
                   Row(
                     children: [
-                      Text(user.email, style: Theme.of(context).textTheme.headline6,),
-                      Spacer(),
+                      Expanded(
+                          child: Text(user.email + 'dsadas', style: Theme.of(context).textTheme.headline6, overflow: TextOverflow.clip,)),
+                     // Spacer(),
                       Container(
                           margin: EdgeInsets.only(bottom: 10),
-                          child: Text('Verified', style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.green),))
+                          child: Text('Verified', style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.green, fontWeight: FontWeight.w300),))
                     ],
                   ),
                   SizedBox(height: 40,),
                   Row(
                     children: [
-                      Icon(FontAwesomeIcons.google, color: Colors.blue,),
+                      Image.asset(
+                        'assets/images/google_icon.png',
+                        scale: 15,
+                      ),
                       SizedBox(width: 20,),
                       Text('Google', style: Theme.of(context).textTheme.headline6,),
                       Spacer(),
-                      Text('Connected', style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.green),)
+                      Text('Connected', style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.green, fontWeight: FontWeight.w300),)
                     ],
                   )
                 ],

@@ -22,8 +22,6 @@ extension tripTypeToString on TripType {
 }
 
 class TripsProvider extends ChangeNotifier{
-
-
   bool _shown = false;
   TripType _tripType = TripType.Past;
 

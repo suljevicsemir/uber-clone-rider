@@ -42,15 +42,15 @@ class AppTheme extends StatelessWidget  {
         //TODO add usage comments
         headline5: TextStyle(
           color: Colors.grey[600],
-          fontSize: 18
+          fontSize: 19
         ),
 
         //TODO add usage comments
         headline6: TextStyle(
           color: Colors.black,
-          fontSize: 20,
-          fontWeight: FontWeight.w400,
-          fontFamily: 'BenneRegular'
+          fontSize: 22,
+          fontWeight: FontWeight.w300,
+          //fontFamily: ''
         )
 
       ),
