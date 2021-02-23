@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
 import 'package:uber_clone/models/user_data.dart';
 
 enum SignedInType {
@@ -22,11 +25,49 @@ class AuthenticationService {
 
   User get currentUser => _firebaseAuth.currentUser;
 
+
+
+   _parseToken(String token ) {
+    if(token == null) return null;
+    final List<String> parts = token.split('.');
+    if(parts.length != 3) return null;
+
+    final String payload = parts[1];
+    final String normalized = base64Url.normalize(payload);
+    final String resp = utf8.decode(base64Url.decode(normalized));
+
+    final payloadMap = json.decode(resp);
+    if( payloadMap is! Map<String, dynamic>) {
+      return null;
+    }
+
+    final String firstName = payloadMap["given_name"];
+    final String lastName = payloadMap["family_name"];
+
+    print("First name: " + firstName);
+    print("Last name: " + lastName);
+    return payloadMap;
+
+
+  }
+
+
+
+
+
+
+
   Future<bool> signInWithGoogle() async{
     try {
       final GoogleSignInAccount accountUser = await _googleSignIn.signIn();
       if(accountUser != null) {
         final GoogleSignInAuthentication googleAuth = await accountUser.authentication;
+        final idToken = googleAuth.idToken;
+        print("Ovo je access token");
+        _parseToken(idToken);
+        print( googleAuth.accessToken.toString());
+        print("Ovo je auth id token");
+        print(idToken.toString());
         final AuthCredential credential = GoogleAuthProvider.credential(
             accessToken: googleAuth.accessToken,
             idToken: googleAuth.idToken
@@ -44,11 +85,20 @@ class AuthenticationService {
   Future<bool> signInWithFacebook() async {
 
     try {
-       final  accessToken = await FacebookAuth.instance.login();
+       final AccessToken accessToken = await FacebookAuth.instance.login();
        final AuthCredential credential = FacebookAuthProvider.credential(accessToken.token);
        await _firebaseAuth.signInWithCredential(credential);
+       print('Access token id');
+       print(accessToken.userId);
+       String url = 'https://graph.facebook.com/v9.0/me?fields=name,first_name,last_name,email&access_token=${accessToken.token}';
+       http.Response x = await http.get(url);
+       final profile = json.decode(x.body);
+       print(profile);
        final Map<String, dynamic> facebookUserData = await FacebookAuth.instance.getUserData();
-        return true;
+       print("Firebase Auth id");
+       print(_firebaseAuth.currentUser.uid);
+
+       return true;
      } on FacebookAuthException catch(error) {
         print(error.errorCode);
         return false;

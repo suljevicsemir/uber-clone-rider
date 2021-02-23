@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:uber_clone/services/authentication_service.dart';
 
 class PickSavedPlace extends StatelessWidget {
   @override
@@ -6,7 +8,9 @@ class PickSavedPlace extends StatelessWidget {
     return Material(
       color: Colors.white,
       child: InkWell(
-        onTap: () {},
+        onTap: ()  async{
+          await Provider.of<AuthenticationService>(context, listen: false).signOutGoogle();
+        },
         splashColor: Colors.grey,
         child: Container(
           child: Row(
