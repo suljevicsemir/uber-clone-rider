@@ -1,24 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/services/authentication_service.dart';
-
-
-class FoodItem {
-
-  String x,y;
-
-  FoodItem(String x, String y) {
-    this.x = x;
-    this.y = y;
-  }
-}
-
 
 class HomeDrawerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<AuthenticationService>(context, listen: false).currentUser;
+    final UserData userData = Provider.of<AuthenticationService>(context, listen:false).currentUserData;
     return DrawerHeader(
       margin: EdgeInsets.zero,
       padding: EdgeInsets.zero,
@@ -26,7 +14,6 @@ class HomeDrawerHeader extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.black,
         ),
-
         child: Container(
           margin: EdgeInsets.only( top: 20),
           child: Column(
@@ -38,12 +25,21 @@ class HomeDrawerHeader extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      backgroundImage: NetworkImage(user.photoURL),
+                      backgroundImage: NetworkImage(userData.profilePicture),
                       backgroundColor: Colors.transparent,
                     ),
                     Container(
                         margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
-                        child: Text(user.displayName, style: TextStyle(color: Colors.white),))
+                        child: RichText(
+                          text: TextSpan(
+                            text: userData.firstName,
+                            style: TextStyle(color: Colors.white),
+                            children: [
+                              TextSpan( text: ' ' + userData.lastName)
+                            ]
+                          ),
+                        )
+                    )
                   ],
                 ),
               ),
@@ -80,7 +76,6 @@ class HomeDrawerHeader extends StatelessWidget {
                   ),
                 ),
               ),
-
             ],
           ),
         ),

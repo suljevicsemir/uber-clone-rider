@@ -13,7 +13,7 @@ class GetStarted extends StatefulWidget {
 
 class _GetStartedState extends State<GetStarted> {
 
-  CallNumbersProvider provider = CallNumbersProvider();
+  SecureStorage provider = SecureStorage();
 
 
   @override

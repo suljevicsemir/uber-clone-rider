@@ -1,29 +1,32 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:uber_clone/globals.dart' as globals;
+import 'package:uber_clone/models/signed_in_type.dart';
 
 @immutable
 class UserData {
-  final String email, displayName, picture;
 
-  UserData.fromFacebookMap(Map<String, dynamic> map) :
-      email = map["email"],
-      displayName = map["name"],
-      picture = "sad";
-     // picture = map["picture"].data.url;
+  final String firstName, lastName, phoneNumber, email, providerUserId, firebaseUserId, profilePicture;
+  final SignedInType signedInType;
 
-  UserData.fromGoogleAccount(GoogleSignInAccount account) :
-      email = account.email,
-      displayName = account.displayName,
-      picture = account.photoUrl;
+  UserData({ this.firstName, this.lastName,this.phoneNumber, this.email, this.providerUserId, this.firebaseUserId, this.profilePicture, this.signedInType});
 
-  UserData.fromFirebaseUser(User user) :
-      email = user.email,
-      displayName = user.displayName,
-      picture = user.photoURL;
+
+  UserData.fromMap(Map<String, dynamic> map):
+      firstName = map[globals.firstName],
+      lastName = map[globals.lastName],
+      phoneNumber = '2131', // TODO
+      email = map[globals.email],
+      providerUserId = map[globals.providerUserId],
+      firebaseUserId = map[globals.firebaseUserId],
+      profilePicture = map[globals.profilePicture],
+      signedInType = map[globals.signedInType] == "Google" ? SignedInType.Google : SignedInType.Facebook;
+
 
   @override
   String toString() {
-    return 'UserData{email: $email, displayName: $displayName, picture: $picture}';
+    return 'UserData{firstName: $firstName, lastName: $lastName, phoneNumber: $phoneNumber, email: $email, providerUserId: $providerUserId, firebaseId: $firebaseUserId, profilePicture: $profilePicture, signedInType: ${signedInType.parseSignedInType()}';
   }
+
+
+
 }

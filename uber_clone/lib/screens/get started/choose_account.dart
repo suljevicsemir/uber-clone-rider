@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
+import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/services/authentication_service.dart';
 
 class ChooseAccount extends StatefulWidget {
@@ -36,8 +37,8 @@ class _ChooseAccountState extends State<ChooseAccount> {
                       child: InkWell(
                         splashColor: Colors.grey,
                         onTap: () async {
-                          final bool result = await Provider.of<AuthenticationService>(context, listen: false).signInWithFacebook();
-                          if(result) {
+                          final UserData result = await Provider.of<AuthenticationService>(context, listen: false).signInWithFacebook();
+                          if(result != null) {
                             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
                           }
                         },
@@ -58,8 +59,8 @@ class _ChooseAccountState extends State<ChooseAccount> {
                       child: InkWell(
                         splashColor: Colors.grey,
                         onTap: ()  async{
-                          final bool result = await Provider.of<AuthenticationService>(context, listen: false).signInWithGoogle();
-                          if(result) {
+                          final UserData result = await Provider.of<AuthenticationService>(context, listen: false).signInWithGoogle();
+                          if( result != null) {
                             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
                           }
                         },

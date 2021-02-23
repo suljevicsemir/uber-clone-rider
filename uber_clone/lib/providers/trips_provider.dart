@@ -6,7 +6,7 @@ enum TripType {
   Upcoming
 }
 
-extension tripTypeToString on TripType {
+extension typeConversion on TripType {
   String parseTripType() {
     return this.toString().split(".").last;
   }
