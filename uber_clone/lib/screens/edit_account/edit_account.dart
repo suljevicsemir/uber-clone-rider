@@ -43,12 +43,6 @@ class _EditAccountState extends State<EditAccount> {
                       elevation: 0.0,
                       expandedHeight: MediaQuery.of(context).size.height * 0.45,
                       pinned: true,
-                      actions: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {},
-                        ),
-                      ],
                       flexibleSpace: LayoutBuilder(
                         builder: (context, constraints) {
                           return  FlexibleSpaceBar(
@@ -57,7 +51,7 @@ class _EditAccountState extends State<EditAccount> {
                             background: Container(
                               decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: AssetImage('assets/images/new_york.jpg'),
+                                    image: NetworkImage(user.profilePicture),
                                     fit: BoxFit.cover,
                                   )
                               ),
