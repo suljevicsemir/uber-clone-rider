@@ -4,11 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
-import 'package:uber_clone/globals.dart' as globals;
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/services/firestore_service.dart';
 import 'package:uber_clone/services/secure_storage.dart';
+import 'package:uber_clone/user_data_fields.dart' as user_data_fields;
 
 class AuthenticationService{
 
@@ -68,13 +68,13 @@ class AuthenticationService{
         final payloadMap = _parseToken(googleAuth.idToken);
 
         final Map<String, dynamic> data = {
-          globals.firstName : payloadMap["given_name"],
-          globals.lastName : payloadMap["family_name"],
-          globals.email : accountUser.email,
-          globals.providerUserId : accountUser.id,
-          globals.profilePicture : accountUser.photoUrl,
-          globals.signedInType : SignedInType.Google.parseSignedInType(),
-          globals.firebaseUserId : FirebaseAuth.instance.currentUser.uid
+          user_data_fields.firstName : payloadMap["given_name"],
+          user_data_fields.lastName : payloadMap["family_name"],
+          user_data_fields.email : accountUser.email,
+          user_data_fields.providerUserId : accountUser.id,
+          user_data_fields.profilePicture : accountUser.photoUrl,
+          user_data_fields.signedInType : SignedInType.Google.parseSignedInType(),
+          user_data_fields.firebaseUserId : FirebaseAuth.instance.currentUser.uid
         };
 
         _userData = UserData.fromMap(data);
@@ -101,13 +101,13 @@ class AuthenticationService{
        print(profile);
 
        final Map<String, dynamic> data = {
-         globals.firstName : profile["first_name"],
-         globals.lastName : profile["last_name"],
-         globals.email : profile["email"],
-         globals.providerUserId : profile["id"],
-         globals.profilePicture : FirebaseAuth.instance.currentUser.photoURL,
-         globals.signedInType : SignedInType.Facebook,
-         globals.firebaseUserId : FirebaseAuth.instance.currentUser.uid
+         user_data_fields.firstName : profile["first_name"],
+         user_data_fields.lastName : profile["last_name"],
+         user_data_fields.email : profile["email"],
+         user_data_fields.providerUserId : profile["id"],
+         user_data_fields.profilePicture : FirebaseAuth.instance.currentUser.photoURL,
+         user_data_fields.signedInType : SignedInType.Facebook,
+         user_data_fields.firebaseUserId : FirebaseAuth.instance.currentUser.uid
        };
 
        _userData = UserData.fromMap(data);

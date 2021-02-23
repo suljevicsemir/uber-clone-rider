@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:uber_clone/globals.dart' as globals;
 import 'package:uber_clone/models/signed_in_type.dart';
+import 'package:uber_clone/user_data_fields.dart' as globals;
 
 @immutable
 class UserData {

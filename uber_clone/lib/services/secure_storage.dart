@@ -1,7 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:uber_clone/globals.dart' as globals;
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/models/user_data.dart';
+import 'package:uber_clone/user_data_fields.dart' as user_data_fields;
 
 class SecureStorage {
 
@@ -9,14 +9,14 @@ class SecureStorage {
 
   static Future<bool> saveUser(UserData userData) async {
     try{
-      await _flutterSecureStorage.write(key: globals.providerUserId, value: userData.providerUserId);
-      await _flutterSecureStorage.write(key: globals.firstName, value: userData.firstName);
-      await _flutterSecureStorage.write(key: globals.lastName, value: userData.lastName);
-      await _flutterSecureStorage.write(key: globals.phoneNumber, value: userData.phoneNumber);
-      await _flutterSecureStorage.write(key: globals.email, value: userData.email);
-      await _flutterSecureStorage.write(key: globals.signedInType, value: userData.signedInType.parseSignedInType());
-      await _flutterSecureStorage.write(key: globals.profilePicture, value: userData.profilePicture);
-      await _flutterSecureStorage.write(key: globals.firebaseUserId, value: userData.firebaseUserId);
+      await _flutterSecureStorage.write(key: user_data_fields.providerUserId, value: userData.providerUserId);
+      await _flutterSecureStorage.write(key: user_data_fields.firstName, value: userData.firstName);
+      await _flutterSecureStorage.write(key: user_data_fields.lastName, value: userData.lastName);
+      await _flutterSecureStorage.write(key: user_data_fields.phoneNumber, value: userData.phoneNumber);
+      await _flutterSecureStorage.write(key: user_data_fields.email, value: userData.email);
+      await _flutterSecureStorage.write(key: user_data_fields.signedInType, value: userData.signedInType.parseSignedInType());
+      await _flutterSecureStorage.write(key: user_data_fields.profilePicture, value: userData.profilePicture);
+      await _flutterSecureStorage.write(key: user_data_fields.firebaseUserId, value: userData.firebaseUserId);
       return true;
     }
     catch (err) {
@@ -30,6 +30,9 @@ class SecureStorage {
 
 
   }
+
+
+
 
 
 }
