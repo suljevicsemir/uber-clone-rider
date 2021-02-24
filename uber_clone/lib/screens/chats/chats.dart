@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:uber_clone/models/chat_info.dart';
 import 'package:uber_clone/providers/chats_provider.dart';
 import 'package:uber_clone/screens/chats/chat_list_tile.dart';
 class Chats extends StatefulWidget {
@@ -41,10 +41,8 @@ class _ChatsState extends State<Chats> {
                 child: ListView.separated(
                   separatorBuilder: (context, index) => Divider(color: Colors.grey, height: 0.0,),
                   itemCount: snapshot.data.docs.length,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot chatInfo = snapshot.data.docs[index];
-                    return ChatListTile();
-                  },
+                  itemBuilder: (context, index) =>  ChatListTile(chatInfo: ChatInfo.fromSnapshot(snapshot.data.docs[index]))
+
                 ),
               );
 

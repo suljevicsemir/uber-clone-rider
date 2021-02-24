@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
-
+import 'package:uber_clone/models/chat_info.dart';
 class ChatListTile extends StatefulWidget {
+
+
+  final ChatInfo chatInfo;
+
+
+  ChatListTile({@required this.chatInfo});
+
   @override
   _ChatListTileState createState() => _ChatListTileState();
 }
