@@ -29,5 +29,16 @@ class FirestoreService {
         }
     }
 
+    static Future<UserData> loadUser(String firebaseUserId) async {
+     try{
+       //TODO load current user data
+       return null;
+     }
+     catch(err) {
+       print(err.toString());
+       return null;
+     }
+    }
+
 
 }

@@ -22,6 +22,23 @@ class AppTheme extends StatelessWidget  {
 
       textTheme: TextTheme(
 
+
+        //headline 1 is used for chat tile last message and time
+        headline1: TextStyle(
+          color: Colors.grey[800],
+          fontSize: 17,
+          fontWeight: FontWeight.w300
+        ),
+
+
+        //headline2 is used for chat tile names
+        headline2: TextStyle(
+          color: Colors.grey[800],
+          fontSize: 19,
+          fontWeight: FontWeight.w400
+        ),
+
+
         /*headline3 is used in Account Settings screen
         it's used for options title
         for instance 'Manage trusted contacts */

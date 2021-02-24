@@ -28,6 +28,8 @@ class AuthenticationService{
   UserData get currentUserData => _userData;
   User get currentUser => _firebaseAuth.currentUser;
 
+
+
   _parseToken(String token ) {
     if(token == null) return null;
     final List<String> parts = token.split('.');

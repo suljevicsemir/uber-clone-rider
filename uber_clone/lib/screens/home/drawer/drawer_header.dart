@@ -49,7 +49,7 @@ class HomeDrawerHeader extends StatelessWidget {
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () async => await Navigator.pushNamed(context, '/chats'),
                     splashColor: Colors.white,
                     child: Container(
                       margin: EdgeInsets.only(left: 20),
