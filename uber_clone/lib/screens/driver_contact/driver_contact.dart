@@ -93,10 +93,6 @@ class _DriverContactState extends State<DriverContact> with TickerProviderStateM
                         icon: Icon(Icons.star_border),
                         onPressed: () {}
                       ),
-                      IconButton(
-                        icon: Icon(Icons.edit),
-                        onPressed: () {},
-                      ),
                     ],
                     flexibleSpace: LayoutBuilder(
                       builder: (context, constraints) {
