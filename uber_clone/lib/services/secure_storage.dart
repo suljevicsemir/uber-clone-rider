@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/models/user_data.dart';
+import 'package:uber_clone/services/firestore_service.dart';
 import 'package:uber_clone/user_data_fields.dart' as user_data_fields;
 
 class SecureStorage {
@@ -26,7 +28,7 @@ class SecureStorage {
 
   static Future<UserData> loadUser() async {
     Map<String, String> data = await _flutterSecureStorage.readAll();
-    return data.isEmpty ? null : UserData.fromMap(data);
+    return data.isEmpty ? await FirestoreService.loadUser(FirebaseAuth.instance.currentUser.uid) : UserData.fromMap(data);
 
 
   }

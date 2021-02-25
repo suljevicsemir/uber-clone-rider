@@ -31,8 +31,8 @@ class FirestoreService {
 
     static Future<UserData> loadUser(String firebaseUserId) async {
      try{
-       //TODO load current user data
-       return null;
+       var x = await _users.doc(firebaseUserId).get();
+       return UserData.fromFirestoreSnapshot(x);
      }
      catch(err) {
        print(err.toString());

@@ -19,18 +19,22 @@ class AuthenticationService{
   Stream<User> get authStateChanges => _firebaseAuth.authStateChanges();
 
   AuthenticationService(this._firebaseAuth) {
-    _loadUser();
+    if(_firebaseAuth.currentUser != null) {
+      _loadUser();
+    }
   }
+
+
+
+
+  UserData get currentUserData => _userData;
+  User get currentUser => _firebaseAuth.currentUser;
 
   Future<void> _loadUser() async {
     _userData = await SecureStorage.loadUser();
   }
-  UserData get currentUserData => _userData;
-  User get currentUser => _firebaseAuth.currentUser;
 
-
-
-  _parseToken(String token ) {
+  _parseGoogleToken(String token ) {
     if(token == null) return null;
     final List<String> parts = token.split('.');
     if(parts.length != 3) return null;
@@ -60,6 +64,8 @@ class AuthenticationService{
   Future<UserData> signInWithGoogle() async{
     try {
       final GoogleSignInAccount accountUser = await _googleSignIn.signIn();
+
+      // accountUser would be null if account is not picked
       if(accountUser != null) {
         final GoogleSignInAuthentication googleAuth = await accountUser.authentication;
         final AuthCredential credential = GoogleAuthProvider.credential(
@@ -67,7 +73,7 @@ class AuthenticationService{
             idToken: googleAuth.idToken
         );
         await _firebaseAuth.signInWithCredential(credential);
-        final payloadMap = _parseToken(googleAuth.idToken);
+        final payloadMap = _parseGoogleToken(googleAuth.idToken);
 
         final Map<String, dynamic> data = {
           user_data_fields.firstName : payloadMap["given_name"],
@@ -76,15 +82,18 @@ class AuthenticationService{
           user_data_fields.providerUserId : accountUser.id,
           user_data_fields.profilePicture : accountUser.photoUrl,
           user_data_fields.signedInType : SignedInType.Google.parseSignedInType(),
-          user_data_fields.firebaseUserId : FirebaseAuth.instance.currentUser.uid
+          user_data_fields.firebaseUserId : FirebaseAuth.instance.currentUser.uid,
+          user_data_fields.phoneNumber : '2225'
         };
 
+        // initialize attribute with gathered data
         _userData = UserData.fromMap(data);
+
+        //save custom user data to SecureStorage and Firestore
         await SecureStorage.saveUser(_userData);
         await FirestoreService.saveUser(_userData);
         return _userData;
       }
-
       return null;
     } on Exception catch(_) {
       print("Error login with google!");
@@ -109,12 +118,18 @@ class AuthenticationService{
          user_data_fields.providerUserId : profile["id"],
          user_data_fields.profilePicture : FirebaseAuth.instance.currentUser.photoURL,
          user_data_fields.signedInType : SignedInType.Facebook,
-         user_data_fields.firebaseUserId : FirebaseAuth.instance.currentUser.uid
+         user_data_fields.firebaseUserId : FirebaseAuth.instance.currentUser.uid,
+         user_data_fields.phoneNumber : '2225'
        };
 
+
+       // initialize attribute with gathered data
        _userData = UserData.fromMap(data);
+
+       //save the custom user data to SecureStorage and Firestore
        await SecureStorage.saveUser(_userData);
        await FirestoreService.saveUser(_userData);
+
        return _userData;
      } on FacebookAuthException catch(error) {
         print(error.errorCode);
