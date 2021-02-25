@@ -24,9 +24,6 @@ class AuthenticationService{
     }
   }
 
-
-
-
   UserData get currentUserData => _userData;
   User get currentUser => _firebaseAuth.currentUser;
 
@@ -64,6 +61,7 @@ class AuthenticationService{
   Future<UserData> signInWithGoogle() async{
     try {
       final GoogleSignInAccount accountUser = await _googleSignIn.signIn();
+
 
       // accountUser would be null if account is not picked
       if(accountUser != null) {
@@ -139,18 +137,6 @@ class AuthenticationService{
   }
 
 
-  Future<String> signInWithEmail(String email, String password)  async{
-  await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-    return "Signed in";
-  }
-
-  Future<String> signUpWithEmail(String email, String password) async {
-  await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
-  return "Created";
-  }
-
-
-
   Future<bool> isLoggedInWithFacebook() async {
     return (await FacebookAuth.instance.isLogged) != null;
   }
@@ -159,16 +145,14 @@ class AuthenticationService{
   }
 
 
-  Future<void> signOutGoogle() async {
-    await _firebaseAuth.signOut();
-    await _googleSignIn.signOut();
+  Future<void> signOut() async {
+    if( await isLoggedInWithFacebook()) {
+      await FacebookAuth.instance.logOut();
+    }
+    else {
+      await _googleSignIn.signOut();
+    }
 
-
-
-  }
-
-  Future<void> signOutWithFacebook() async {
-    await FacebookAuth.instance.logOut();
     await FirebaseAuth.instance.signOut();
 
   }

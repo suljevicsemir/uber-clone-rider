@@ -28,7 +28,7 @@ class ChatsProvider  {
 
   Map<String, dynamic> _buildMessage(Message message) {
     return {
-      message_fields.senderId  : message.senderId,
+      message_fields.senderFirebaseId  : message.senderFirebaseId,
       message_fields.content   : message.content,
       message_fields.timestamp : message.timestamp
     };

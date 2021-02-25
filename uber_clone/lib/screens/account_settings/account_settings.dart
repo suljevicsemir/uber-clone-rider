@@ -206,7 +206,7 @@ class _AccountSettingsState extends State<AccountSettings> {
             ElevatedButton(
                 style: Palette.greyElevatedStyleAllPadding,
                 onPressed: () async {
-                  await Provider.of<AuthenticationService>(context, listen: false).signOutGoogle();
+                  await Provider.of<AuthenticationService>(context, listen: false).signOut();
                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
                 },
                 child: Column(

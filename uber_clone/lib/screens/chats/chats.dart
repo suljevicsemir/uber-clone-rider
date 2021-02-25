@@ -42,7 +42,6 @@ class _ChatsState extends State<Chats> {
                   separatorBuilder: (context, index) => Divider(color: Colors.grey, height: 0.0,),
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (context, index) =>  ChatListTile(chatInfo: ChatInfo.fromSnapshot(snapshot.data.docs[index]))
-
                 ),
               );
 

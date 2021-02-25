@@ -2,9 +2,9 @@ library chat_info_fields;
 
 
 String
-    chatId               = 'chatId',
-    firstName            = 'firstName',
-    lastName             = 'lastName',
-    lastMessageTimestamp = 'lastMessageTimestamp',
-    lastMessage          = 'lastMessage' ,
-    senderFirebaseId     = 'senderFirebaseId';
+    driverId                    = 'driverId',
+    firstName                   = 'firstName',
+    lastName                    = 'lastName',
+    lastMessage                 = 'lastMessage' ,
+    lastMessageTimestamp        = 'lastMessageTimestamp',
+    lastMessageSenderFirebaseId = 'lastMessageSenderFirebaseId';
