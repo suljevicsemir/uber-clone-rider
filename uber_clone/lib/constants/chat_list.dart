@@ -1,8 +1,9 @@
-library chat_info_fields;
+library chat_list_fields;
 
-
+// subcollection of users(id) - chats(id)
+//last revised 26.2 16:52
 String
-    driverId                    = 'driverId',
+    firebaseUserId              = 'firebaseUserId',
     firstName                   = 'firstName',
     lastName                    = 'lastName',
     lastMessage                 = 'lastMessage' ,

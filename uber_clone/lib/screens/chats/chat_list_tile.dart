@@ -5,7 +5,6 @@ class ChatListTile extends StatefulWidget {
 
   final ChatInfo chatInfo;
 
-
   ChatListTile({@required this.chatInfo});
 
   @override
@@ -39,14 +38,22 @@ class _ChatListTileState extends State<ChatListTile> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Shenaid', style: Theme.of(context).textTheme.headline2,),
+                  RichText(
+                    text: TextSpan(
+                        text: widget.chatInfo.firstName,
+                        style: TextStyle(color: Colors.white),
+                        children: [
+                          TextSpan( text: ' ' + widget.chatInfo.lastName)
+                        ]
+                    ),
+                  ),
                   SizedBox(height: 10,),
-                  Text('Necu zalomit', style: Theme.of(context).textTheme.headline1,)
+                  Text(widget.chatInfo.lastMessage, style: Theme.of(context).textTheme.headline1,)
                 ],
               ),
             ),
             Spacer(),
-            Text('0:16', style: Theme.of(context).textTheme.headline1,)
+            Text(DateTime.fromMillisecondsSinceEpoch(widget.chatInfo.lastMessageTimestamp.millisecondsSinceEpoch).toString(), style: Theme.of(context).textTheme.headline1,)
           ],
         ),
       ),

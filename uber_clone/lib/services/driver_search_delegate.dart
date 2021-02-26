@@ -65,7 +65,7 @@ class DriverSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context ) {
-    // TODO: implement buildSuggestions
+
     return Container(
       padding: EdgeInsets.only(left: 10, right: 10),
       color: Colors.red,
@@ -74,6 +74,7 @@ class DriverSearchDelegate extends SearchDelegate {
         itemBuilder: (context, index) {
           return Container(
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(_drivers.elementAt(index).firstName),
                 Text(_drivers.elementAt(index).lastName)

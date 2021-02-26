@@ -1,7 +1,17 @@
 library message_send_fields;
 
 
+// document at chats (id) - messages
+
 //might need some additional fields for notifications implementation
 
-String senderFirebaseId = 'senderFirebaseId', content = 'content', chatId = 'chatId';
-String timestamp = 'timestamp';
+
+
+//last revised 26.2 16:52
+
+
+String
+      firebaseUserId   = 'firebaseUserId',
+      message          = 'message',
+      chatId           = 'chatId',
+      timestamp        = 'timestamp';

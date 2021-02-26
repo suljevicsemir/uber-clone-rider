@@ -31,7 +31,7 @@ class UserData {
       phoneNumber = snapshot[globals.phoneNumber],
       email = snapshot[globals.email],
       providerUserId = snapshot[globals.providerUserId],
-      firebaseUserId = snapshot[globals.firebaseUserId],
+      firebaseUserId = snapshot.id,
       profilePicture = snapshot[globals.profilePicture],
       signedInType = snapshot[globals.signedInType] == "Google" ? SignedInType.Google : SignedInType.Facebook;
 

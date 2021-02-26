@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uber_clone/models/chat_info.dart';
 import 'package:uber_clone/providers/chats_provider.dart';
 import 'package:uber_clone/screens/chats/chat_list_tile.dart';
+import 'package:uber_clone/services/driver_search_delegate.dart';
 class Chats extends StatefulWidget {
 
   static const route = '/chats';
@@ -23,7 +24,7 @@ class _ChatsState extends State<Chats> {
         title: Text('Messages'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => showSearch(context: context, delegate: DriverSearchDelegate()),
             icon: Icon(Icons.search),
           )
         ],
@@ -36,7 +37,8 @@ class _ChatsState extends State<Chats> {
               if(snapshot.hasError)
                 return Text('There was an error!');
               if(!snapshot.hasData)
-                return CircularProgressIndicator();
+                return Center(
+                    child: CircularProgressIndicator());
               return Container(
                 child: ListView.separated(
                   separatorBuilder: (context, index) => Divider(color: Colors.grey, height: 0.0,),

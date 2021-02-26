@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:uber_clone/providers/chats_provider.dart';
 class Chat extends StatefulWidget {
 
   static const route = '/chat';
@@ -42,7 +40,7 @@ class _ChatState extends State<Chat> {
             child: Container(
               margin: EdgeInsets.only(top: 10),
               child: StreamBuilder(
-                stream: Provider.of<ChatsProvider>(context).getChat('userId'),
+                stream: stream,
                 builder: (context, snapshot) {
                   if(!snapshot.hasData) {
                     return Center(
