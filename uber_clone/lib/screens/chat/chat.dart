@@ -195,6 +195,7 @@ class _ChatState extends State<Chat> {
   void dispose() {
     controller.dispose();
     super.dispose();
+
   }
 
 
