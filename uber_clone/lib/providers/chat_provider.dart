@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:uber_clone/constants/chat_list.dart' as chat_fields;
 import 'package:uber_clone/constants/message.dart' as message_fields;
 import 'package:uber_clone/models/chat_info.dart';
 import 'package:uber_clone/models/message.dart';
@@ -14,6 +13,8 @@ class ChatProvider {
   final CollectionReference _usersReference = FirebaseFirestore.instance.collection('users');
   final ChatInfo chatInfo;
 
+  double test = 12.0;
+
   ChatProvider({@required this.chatInfo});
 
   Future<void> sendMessage(Message message) async {
@@ -24,7 +25,7 @@ class ChatProvider {
        transaction.set(_chatReference.doc(chatInfo.chatId).collection('messages').doc(DateTime.now().millisecondsSinceEpoch.toString()), snapshot);
      });
 
-     await _instance.runTransaction((transaction) async {
+     /*await _instance.runTransaction((transaction) async {
        transaction.update(_usersReference.doc(userId).collection('chats').doc(chatInfo.chatId), {
          chat_fields.lastMessage : message.content,
          chat_fields.lastMessageTimestamp : message.timestamp,
@@ -39,7 +40,7 @@ class ChatProvider {
          chat_fields.lastMessageTimestamp : message.timestamp,
          chat_fields.lastMessageSenderFirebaseId : userId
        });
-     });
+     });*/
 
 
   }
@@ -47,8 +48,8 @@ class ChatProvider {
 
   Map<String, dynamic> _buildMessage(Message message) {
     return {
-      message_fields.firebaseUserId :  userId,
-      message_fields.message          : message.content,
+      message_fields.firebaseUserId   :  userId,
+      message_fields.message          : message.message,
       message_fields.timestamp        : message.timestamp
     };
   }

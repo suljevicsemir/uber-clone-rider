@@ -14,9 +14,9 @@ class ChatInfo {
 
   ChatInfo.fromSnapshot(DocumentSnapshot snapshot) :
       chatId                      = snapshot.id,
-      lastMessage                 = snapshot[fields.lastMessage],
-      lastMessageSenderFirebaseId = snapshot[fields.lastMessageSenderFirebaseId],
-      lastMessageTimestamp        = snapshot[fields.lastMessageTimestamp],
+      lastMessage                 = snapshot.get(fields.lastMessage),
+      lastMessageSenderFirebaseId = snapshot.get(fields.lastMessageSenderFirebaseId),
+      lastMessageTimestamp        = snapshot.get(fields.lastMessageTimestamp),
       firebaseUserId              = snapshot[fields.firebaseUserId],
       firstName                   = snapshot[fields.firstName],
       lastName                    = snapshot[fields.lastName];

@@ -15,7 +15,7 @@ class _ChatListTileState extends State<ChatListTile> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: ( ) async => await Navigator.pushNamed(context, '/chat'),
+      onPressed: ( ) async => await Navigator.pushNamed(context, '/chat', arguments: widget.chatInfo),
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0.0,
@@ -41,7 +41,7 @@ class _ChatListTileState extends State<ChatListTile> {
                   RichText(
                     text: TextSpan(
                         text: widget.chatInfo.firstName,
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                         children: [
                           TextSpan( text: ' ' + widget.chatInfo.lastName)
                         ]
@@ -53,7 +53,7 @@ class _ChatListTileState extends State<ChatListTile> {
               ),
             ),
             Spacer(),
-            Text(DateTime.fromMillisecondsSinceEpoch(widget.chatInfo.lastMessageTimestamp.millisecondsSinceEpoch).toString(), style: Theme.of(context).textTheme.headline1,)
+            Text(widget.chatInfo.lastMessageTimestamp.toDate().toString(), style: Theme.of(context).textTheme.headline1,)
           ],
         ),
       ),

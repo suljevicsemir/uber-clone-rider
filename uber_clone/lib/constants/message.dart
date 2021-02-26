@@ -13,5 +13,4 @@ library message_send_fields;
 String
       firebaseUserId   = 'firebaseUserId',
       message          = 'message',
-      chatId           = 'chatId',
       timestamp        = 'timestamp';

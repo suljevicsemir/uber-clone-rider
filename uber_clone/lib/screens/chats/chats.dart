@@ -38,7 +38,13 @@ class _ChatsState extends State<Chats> {
                 return Text('There was an error!');
               if(!snapshot.hasData)
                 return Center(
-                    child: CircularProgressIndicator());
+                    child: CircularProgressIndicator()
+              );
+              if( snapshot.data.docs.isEmpty) {
+                return Center(
+                  child: Text('You have no messages'),
+                );
+              }
               return Container(
                 child: ListView.separated(
                   separatorBuilder: (context, index) => Divider(color: Colors.grey, height: 0.0,),

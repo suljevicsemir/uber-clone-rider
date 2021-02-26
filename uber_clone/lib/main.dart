@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
           DriverContact.route: (context) => DriverContact(),
           AccountSettings.route : (context) => AccountSettings(),
           Chats.route : (context) => Chats(),
-          Chat.route: (context) => Chat()
+          Chat.route: (context) => Chat(chatInfo: ModalRoute.of(context).settings.arguments,)
         },
       ),
     );

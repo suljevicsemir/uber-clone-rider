@@ -5,4 +5,4 @@ String
     lastName             = "lastName",
     lastMessage          = 'lastMessage',
     lastMessageTimestamp = 'lastMessageTimestamp',
-    senderFirebaseUserId     = 'senderFirebaseUserId';
+    senderFirebaseUserId = 'senderFirebaseUserId';
