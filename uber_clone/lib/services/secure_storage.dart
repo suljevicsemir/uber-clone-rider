@@ -28,6 +28,7 @@ class SecureStorage {
 
   static Future<UserData> loadUser() async {
     Map<String, String> data = await _flutterSecureStorage.readAll();
+    if(data.isEmpty) print('nema nista u storage');
     return data.isEmpty ? await FirestoreService.loadUser(FirebaseAuth.instance.currentUser.uid) : UserData.fromMap(data);
 
 

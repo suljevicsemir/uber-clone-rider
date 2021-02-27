@@ -5,12 +5,20 @@ import 'package:flutter/material.dart';
 
 
 class MockDriver {
-  final String firstName, lastName;
+  final String firstName, lastName, id, phoneNumber;
 
-  MockDriver({@required this.firstName,@required this.lastName});
+  MockDriver({@required this.firstName,@required this.lastName, @required this.id, @required this.phoneNumber});
   MockDriver.fromSnapshot(DocumentSnapshot snapshot):
       firstName = snapshot.get('firstName'),
-      lastName = snapshot.get('lastName');
+      lastName = snapshot.get('lastName'),
+      id = snapshot.id,
+      phoneNumber = snapshot.get('phoneNumber');
+
+  MockDriver.fromObject(MockDriver mockDriver):
+      firstName = mockDriver.firstName,
+      lastName = mockDriver.lastName,
+      id = mockDriver.id,
+      phoneNumber = mockDriver.phoneNumber;
 }
 
 
@@ -67,18 +75,30 @@ class DriverSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context ) {
 
     return Container(
-      padding: EdgeInsets.only(left: 10, right: 10),
-      color: Colors.red,
+      margin: EdgeInsets.only(top: 10),
       child: ListView.builder(
         itemCount: _drivers.length,
         itemBuilder: (context, index) {
-          return Container(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(_drivers.elementAt(index).firstName),
-                Text(_drivers.elementAt(index).lastName)
-              ],
+          return GestureDetector(
+            onTap: () async => await Navigator.pushNamed(context, '/driverProfile', arguments: MockDriver.fromObject(_drivers.elementAt(index))),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                margin: EdgeInsets.only(left: 10, bottom: 10),
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.grey[300]
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(_drivers.elementAt(index).firstName),
+                    Text(' ' + _drivers.elementAt(index).lastName)
+                  ],
+                )
+              ),
             ),
           );
         },

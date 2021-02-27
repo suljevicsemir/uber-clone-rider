@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:uber_clone/models/chat_info.dart';
 class ChatListTile extends StatefulWidget {
 
@@ -27,33 +28,35 @@ class _ChatListTileState extends State<ChatListTile> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             CircleAvatar(
               radius: 30.0,
               backgroundColor: Colors.transparent,
               backgroundImage: AssetImage('assets/images/person_avatar.png'),
             ),
-            Container(
-              margin: EdgeInsets.only(left: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                        text: widget.chatInfo.firstName,
-                        style: TextStyle(color: Colors.black),
-                        children: [
-                          TextSpan( text: ' ' + widget.chatInfo.lastName)
-                        ]
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(left: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                          text: widget.chatInfo.firstName,
+                          style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500),
+                          children: [
+                            TextSpan( text: ' ' + widget.chatInfo.lastName)
+                          ]
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 10,),
-                  Text(widget.chatInfo.lastMessage, style: Theme.of(context).textTheme.headline1,)
-                ],
+                    SizedBox(height: 10,),
+                    Text(widget.chatInfo.lastMessage, style: Theme.of(context).textTheme.headline1, overflow: TextOverflow.ellipsis,)
+                  ],
+                ),
               ),
             ),
-            Spacer(),
-            Text(widget.chatInfo.lastMessageTimestamp.toDate().toString(), style: Theme.of(context).textTheme.headline1,)
+            Text(timeago.format(widget.chatInfo.lastMessageTimestamp.toDate(), locale: 'en_short'), style: Theme.of(context).textTheme.headline1,)
           ],
         ),
       ),

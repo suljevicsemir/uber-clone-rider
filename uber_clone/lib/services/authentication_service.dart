@@ -157,5 +157,4 @@ class AuthenticationService{
 
   }
 
-  GoogleSignIn get googleSignIn => _googleSignIn;
 }

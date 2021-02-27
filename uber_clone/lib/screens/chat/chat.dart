@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,27 +22,52 @@ class _ChatState extends State<Chat> {
 
 
   ChatProvider chatProvider;
-  final TextEditingController controller = TextEditingController();
-
+  final TextEditingController textController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     chatProvider = ChatProvider(chatInfo: widget.chatInfo);
+   // _scrollChatToBottom();
   }
 
+
+  _scrollChatToBottom() {
+    print('pozvana je');
+    if(scrollController.hasClients) {
+      print('controller has clients');
+      print('it should animate');
+      scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          curve: Curves.linear,
+          duration: const Duration(milliseconds: 120)
+      );
+    }
+    else {
+      Timer(const Duration(milliseconds: 40), () => _scrollChatToBottom());
+    }
+  }
+
+  _scroll() {
+    scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        curve: Curves.linear,
+        duration: const Duration(milliseconds: 150)
+    );
+  }
 
 
 
 
   @override
   Widget build(BuildContext context) {
-
+    _scrollChatToBottom();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0.0,
-        title: Text('John'),
+        title: Text(widget.chatInfo.firstName),
         actions: [
           IconButton(icon: Icon(Icons.call), onPressed: () {
 
@@ -55,8 +82,7 @@ class _ChatState extends State<Chat> {
               margin: EdgeInsets.only(top: 10),
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance.collection('chats').doc(widget.chatInfo.chatId).collection('messages').limit(100).snapshots(),
-                builder: (context, snapshot) {
-
+                builder: (context, snapshot)  {
                   if(!snapshot.hasData) {
                     return Center(
                       child: SizedBox(
@@ -67,12 +93,17 @@ class _ChatState extends State<Chat> {
                     );
                   }
                   if( snapshot.data.docs.isEmpty) {
+                    //create chat in chats collection and in users-chats
+
+                    chatProvider.createChat();
+
                     return Center(
                       child: Text('There are no messages'),
                     );
                   }
                   return Container(
                     child: ListView.builder(
+                      controller: scrollController,
                       shrinkWrap: true,
                       itemCount: snapshot.data.docs.length,
                       itemBuilder: (context, index) => _buildMessage(context, Message.fromSnapshot(snapshot.data.docs[index]))
@@ -111,8 +142,8 @@ class _ChatState extends State<Chat> {
                           child: Container(
                             margin: EdgeInsets.only(left: 8),
                             child: TextField(
-                              onTap: () => {},
-                              controller: controller,
+
+                              controller: textController,
                               decoration: InputDecoration(
                                   hintText: 'Type a message...',
                                   hintStyle: TextStyle(color: Colors.grey[500], fontSize: 19),
@@ -137,10 +168,9 @@ class _ChatState extends State<Chat> {
                               color: Colors.yellow,
                               onPressed: () async{
                                 Timestamp timestamp = Timestamp.now();
-                                Message message = Message(message: controller.text, timestamp: timestamp);
-                                controller.clear();
+                                Message message = Message(message: textController.text, timestamp: timestamp);
+                                textController.clear();
                                 await chatProvider.sendMessage(message);
-
                               },
                               icon: Icon(Icons.send)
                           ),
@@ -173,12 +203,10 @@ class _ChatState extends State<Chat> {
   _buildMessage(BuildContext context, Message message ) {
     bool sentMessage = message.firebaseUserId == FirebaseAuth.instance.currentUser.uid ? true : false;
     return Align(
-      alignment: sentMessage == true ?
-      Alignment.centerRight : Alignment.centerLeft,
+      alignment: sentMessage == true ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-        margin: sentMessage == true ?
-        EdgeInsets.only(right: 10, bottom: 10) : EdgeInsets.only(left: 10, bottom: 10),
+        padding: EdgeInsets.all(10),
+        margin: sentMessage == true ? EdgeInsets.only(right: 10, bottom: 10) : EdgeInsets.only(left: 10, bottom: 10),
         decoration: BoxDecoration(
           color: Colors.grey[300],
           borderRadius: BorderRadius.circular(20)
@@ -193,9 +221,9 @@ class _ChatState extends State<Chat> {
 
   @override
   void dispose() {
-    controller.dispose();
+    textController.dispose();
+    scrollController.dispose();
     super.dispose();
-
   }
 
 

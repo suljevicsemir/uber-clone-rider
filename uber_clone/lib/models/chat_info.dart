@@ -1,16 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uber_clone/constants/chat_list.dart' as fields;
-@immutable
+import 'package:uber_clone/services/driver_search_delegate.dart';
+
 class ChatInfo {
-  final  String chatId,
+    String chatId,
       lastMessage,
       lastMessageSenderFirebaseId,
       //other participant user id
       firebaseUserId,
       firstName,
       lastName;
-  final Timestamp lastMessageTimestamp;
+   Timestamp lastMessageTimestamp;
 
   ChatInfo.fromSnapshot(DocumentSnapshot snapshot) :
       chatId                      = snapshot.id,
@@ -21,6 +22,11 @@ class ChatInfo {
       firstName                   = snapshot[fields.firstName],
       lastName                    = snapshot[fields.lastName];
 
-
-
+    ChatInfo.fromDriver(MockDriver driver)  {
+      firstName = driver.firstName;
+      lastName = driver.lastName;
+      firebaseUserId = driver.id;
+      chatId = 'chat' +  (FirebaseAuth.instance.currentUser.uid.compareTo(driver.id) < 0 ?
+      (FirebaseAuth.instance.currentUser.uid + driver.id) : (driver.id + FirebaseAuth.instance.currentUser.uid));
+    }
 }

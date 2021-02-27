@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
           Help.route : (context) => Help(),
           Wallet.route : (context) => Wallet(),
           EditAccount.route : (context) => EditAccount(),
-          DriverContact.route: (context) => DriverContact(),
+          DriverContact.route: (context) => DriverContact(mockDriver: ModalRoute.of(context).settings.arguments,),
           AccountSettings.route : (context) => AccountSettings(),
           Chats.route : (context) => Chats(),
           Chat.route: (context) => Chat(chatInfo: ModalRoute.of(context).settings.arguments,)

@@ -44,7 +44,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   DrawerItem(itemTitle: 'Help', route: '/help',),
                   DrawerItem(itemTitle: 'Wallet', route: '/wallet',),
                   DrawerItem(itemTitle: 'Settings', route: '/accountSettings',),
-                  DrawerItem(itemTitle: 'Driver Profile', route: '/driverProfile')
                 ],
               ),
             )

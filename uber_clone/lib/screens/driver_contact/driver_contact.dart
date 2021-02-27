@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import 'package:uber_clone/models/chat_info.dart';
 import 'package:uber_clone/screens/driver_contact//driver_contact_types/call_driver.dart';
 import 'package:uber_clone/screens/driver_contact/driver_contact_types/schedule_ride_with_driver.dart';
 import 'package:uber_clone/screens/driver_contact/driver_contact_types/sms_driver.dart';
+import 'package:uber_clone/services/driver_search_delegate.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DriverContact extends StatefulWidget {
 
   static const route = '/driverProfile';
+  final MockDriver mockDriver;
 
+
+  DriverContact({@required this.mockDriver});
 
   @override
   _DriverContactState createState() => _DriverContactState();
@@ -98,7 +104,7 @@ class _DriverContactState extends State<DriverContact> with TickerProviderStateM
                       builder: (context, constraints) {
                         return  FlexibleSpaceBar(
                           centerTitle: false,
-                          title: Text('John', style: TextStyle(color: Colors.white, fontSize: 22),),
+                          title: Text(widget.mockDriver.firstName, style: TextStyle(color: Colors.white, fontSize: 22),),
                           background: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
@@ -132,7 +138,7 @@ class _DriverContactState extends State<DriverContact> with TickerProviderStateM
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)
                       ),
-                      onPressed: () {},
+                      onPressed: () async => await launch("tel://" + widget.mockDriver.phoneNumber),
                       child: Text('Phone call', style: TextStyle(color: Colors.white, fontSize: 16),),
                       splashColor: Colors.white,
                     ),
@@ -144,7 +150,11 @@ class _DriverContactState extends State<DriverContact> with TickerProviderStateM
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        ChatInfo info = ChatInfo.fromDriver(widget.mockDriver);
+
+                        await Navigator.pushNamed(context, '/chat', arguments: info);
+                      },
                       child: Text('Send message', style: TextStyle(color: Colors.white, fontSize: 16),),
                       splashColor: Colors.white,
                     ),
@@ -162,11 +172,12 @@ class _DriverContactState extends State<DriverContact> with TickerProviderStateM
                       margin: EdgeInsets.only(left: 20, right: 20),
                       child: Row(
                         children: [
-                          Text('062 923 491', style: TextStyle(fontSize: 18),),
+                          Text(widget.mockDriver.phoneNumber, style: TextStyle(fontSize: 18),),
                           Spacer(),
                           RotationTransition(
                               turns: Tween<double>(begin: begin, end: end).animate(clickedController),
-                              child: Icon(Icons.keyboard_arrow_down_outlined, color: Colors.black,))
+                              child: Icon(Icons.keyboard_arrow_down_outlined, color: Colors.black,)
+                          )
                         ],
                       ),
                     ),
