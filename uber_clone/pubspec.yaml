@@ -39,6 +39,7 @@ dependencies:
   flutter_statusbarcolor: ^0.2.3
   url_launcher: ^5.7.10
   timeago: ^2.0.30
+  keyboard_visibility: ^0.5.6
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

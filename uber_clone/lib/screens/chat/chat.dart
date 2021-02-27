@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:uber_clone/models/chat_info.dart';
 import 'package:uber_clone/models/message.dart';
 import 'package:uber_clone/providers/chat_provider.dart';
@@ -29,7 +30,15 @@ class _ChatState extends State<Chat> {
   void initState() {
     super.initState();
     chatProvider = ChatProvider(chatInfo: widget.chatInfo);
-     _scrollChatToBottom();
+
+     KeyboardVisibilityNotification().addNewListener(
+       onChange: (bool visible) async {
+         if(visible)  {
+           await Future.delayed(const Duration(milliseconds: 10));
+           _scrollChatToBottom();
+         }
+       }
+     );
 
   }
 
@@ -48,20 +57,11 @@ class _ChatState extends State<Chat> {
     }
   }
 
-  _scroll() {
-    scrollController.animateTo(
-        scrollController.position.maxScrollExtent,
-        curve: Curves.linear,
-        duration: const Duration(milliseconds: 150)
-    );
-  }
-
-
 
 
   @override
   Widget build(BuildContext context) {
-
+    _scrollChatToBottom();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -141,17 +141,6 @@ class _ChatState extends State<Chat> {
                           child: Container(
                             margin: EdgeInsets.only(left: 8),
                             child: TextField(
-                              //onTap: () => _scrollChatToBottom(),
-                              onTap: () async {
-                                print('klikno je bez skrolanja');
-
-                               scrollController.animateTo(
-                                    scrollController.position.maxScrollExtent,
-                                    curve: Curves.linear,
-                                    duration: const Duration(milliseconds: 150)
-                                );
-                               print(' da li dodje');
-                              },
                               controller: textController,
                               decoration: InputDecoration(
                                   hintText: 'Type a message...',
@@ -180,6 +169,7 @@ class _ChatState extends State<Chat> {
                                 Message message = Message(message: textController.text, timestamp: timestamp);
                                 textController.clear();
                                 await chatProvider.sendMessage(message);
+                                _scrollChatToBottom();
                               },
                               icon: Icon(Icons.send)
                           ),
@@ -221,7 +211,7 @@ class _ChatState extends State<Chat> {
           borderRadius: BorderRadius.circular(20)
         ),
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width / 2
+          maxWidth: MediaQuery.of(context).size.width / 1.5
         ),
         child: Text(message.message, style: TextStyle(color: Colors.black, fontSize: 20),),
       ),
