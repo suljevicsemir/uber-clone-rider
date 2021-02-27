@@ -29,15 +29,14 @@ class _ChatState extends State<Chat> {
   void initState() {
     super.initState();
     chatProvider = ChatProvider(chatInfo: widget.chatInfo);
-   // _scrollChatToBottom();
+     _scrollChatToBottom();
+
   }
 
 
   _scrollChatToBottom() {
-    print('pozvana je');
+
     if(scrollController.hasClients) {
-      print('controller has clients');
-      print('it should animate');
       scrollController.animateTo(
           scrollController.position.maxScrollExtent,
           curve: Curves.linear,
@@ -62,7 +61,7 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-    _scrollChatToBottom();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -142,7 +141,17 @@ class _ChatState extends State<Chat> {
                           child: Container(
                             margin: EdgeInsets.only(left: 8),
                             child: TextField(
+                              //onTap: () => _scrollChatToBottom(),
+                              onTap: () async {
+                                print('klikno je bez skrolanja');
 
+                               scrollController.animateTo(
+                                    scrollController.position.maxScrollExtent,
+                                    curve: Curves.linear,
+                                    duration: const Duration(milliseconds: 150)
+                                );
+                               print(' da li dodje');
+                              },
                               controller: textController,
                               decoration: InputDecoration(
                                   hintText: 'Type a message...',
