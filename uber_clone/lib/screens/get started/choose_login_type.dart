@@ -105,6 +105,7 @@ class _LoginTypePickerState extends State<LoginTypePicker> {
                 SizedBox(height: 10,),
                 ElevatedButton(
                   onPressed: () {
+
                     //Navigator.push(context, MaterialPageRoute(builder: (context) => LoginTypePicker()));
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
