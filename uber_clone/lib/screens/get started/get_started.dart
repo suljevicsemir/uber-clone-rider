@@ -9,12 +9,13 @@ class GetStarted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return AnnotatedRegion(
-      value: SystemUiOverlayStyle(
-        statusBarColor: const Color(0xff286ef0)
-      ),
-      child: Scaffold(
-        body: SafeArea(
+    return Scaffold(
+      body: AnnotatedRegion(
+        value: SystemUiOverlayStyle(
+          statusBarColor: const Color(0xff286ef0),
+          statusBarIconBrightness: Brightness.light
+        ),
+        child: SafeArea(
           child: Container(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
             color: const Color(0xff286ef0),
