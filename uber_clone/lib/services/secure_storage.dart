@@ -2,8 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/models/user_data.dart';
-import 'package:uber_clone/services/firestore_service.dart';
 import 'package:uber_clone/user_data_fields.dart' as user_data_fields;
+
+import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/services/firebase/firestore_service.dart';
 
 class SecureStorage {
 

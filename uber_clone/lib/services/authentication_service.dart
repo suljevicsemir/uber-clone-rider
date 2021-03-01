@@ -1,15 +1,17 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:uber_clone/constants/user_settings/ride_verification.dart' as fields;
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/models/user_data.dart';
-import 'package:uber_clone/services/firestore_service.dart';
 import 'package:uber_clone/services/secure_storage.dart';
 import 'package:uber_clone/user_data_fields.dart' as user_data_fields;
 
+import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/services/firebase/firestore_service.dart';
 class AuthenticationService{
 
   final FirebaseAuth _firebaseAuth;
@@ -88,6 +90,10 @@ class AuthenticationService{
         _userData = UserData.fromMap(data);
 
         //save custom user data to SecureStorage and Firestore
+        await FirebaseFirestore.instance.collection('user_settings').doc(FirebaseAuth.instance.currentUser.uid).set({
+          fields.isUserUsingPIN  : false,
+          fields.isNightTimeOnly : false
+        });
         await SecureStorage.saveUser(_userData);
         await FirestoreService.saveUser(_userData);
         return _userData;
@@ -125,6 +131,10 @@ class AuthenticationService{
        _userData = UserData.fromMap(data);
 
        //save the custom user data to SecureStorage and Firestore
+       await FirebaseFirestore.instance.collection('user_settings').doc(FirebaseAuth.instance.currentUser.uid).set({
+         fields.isUserUsingPIN  : false,
+         fields.isNightTimeOnly : false
+       });
        await SecureStorage.saveUser(_userData);
        await FirestoreService.saveUser(_userData);
 

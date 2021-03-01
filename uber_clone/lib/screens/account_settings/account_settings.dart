@@ -134,7 +134,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                         ),
                         ElevatedButton.icon(
                             style: Palette.greyElevatedStyleAllPadding,
-                            onPressed: () {},
+                            onPressed: () async => await Navigator.pushNamed(context, '/rideVerification'),
                             icon: Icon(Icons.fiber_pin, color: Colors.black,),
                             label: Container(
                               margin: EdgeInsets.only(left: 10),
