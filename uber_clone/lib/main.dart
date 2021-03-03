@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,8 +17,9 @@ import 'package:uber_clone/screens/help/help.dart';
 import 'package:uber_clone/screens/home/home.dart';
 import 'package:uber_clone/screens/user_trips/trips.dart';
 import 'package:uber_clone/screens/wallet/wallet.dart';
-import 'package:uber_clone/services/authentication_service.dart';
 import 'package:uber_clone/theme/theme.dart';
+
+import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/services/firebase/authentication_service.dart';
 void main()  async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -34,10 +34,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<AuthenticationService>(
-          create: (context) => AuthenticationService((FirebaseAuth.instance)),
+          create: (context) => AuthenticationService(),
         ),
         StreamProvider(
-          create: (context) => context.read<AuthenticationService>().authStateChanges,
+          create: (context) => Provider.of<AuthenticationService>(context, listen: false).authStateChanges,
         )
       ],
       child: MaterialApp(
@@ -62,7 +62,8 @@ class MyApp extends StatelessWidget {
           Chat.route: (context) => Chat(chatInfo: ModalRoute.of(context).settings.arguments,),
           RideVerification.route : (context) => ChangeNotifierProvider(
               create: (context) => RideVerificationProvider(),
-              child: RideVerification())
+              child: RideVerification()
+          )
         },
       ),
     );

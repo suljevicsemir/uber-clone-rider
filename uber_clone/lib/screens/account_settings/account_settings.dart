@@ -1,9 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
-import 'package:uber_clone/services/authentication_service.dart';
+import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/theme/palette.dart';
+
+import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/services/firebase/authentication_service.dart';
 
 class AccountSettings extends StatefulWidget {
 
@@ -24,7 +25,7 @@ class _AccountSettingsState extends State<AccountSettings> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<AuthenticationService>(context, listen: false).currentUser;
+    final UserData user = Provider.of<AuthenticationService>(context, listen: false).userData;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -42,7 +43,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      backgroundImage: NetworkImage(user.photoURL),
+                      backgroundImage: NetworkImage(user.profilePicture),
                       backgroundColor: Colors.transparent,
                     ),
                     Container(
@@ -50,7 +51,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(user.displayName, style: accountInfoStyle,),
+                          Text(user.firstName, style: accountInfoStyle,),
                           Text('+387 62 972 494', style: accountInfoStyle,),
                           Text(user.email, style: accountInfoStyle,)
                         ],

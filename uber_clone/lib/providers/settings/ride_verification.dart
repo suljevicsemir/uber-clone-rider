@@ -1,66 +1,33 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:uber_clone/constants/user_settings/ride_verification.dart' as fields;
+import 'package:uber_clone/models/ride_verification.dart';
+import 'package:uber_clone/services/firebase/ride_verification_service.dart';
+
 class RideVerificationProvider extends ChangeNotifier {
 
-  bool _isUserUsingPIN = false, _isNightTimeOnly = false;
-  bool _initialUsingPIN = false, _initialNightTime = false;
-  String _userId = FirebaseAuth.instance.currentUser.uid;
-  FirebaseFirestore _instance = FirebaseFirestore.instance;
+  RideVerification _rideVerification = RideVerification();
+  final UserSettingsService _settingsService = UserSettingsService();
+
   RideVerificationProvider() {
     _loadVerificationSettings();
   }
   
-  
   Future<void> _loadVerificationSettings() async {
-    print(_userId);
-    DocumentSnapshot rideVerificationSettings = await FirebaseFirestore.instance.collection('user_settings').doc(_userId).get();
-
-      print(rideVerificationSettings.data().toString());
-    _isUserUsingPIN = _initialUsingPIN = rideVerificationSettings.get(fields.isUserUsingPIN);
-
-
-    if( _isUserUsingPIN) {
-      _isNightTimeOnly = _initialNightTime = rideVerificationSettings.get(fields.isNightTimeOnly);
-    }
+    _rideVerification = await _settingsService.loadVerificationSettings();
     notifyListeners();
   }
 
-
   Future<void> updateVerification() async {
-
    if(!_shouldUpdate())
      return;
-    print('updateovat ce');
-   await _instance.runTransaction((transaction) async {
-      transaction.update(FirebaseFirestore.instance.collection('user_settings').doc(_userId), {
-        fields.isUserUsingPIN  : _isUserUsingPIN,
-        fields.isNightTimeOnly : _isNightTimeOnly
-      });
-    });
+
+   await _settingsService.updateRideVerification(isUserUsingPIN: _rideVerification.isUserUsingPIN, isNightTimeOnly: _rideVerification.isNightTimeOnly);
   }
 
   bool _shouldUpdate() {
-
-    return isUserUsingPIN != _initialUsingPIN || isNightTimeOnly != _initialNightTime;
+    return _rideVerification.isUserUsingPIN != _rideVerification.initialUsingPIN || _rideVerification.isNightTimeOnly != _rideVerification.initialNightTime;
   }
 
-  bool get isNightTimeOnly => _isNightTimeOnly;
+  UserSettingsService get settingsService => _settingsService;
 
-  bool get isUserUsingPIN => _isUserUsingPIN;
-
-  set isNightTimeOnly(value) {
-    _isNightTimeOnly = value;
-    notifyListeners();
-  }
-
-  set isUserUsingPIN(bool value) {
-    _isUserUsingPIN = value;
-    notifyListeners();
-  }
-
-  bool get initialNightTime => _initialNightTime;
-
-  bool get initialUsingPIN => _initialUsingPIN;
+  RideVerification get rideVerification => _rideVerification;
 }

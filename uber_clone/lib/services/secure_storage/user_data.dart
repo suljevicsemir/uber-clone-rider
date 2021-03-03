@@ -1,16 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/user_data_fields.dart' as user_data_fields;
-
-import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/services/firebase/firestore_service.dart';
-
 class SecureStorage {
 
-  static FlutterSecureStorage _flutterSecureStorage = FlutterSecureStorage();
+  FlutterSecureStorage _flutterSecureStorage = FlutterSecureStorage();
 
-  static Future<bool> saveUser(UserData userData) async {
+  Future<bool> saveUser(UserData userData) async {
     try{
       await _flutterSecureStorage.write(key: user_data_fields.providerUserId, value: userData.providerUserId);
       await _flutterSecureStorage.write(key: user_data_fields.firstName, value: userData.firstName);
@@ -27,17 +23,12 @@ class SecureStorage {
     }
   }
 
-  static Future<UserData> loadUser() async {
+  Future<UserData> loadUser() async {
     Map<String, String> data = await _flutterSecureStorage.readAll();
-    if(data.isEmpty) print('nema nista u storage');
-    return data.isEmpty ? await FirestoreService.loadUser(FirebaseAuth.instance.currentUser.uid) : UserData.fromMap(data);
-
-
+    if(data.isEmpty)
+      return null;
+    return UserData.fromMap(data);
   }
 
 
-
-
-
 }
-

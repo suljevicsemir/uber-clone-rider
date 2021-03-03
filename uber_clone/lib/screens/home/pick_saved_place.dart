@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uber_clone/models/user_data.dart';
-import 'package:uber_clone/services/secure_storage.dart';
+
 
 class PickSavedPlace extends StatelessWidget {
   @override
@@ -9,8 +8,8 @@ class PickSavedPlace extends StatelessWidget {
       color: Colors.white,
       child: InkWell(
         onTap: () async{
-          UserData x = await SecureStorage.loadUser();
-          print(x);
+          //UserData x = await SecureStorage.loadUser();
+          //print(x);
         },
         splashColor: Colors.grey,
         child: Container(

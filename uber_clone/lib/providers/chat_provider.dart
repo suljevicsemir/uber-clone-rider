@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,8 +5,7 @@ import 'package:uber_clone/constants/chat_list.dart' as chat_list;
 import 'package:uber_clone/constants/message.dart' as message_fields;
 import 'package:uber_clone/models/chat_info.dart';
 import 'package:uber_clone/models/message.dart';
-import 'package:uber_clone/models/user_data.dart';
-import 'package:uber_clone/services/secure_storage.dart';
+
 class ChatProvider {
 
   final String userId = FirebaseAuth.instance.currentUser.uid;
@@ -72,7 +70,7 @@ class ChatProvider {
       return;
     }
 
-    UserData userData = await SecureStorage.loadUser();
+   /* UserData userData = await SecureStorage.loadUser();
 
     // if not, we need to create three new collections
 
@@ -112,7 +110,7 @@ class ChatProvider {
     });
 
 
-
+*/
 
 
   }

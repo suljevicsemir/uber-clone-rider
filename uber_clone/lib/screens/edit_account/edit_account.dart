@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/models/user_data.dart';
-import 'package:uber_clone/services/authentication_service.dart';
+
+import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/services/firebase/authentication_service.dart';
 
 class EditAccount extends StatefulWidget {
 
@@ -22,7 +23,7 @@ class _EditAccountState extends State<EditAccount> {
 
   @override
   Widget build(BuildContext context) {
-    final UserData user = Provider.of<AuthenticationService>(context, listen: false).currentUserData;
+    final UserData user = Provider.of<AuthenticationService>(context, listen: false).userData;
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,

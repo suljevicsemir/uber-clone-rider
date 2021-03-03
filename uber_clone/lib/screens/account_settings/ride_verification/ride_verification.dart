@@ -101,8 +101,8 @@ class _RideVerificationState extends State<RideVerification> {
                                     Expanded(
                                         child: Text('Use PIN to verify rides', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w500),)),
                                     Switch(
-                                      value: Provider.of<RideVerificationProvider>(context).isUserUsingPIN,
-                                      onChanged: (value) =>  Provider.of<RideVerificationProvider>(context, listen: false).isUserUsingPIN = value,
+                                      value: Provider.of<RideVerificationProvider>(context).rideVerification.isUserUsingPIN,
+                                      onChanged: (value) =>  Provider.of<RideVerificationProvider>(context, listen: false).rideVerification.isUserUsingPIN = value,
                                       activeColor: Colors.black,
                                       activeTrackColor: Colors.grey,
                                       inactiveTrackColor: Colors.grey,
@@ -110,7 +110,7 @@ class _RideVerificationState extends State<RideVerification> {
                                   ],
                                 ),
                               ),
-                              Provider.of<RideVerificationProvider>(context).isUserUsingPIN ?
+                              Provider.of<RideVerificationProvider>(context).rideVerification.isUserUsingPIN ?
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -127,8 +127,8 @@ class _RideVerificationState extends State<RideVerification> {
                                     ),
                                   ),
                                   Switch(
-                                    value: Provider.of<RideVerificationProvider>(context).isNightTimeOnly,
-                                    onChanged: (value) => Provider.of<RideVerificationProvider>(context, listen: false).isNightTimeOnly = value,
+                                    value: Provider.of<RideVerificationProvider>(context).rideVerification.isNightTimeOnly,
+                                    onChanged: (value) => Provider.of<RideVerificationProvider>(context, listen: false).rideVerification.isNightTimeOnly = value,
                                     activeColor: Colors.black,
                                     activeTrackColor: Colors.grey,
                                     inactiveTrackColor: Colors.grey,
