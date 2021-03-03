@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:uber_clone/models/ride_verification.dart';
+import 'package:uber_clone/constants/user_settings/ride_verification.dart' as fields;
+import 'package:uber_clone/services/firebase/firestore/firestore_service.dart';
 import 'package:uber_clone/services/firebase/ride_verification_service.dart';
-
 class RideVerificationProvider extends ChangeNotifier {
 
-  RideVerification _rideVerification = RideVerification();
+
+  bool _isUserUsingPIN = false, _isNightTimeOnly = false;
+  bool _initialUsingPIN = false, _initialNightTime = false;
   final UserSettingsService _settingsService = UserSettingsService();
 
   RideVerificationProvider() {
@@ -12,22 +15,39 @@ class RideVerificationProvider extends ChangeNotifier {
   }
   
   Future<void> _loadVerificationSettings() async {
-    _rideVerification = await _settingsService.loadVerificationSettings();
+    DocumentSnapshot snapshot = await FirestoreService.userSettings.get();
+    _isUserUsingPIN  = _initialUsingPIN  = snapshot.get(fields.isUserUsingPIN);
+
+    if(_isUserUsingPIN) {
+      _isNightTimeOnly = _initialNightTime = snapshot.get(fields.isNightTimeOnly);
+    }
     notifyListeners();
   }
 
   Future<void> updateVerification() async {
    if(!_shouldUpdate())
      return;
-
-   await _settingsService.updateRideVerification(isUserUsingPIN: _rideVerification.isUserUsingPIN, isNightTimeOnly: _rideVerification.isNightTimeOnly);
+  print('it will update');
+   await _settingsService.updateRideVerification(isUserUsingPIN: _isUserUsingPIN, isNightTimeOnly: _isNightTimeOnly);
   }
 
   bool _shouldUpdate() {
-    return _rideVerification.isUserUsingPIN != _rideVerification.initialUsingPIN || _rideVerification.isNightTimeOnly != _rideVerification.initialNightTime;
+    return _isUserUsingPIN != _initialUsingPIN || _isNightTimeOnly != _initialNightTime;
   }
 
-  UserSettingsService get settingsService => _settingsService;
+  get isNightTimeOnly => _isNightTimeOnly;
 
-  RideVerification get rideVerification => _rideVerification;
+  set isNightTimeOnly(value) {
+    _isNightTimeOnly = value;
+    print('updateovo se night time only ' + value.toString());
+    notifyListeners();
+  }
+
+  bool get isUserUsingPIN => _isUserUsingPIN;
+
+  set isUserUsingPIN(bool value) {
+    _isUserUsingPIN = value;
+    print('updateovo se koristi pin ' + value.toString());
+    notifyListeners();
+  }
 }

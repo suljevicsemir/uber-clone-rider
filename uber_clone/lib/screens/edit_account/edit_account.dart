@@ -3,8 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/models/user_data.dart';
-
-import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/services/firebase/authentication_service.dart';
+import 'package:uber_clone/services/firebase/authentication_service.dart';
 
 class EditAccount extends StatefulWidget {
 

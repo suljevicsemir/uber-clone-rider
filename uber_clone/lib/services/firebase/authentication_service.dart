@@ -4,6 +4,7 @@ import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/services/firebase/auth/facebook_login.dart';
 import 'package:uber_clone/services/firebase/auth/google_auth.dart';
 import 'package:uber_clone/services/firebase/auth/uber_auth.dart';
+import 'package:uber_clone/services/firebase/ride_verification_service.dart';
 import 'package:uber_clone/services/user_data_service.dart';
 
 class AuthenticationService{
@@ -12,14 +13,14 @@ class AuthenticationService{
   final GoogleAuth googleAuth = GoogleAuth();
   final FacebookLogin facebookLogin = FacebookLogin();
   final UserDataService userDataService = UserDataService();
-
+  final UserSettingsService settingsService = UserSettingsService();
   final FacebookAuth facebookAuth = FacebookAuth.instance;
   UserData _userData;
 
-  Stream<User> get authStateChanges => UberAuth.instance.authStateChanges();
+  Stream<User> get authStateChanges => FirebaseAuth.instance.authStateChanges();
+  FirebaseAuth auth;
 
-
-  AuthenticationService() {
+  AuthenticationService(this.auth) {
     if(UberAuth.instance.currentUser != null) {
       _loadUser();
     }
@@ -42,11 +43,20 @@ class AuthenticationService{
 
   Future<UserData> signInWithFacebook() async {
     _userData = await facebookLogin.signIn();
+    if(_userData == null)
+      return null;
+    await userDataService.saveUserData(_userData);
+    await settingsService.saveRideVerification();
     return _userData;
   }
 
   Future<UserData> signInWithGoogle() async {
+
     _userData = await googleAuth.signIn();
+    if(_userData == null)
+      return null;
+    await userDataService.saveUserData(_userData);
+    await settingsService.saveRideVerification();
     return _userData;
   }
 

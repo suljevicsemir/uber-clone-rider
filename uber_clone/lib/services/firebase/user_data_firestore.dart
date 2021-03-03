@@ -10,7 +10,7 @@ class UserDataFirestore extends FirestoreService {
   Future<bool> saveUser(UserData userData) async {
     try {
       await FirebaseFirestore.instance.runTransaction((transaction) async {
-          transaction.set(super.user, {
+          transaction.set(FirestoreService.user, {
             user_data_fields.firstName : userData.firstName,
             user_data_fields.lastName : userData.lastName,
             user_data_fields.profilePicture: userData.profilePicture,
@@ -30,7 +30,7 @@ class UserDataFirestore extends FirestoreService {
 
   Future<UserData> loadUser() async {
     try {
-      DocumentSnapshot snapshot = await super.user.get();
+      DocumentSnapshot snapshot = await FirestoreService.user.get();
       return UserData.fromFirestoreSnapshot(snapshot);
     }
     catch(err) {

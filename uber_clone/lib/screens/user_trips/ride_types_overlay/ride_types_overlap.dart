@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/providers/trips_provider.dart';
+import 'package:uber_clone/screens/user_trips/ride_types_overlay/ride_type.dart';
+import 'package:uber_clone/screens/user_trips/ride_types_overlay/ride_type_divider.dart';
 
-import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/screens/user_trips/ride_types_overlay/ride_type.dart';
-import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/screens/user_trips/ride_types_overlay/ride_type_divider.dart';
+
+
 class RideTypesOverlap extends StatefulWidget {
 
 

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
 import 'package:uber_clone/models/user_data.dart';
+import 'package:uber_clone/services/firebase/authentication_service.dart';
 import 'package:uber_clone/theme/palette.dart';
 
-import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/services/firebase/authentication_service.dart';
 
 class AccountSettings extends StatefulWidget {
 
@@ -51,7 +51,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(user.firstName, style: accountInfoStyle,),
+                          Text(user.firstName + ' ' + user.lastName, style: accountInfoStyle,),
                           Text('+387 62 972 494', style: accountInfoStyle,),
                           Text(user.email, style: accountInfoStyle,)
                         ],

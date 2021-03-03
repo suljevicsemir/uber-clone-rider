@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,16 +11,17 @@ import 'package:uber_clone/screens/chat/chat.dart';
 import 'package:uber_clone/screens/chats/chats.dart';
 import 'package:uber_clone/screens/driver_contact/driver_contact.dart';
 import 'package:uber_clone/screens/edit_account/edit_account.dart';
-import 'package:uber_clone/screens/get%20started/choose_account.dart';
-import 'package:uber_clone/screens/get%20started/choose_login_type.dart';
-import 'package:uber_clone/screens/get%20started/get_started.dart';
+import 'package:uber_clone/screens/get_started/choose_account.dart';
+import 'package:uber_clone/screens/get_started/choose_login_type.dart';
+import 'package:uber_clone/screens/get_started/get_started.dart';
 import 'package:uber_clone/screens/help/help.dart';
 import 'package:uber_clone/screens/home/home.dart';
 import 'package:uber_clone/screens/user_trips/trips.dart';
 import 'package:uber_clone/screens/wallet/wallet.dart';
+import 'package:uber_clone/services/firebase/authentication_service.dart';
 import 'package:uber_clone/theme/theme.dart';
 
-import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/services/firebase/authentication_service.dart';
+
 void main()  async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -34,10 +36,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<AuthenticationService>(
-          create: (context) => AuthenticationService(),
+          create: (context) => AuthenticationService(FirebaseAuth.instance),
         ),
         StreamProvider(
-          create: (context) => Provider.of<AuthenticationService>(context, listen: false).authStateChanges,
+          create: (context) => context.read<AuthenticationService>().authStateChanges,
         )
       ],
       child: MaterialApp(

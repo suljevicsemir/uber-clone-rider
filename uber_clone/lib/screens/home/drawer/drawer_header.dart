@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/models/user_data.dart';
+import 'package:uber_clone/services/firebase/authentication_service.dart';
 
-import 'file:///C:/Users/semir/FlutterProjects/uber-clone/uber_clone/lib/services/firebase/authentication_service.dart';
 
 class HomeDrawerHeader extends StatelessWidget {
   @override
