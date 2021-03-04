@@ -11,12 +11,9 @@ class HomeDrawer extends StatefulWidget {
 class _HomeDrawerState extends State<HomeDrawer> {
 
 
-
-
   @override
   void initState() {
     super.initState();
-    //changeStatusBarColor();
   }
 
 
