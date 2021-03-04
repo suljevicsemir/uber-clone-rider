@@ -31,15 +31,16 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion(
-      value: SystemUiOverlayStyle(
-        statusBarColor: statusBarColor
-      ),
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        key: globalKey,
-        backgroundColor: Colors.grey,
-        body: SafeArea(
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      key: globalKey,
+      backgroundColor: Colors.grey,
+      body: AnnotatedRegion(
+        value: SystemUiOverlayStyle(
+          statusBarColor:  Colors.transparent,
+          statusBarIconBrightness: Brightness.light
+        ),
+        child: SafeArea(
           child: Stack(
             fit: StackFit.loose,
             children: [
@@ -56,8 +57,8 @@ class _HomeState extends State<Home> {
             ]
           )
         ),
-        drawer: HomeDrawer(),
       ),
+      drawer: HomeDrawer(),
     );
   }
 

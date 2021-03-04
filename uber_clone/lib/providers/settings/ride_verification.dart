@@ -39,7 +39,6 @@ class RideVerificationProvider extends ChangeNotifier {
 
   set isNightTimeOnly(value) {
     _isNightTimeOnly = value;
-    print('updateovo se night time only ' + value.toString());
     notifyListeners();
   }
 
@@ -47,7 +46,6 @@ class RideVerificationProvider extends ChangeNotifier {
 
   set isUserUsingPIN(bool value) {
     _isUserUsingPIN = value;
-    print('updateovo se koristi pin ' + value.toString());
     notifyListeners();
   }
 }
