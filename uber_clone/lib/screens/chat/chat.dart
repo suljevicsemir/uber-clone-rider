@@ -34,7 +34,7 @@ class _ChatState extends State<Chat> {
      KeyboardVisibilityNotification().addNewListener(
        onChange: (bool visible) async {
          if(visible)  {
-           await Future.delayed(const Duration(milliseconds: 10));
+           await Future.delayed(const Duration(milliseconds: 30));
            _scrollChatToBottom();
          }
        }
@@ -69,7 +69,6 @@ class _ChatState extends State<Chat> {
         title: Text(widget.chatInfo.firstName),
         actions: [
           IconButton(icon: Icon(Icons.call), onPressed: () {
-
           })
         ],
       ),
@@ -93,9 +92,7 @@ class _ChatState extends State<Chat> {
                   }
                   if( snapshot.data.docs.isEmpty) {
                     //create chat in chats collection and in users-chats
-
                     chatProvider.createChat();
-
                     return Center(
                       child: Text('There are no messages'),
                     );

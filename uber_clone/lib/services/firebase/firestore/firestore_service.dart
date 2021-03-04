@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uber_clone/services/firebase/auth/uber_auth.dart';
 

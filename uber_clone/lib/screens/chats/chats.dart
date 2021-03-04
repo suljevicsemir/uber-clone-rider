@@ -49,7 +49,7 @@ class _ChatsState extends State<Chats> {
                 child: ListView.separated(
                   separatorBuilder: (context, index) => Divider(color: Colors.grey, height: 0.0,),
                   itemCount: snapshot.data.docs.length,
-                  itemBuilder: (context, index) => snapshot.data.docs[index].get('lastMessage') != '' ?   ChatListTile(chatInfo: ChatInfo.fromSnapshot(snapshot.data.docs[index])) : Container()
+                  itemBuilder: (context, index) => snapshot.data.docs[index].get('lastMessage') != '' ?  ChatListTile(chatInfo: ChatInfo.fromSnapshot(snapshot.data.docs[index])) : Container()
                 ),
               );
 
