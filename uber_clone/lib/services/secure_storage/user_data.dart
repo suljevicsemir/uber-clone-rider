@@ -14,7 +14,7 @@ class SecureStorage {
       await _flutterSecureStorage.write(key: user_data_fields.phoneNumber, value: userData.phoneNumber);
       await _flutterSecureStorage.write(key: user_data_fields.email, value: userData.email);
       await _flutterSecureStorage.write(key: user_data_fields.signedInType, value: userData.signedInType.parseSignedInType());
-      await _flutterSecureStorage.write(key: user_data_fields.profilePicture, value: userData.profilePicture);
+      //await _flutterSecureStorage.write(key: user_data_fields.profilePicture, value: userData.profilePicture);
       await _flutterSecureStorage.write(key: user_data_fields.firebaseUserId, value: userData.firebaseUserId);
       return true;
     }

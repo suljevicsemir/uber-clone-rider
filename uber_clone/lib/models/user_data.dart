@@ -1,15 +1,15 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/user_data_fields.dart' as globals;
 
-@immutable
+
 class UserData {
 
-  final String firstName, lastName, phoneNumber, email, providerUserId, firebaseUserId, profilePicture;
+  final String firstName, lastName, phoneNumber, email, providerUserId, firebaseUserId;
   final SignedInType signedInType;
-
-  UserData({ this.firstName, this.lastName,this.phoneNumber, this.email, this.providerUserId, this.firebaseUserId, this.profilePicture, this.signedInType});
+  File profilePicture;
+  //UserData({ this.firstName, this.lastName,this.phoneNumber, this.email, this.providerUserId, this.firebaseUserId, this.profilePicture, this.signedInType});
 
 
   //reading from SecureStorage and manually gathered data
@@ -21,7 +21,6 @@ class UserData {
       email = map[globals.email],
       providerUserId = map[globals.providerUserId],
       firebaseUserId = map[globals.firebaseUserId],
-      profilePicture = map[globals.profilePicture],
       signedInType = map[globals.signedInType] == "Google" ? SignedInType.Google : SignedInType.Facebook;
 
 
@@ -32,14 +31,16 @@ class UserData {
       email = snapshot[globals.email],
       providerUserId = snapshot[globals.providerUserId],
       firebaseUserId = snapshot.id,
-      profilePicture = snapshot[globals.profilePicture],
+      //profilePicture = snapshot[globals.profilePicture],
       signedInType = snapshot[globals.signedInType] == "Google" ? SignedInType.Google : SignedInType.Facebook;
+
+
 
 
 
   @override
   String toString() {
-    return 'UserData{firstName: $firstName, lastName: $lastName, phoneNumber: $phoneNumber, email: $email, providerUserId: $providerUserId, firebaseId: $firebaseUserId, profilePicture: $profilePicture, signedInType: ${signedInType.parseSignedInType()}';
+    return 'UserData{firstName: $firstName, lastName: $lastName, phoneNumber: $phoneNumber, email: $email, providerUserId: $providerUserId, firebaseId: $firebaseUserId, signedInType: ${signedInType.parseSignedInType()}';
   }
 
 

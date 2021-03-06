@@ -42,7 +42,14 @@ class _ChatsState extends State<Chats> {
               );
               if( snapshot.data.docs.isEmpty) {
                 return Center(
-                  child: Text('You have no messages'),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/images/such_empty.jpg'),
+                      SizedBox(height: 50,),
+                      Text('Wow, such empty.', style: TextStyle(fontSize: 22, color: Colors.grey[700]),)
+                    ],
+                  ),
                 );
               }
               return Container(

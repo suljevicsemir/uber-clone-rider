@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
+import 'package:uber_clone/mock_screen.dart';
 import 'package:uber_clone/providers/settings/ride_verification.dart';
 import 'package:uber_clone/providers/trips_provider.dart';
 import 'package:uber_clone/screens/account_settings/account_settings.dart';
@@ -64,7 +65,8 @@ class MyApp extends StatelessWidget {
           RideVerification.route : (context) => ChangeNotifierProvider(
               create: (context) => RideVerificationProvider(),
               child: RideVerification()
-          )
+          ),
+          MockScreen.route : (context) => MockScreen()
         },
       ),
     );

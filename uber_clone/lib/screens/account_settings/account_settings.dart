@@ -43,7 +43,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      backgroundImage: NetworkImage(user.profilePicture),
+                      //backgroundImage: FileImage(user.profilePicture),
                       backgroundColor: Colors.transparent,
                     ),
                     Container(

@@ -51,7 +51,7 @@ class _EditAccountState extends State<EditAccount> {
                             background: Container(
                               decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: NetworkImage(user.profilePicture),
+                                    image: FileImage(user.profilePicture),
                                     fit: BoxFit.cover,
                                   )
                               ),

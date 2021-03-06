@@ -35,7 +35,7 @@ class RideVerificationProvider extends ChangeNotifier {
     return _isUserUsingPIN != _initialUsingPIN || _isNightTimeOnly != _initialNightTime;
   }
 
-  get isNightTimeOnly => _isNightTimeOnly;
+  bool get isNightTimeOnly => _isNightTimeOnly;
 
   set isNightTimeOnly(value) {
     _isNightTimeOnly = value;

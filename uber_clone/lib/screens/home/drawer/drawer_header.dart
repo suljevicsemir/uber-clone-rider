@@ -28,7 +28,7 @@ class HomeDrawerHeader extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 30,
-                        backgroundImage: NetworkImage(userData.profilePicture),
+                        //backgroundImage: FileImage(userData.profilePicture),
                         backgroundColor: Colors.transparent,
                       ),
                       Container(
