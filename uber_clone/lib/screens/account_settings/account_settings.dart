@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
 import 'package:uber_clone/models/user_data.dart';
+import 'package:uber_clone/providers/user_data_provider.dart';
 import 'package:uber_clone/services/firebase/authentication_service.dart';
 import 'package:uber_clone/theme/palette.dart';
 
@@ -25,7 +26,7 @@ class _AccountSettingsState extends State<AccountSettings> {
 
   @override
   Widget build(BuildContext context) {
-    final UserData user = Provider.of<AuthenticationService>(context, listen: false).userData;
+    final UserData user = Provider.of<UserDataProvider>(context, listen: false).userData;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,

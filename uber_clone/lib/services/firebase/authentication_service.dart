@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
 import 'package:uber_clone/models/user_data.dart';
+import 'package:uber_clone/services/cached_data/temp_directory_service.dart';
 import 'package:uber_clone/services/firebase/auth/facebook_login.dart';
 import 'package:uber_clone/services/firebase/auth/google_auth.dart';
 import 'package:uber_clone/services/firebase/auth/uber_auth.dart';
 import 'package:uber_clone/services/firebase/ride_verification_service.dart';
 import 'package:uber_clone/services/firebase/storage/storage_provider.dart';
 import 'package:uber_clone/services/user_data_service.dart';
-
 class AuthenticationService{
 
 
@@ -14,22 +15,8 @@ class AuthenticationService{
   final FacebookLogin facebookLogin = FacebookLogin();
   final UserDataService userDataService = UserDataService();
   final UserSettingsService settingsService = UserSettingsService();
-  final FirebaseStorageProvider storageProvider = FirebaseStorageProvider();
-
-  UserData _userData;
 
   Stream<User> get authStateChanges => FirebaseAuth.instance.authStateChanges();
-  FirebaseAuth auth;
-
-  AuthenticationService(this.auth) {
-    if(UberAuth.instance.currentUser != null) {
-      _loadUser();
-    }
-  }
-
-  Future<void> _loadUser() async {
-    _userData = await userDataService.loadUser();
-  }
 
 
   Future<void> signOut() async {
@@ -43,25 +30,40 @@ class AuthenticationService{
   }
 
   Future<UserData> signInWithFacebook() async {
-    _userData = await facebookLogin.signIn();
-    if(_userData == null)
+    UserData userData = await facebookLogin.signIn();
+    if(userData == null)
       return null;
-    await userDataService.saveUserData(_userData);
+
+    await userDataService.saveUserData(userData);
     await settingsService.saveRideVerification();
 
 
-    return _userData;
+    http.Response response = await http.get(userData.profilePicture);
+    print('DOHVACENA SLIKA PROFILA');
+
+    await TempDirectoryService.storeUserPicture(response.bodyBytes);
+    print('SPASENA LOKALNO');
+
+    await FirebaseStorageProvider.uploadPictureFromList(response.bodyBytes);
+    print('SPASENA U STORAGE');
+
+    return userData;
   }
 
   Future<UserData> signInWithGoogle() async {
 
-    _userData = await googleAuth.signIn();
-    if(_userData == null)
+    UserData userData = await googleAuth.signIn();
+    if(userData == null)
       return null;
-    await userDataService.saveUserData(_userData);
+    await userDataService.saveUserData(userData);
     await settingsService.saveRideVerification();
-    return _userData;
+
+    http.Response response = await http.get(userData.profilePicture);
+
+    await TempDirectoryService.storeUserPicture(response.bodyBytes);
+    await FirebaseStorageProvider.uploadPictureFromList(response.bodyBytes);
+
+    return userData;
   }
 
-  UserData get userData => _userData;
 }

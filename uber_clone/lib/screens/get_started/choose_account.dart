@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
 import 'package:uber_clone/models/user_data.dart';
+import 'package:uber_clone/providers/cached_data_provider.dart';
+import 'package:uber_clone/providers/user_data_provider.dart';
 import 'package:uber_clone/services/firebase/authentication_service.dart';
 
 class ChooseAccount extends StatelessWidget {
@@ -31,8 +33,11 @@ class ChooseAccount extends StatelessWidget {
                           splashColor: Colors.grey,
                           onTap: () async {
                             final UserData result = await Provider.of<AuthenticationService>(context, listen: false).signInWithFacebook();
+                            print('ZAVRSENO SA SVIM SPASAVANJEM');
                             if(result != null) {
-                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
+                             Provider.of<UserDataProvider>(context, listen: false).userData = result;
+                             await Provider.of<CachedDataProvider>(context, listen: false).loadCachedPictures();
+                             await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
                             }
                           },
                           child: Container(
@@ -53,7 +58,11 @@ class ChooseAccount extends StatelessWidget {
                           splashColor: Colors.grey,
                           onTap: ()  async{
                             final UserData result = await Provider.of<AuthenticationService>(context, listen: false).signInWithGoogle();
+
                             if( result != null) {
+                              Provider.of<UserDataProvider>(context, listen: false).userData = result;
+                              await Provider.of<CachedDataProvider>(context, listen: false).loadCachedPictures();
+
                               Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
                             }
                           },

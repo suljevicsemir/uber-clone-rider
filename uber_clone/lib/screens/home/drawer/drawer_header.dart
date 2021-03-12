@@ -1,14 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/models/user_data.dart';
-import 'package:uber_clone/services/firebase/authentication_service.dart';
+import 'package:uber_clone/providers/cached_data_provider.dart';
+import 'package:uber_clone/providers/user_data_provider.dart';
+
 
 
 class HomeDrawerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final UserData userData = Provider.of<AuthenticationService>(context, listen:false).userData;
-    return Container(
+    final UserData userData = Provider.of<UserDataProvider>(context, listen:false).userData;
+    final File picture = Provider.of<CachedDataProvider>(context, listen: false).userProfilePicture;
+    return userData == null  ? CircularProgressIndicator() : Container(
       color: Colors.black,
       child: DrawerHeader(
         margin: EdgeInsets.zero,
@@ -21,14 +26,15 @@ class HomeDrawerHeader extends StatelessWidget {
             margin: EdgeInsets.only( top: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
                   margin: EdgeInsets.only(left: 20),
                   child: Row(
                     children: [
                       CircleAvatar(
-                        radius: 30,
-                        //backgroundImage: FileImage(userData.profilePicture),
+                        radius: 35,
+                        backgroundImage: FileImage(picture),
                         backgroundColor: Colors.transparent,
                       ),
                       Container(
@@ -46,7 +52,7 @@ class HomeDrawerHeader extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 25,),
+                SizedBox(height: 20,),
                 Divider(color: Colors.grey, height: 1,),
                 Expanded(
                   child: Material(

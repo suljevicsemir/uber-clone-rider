@@ -22,10 +22,13 @@ class UserDataService {
       return true;
     }
     catch(err) {
+      print('GRESKA PRI SPASAVANJU');
       print(err.toString());
       return false;
     }
   }
+
+
 
 
 }

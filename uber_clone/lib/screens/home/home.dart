@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import 'package:provider/provider.dart';
+import 'package:uber_clone/providers/cached_data_provider.dart';
 import 'package:uber_clone/screens/home/drawer/drawer.dart';
 import 'package:uber_clone/screens/home/drawer_menu_icon.dart';
 import 'package:uber_clone/screens/home/pick_destination.dart';
 import 'package:uber_clone/screens/home/ride_now.dart';
 
 class Home extends StatefulWidget {
-  static const route = '/home';
+  static const String route = '/home';
+
+  Home();
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -20,7 +25,9 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
   }
+
 
 
   Future<void> changeStatusBarColor() async {
@@ -51,6 +58,42 @@ class _HomeState extends State<Home> {
               //BLUE RIDE NOW PART
               RideNow(),
 
+              Positioned(
+                  left: 90.0,
+                  top: 10.0,
+                  child: ClipOval(
+                    child: Material(
+                      color: Colors.green,
+                      child: InkWell(
+                        splashColor: Colors.black,
+                        child: SizedBox(
+                          height: 55,
+                          width: 55,
+                          child: Icon(Icons.menu, size: 30,),
+                        ),
+                        onTap: () async =>  await Provider.of<CachedDataProvider>(context, listen: false).deleteDriverDirectory(),
+                      ),
+                    ),
+                  )
+              ),
+              Positioned(
+                  left: 180.0,
+                  top: 10.0,
+                  child: ClipOval(
+                    child: Material(
+                      color: Colors.green,
+                      child: InkWell(
+                        splashColor: Colors.black,
+                        child: SizedBox(
+                          height: 55,
+                          width: 55,
+                          child: Icon(Icons.menu, size: 30,),
+                        ),
+                        onTap: () async =>  await Provider.of<CachedDataProvider>(context, listen: false).deleteUserPicture(),
+                      ),
+                    ),
+                  )
+              ),
 
               //Drawer Menu Icon
               DrawerMenu(),

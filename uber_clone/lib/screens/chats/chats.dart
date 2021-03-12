@@ -18,6 +18,7 @@ class _ChatsState extends State<Chats> {
 
   @override
   Widget build(BuildContext context) {
+    print('chats build called');
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -33,7 +34,7 @@ class _ChatsState extends State<Chats> {
         child: Container(
           child: StreamBuilder(
             stream: provider.chats,
-            builder: (context, snapshot) {
+            builder: (context, snapshot)  {
               if(snapshot.hasError)
                 return Text('There was an error!');
               if(!snapshot.hasData)
@@ -52,14 +53,19 @@ class _ChatsState extends State<Chats> {
                   ),
                 );
               }
+
               return Container(
                 child: ListView.separated(
                   separatorBuilder: (context, index) => Divider(color: Colors.grey, height: 0.0,),
                   itemCount: snapshot.data.docs.length,
-                  itemBuilder: (context, index) => snapshot.data.docs[index].get('lastMessage') != '' ?  ChatListTile(chatInfo: ChatInfo.fromSnapshot(snapshot.data.docs[index])) : Container()
+                  itemBuilder: (context, index) {
+                    dynamic data = snapshot.data.docs[index];
+                    return snapshot.data.docs[index].get('lastMessage') == '' ? Container() :
+                    ChatListTile(chatInfo: ChatInfo.fromSnapshot(snapshot.data.docs[index]));
+
+                  }
                 ),
               );
-
             },
           )
         ),
