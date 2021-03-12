@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,8 +12,9 @@ class Chat extends StatefulWidget {
 
   static const route = '/chat';
   final ChatInfo chatInfo;
+  final File picture;
 
-  Chat({@required this.chatInfo});
+  Chat({@required this.chatInfo, this.picture});
 
   @override
   _ChatState createState() => _ChatState();
@@ -200,18 +202,27 @@ class _ChatState extends State<Chat> {
     bool sentMessage = message.firebaseUserId == FirebaseAuth.instance.currentUser.uid ? true : false;
     return Align(
       alignment: sentMessage == true ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        margin: sentMessage == true ? EdgeInsets.only(right: 10, bottom: 10) : EdgeInsets.only(left: 10, bottom: 10),
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(20)
-        ),
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width / 1.5
-        ),
-        child: Text(message.message, style: TextStyle(color: Colors.black, fontSize: 20),),
-      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+              radius: 30.0,
+              backgroundColor: Colors.transparent,
+              backgroundImage: FileImage(widget.picture),
+          ),
+          Container(
+            padding: EdgeInsets.all(10),
+            margin: sentMessage == true ? EdgeInsets.only(right: 10, bottom: 10) : EdgeInsets.only(left: 10, bottom: 10),
+            decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(20)
+            ),
+            constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width / 1.5
+            ),
+            child: Text(message.message, style: TextStyle(color: Colors.black, fontSize: 20),),
+          ),
+        ],
+      )
     );
   }
 

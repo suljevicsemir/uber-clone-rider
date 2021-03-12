@@ -57,11 +57,10 @@ class _ChatsState extends State<Chats> {
                 );
               }
 
-
               List<String> driverIds = [];
 
               for(int i = 0; i < snapshot.data.docs.length; i++) {
-                dynamic id = snapshot.data.docs[i].get('firebaseUserId');
+                String id = snapshot.data.docs[i].get('firebaseUserId');
                 if(Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures[id] == null) {
                   driverIds.add(id);
                 }
@@ -72,17 +71,13 @@ class _ChatsState extends State<Chats> {
                       context, listen: false).getList(driverIds);
                 });
               }
-
-
               return Container(
                 child: ListView.separated(
                   separatorBuilder: (context, index) => Divider(color: Colors.grey, height: 0.0,),
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (context, index) {
-                    dynamic data = snapshot.data.docs[index];
                     return snapshot.data.docs[index].get('lastMessage') == '' ? Container() :
                     ChatListTile(chatInfo: ChatInfo.fromSnapshot(snapshot.data.docs[index]));
-
                   }
                 ),
               );
