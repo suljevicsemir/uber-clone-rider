@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:provider/provider.dart';
-import 'package:uber_clone/providers/cached_data_provider.dart';
+import 'package:uber_clone/providers/cached_data_service.dart';
 import 'package:uber_clone/screens/home/drawer/drawer.dart';
 import 'package:uber_clone/screens/home/drawer_menu_icon.dart';
 import 'package:uber_clone/screens/home/pick_destination.dart';
@@ -11,7 +11,6 @@ import 'package:uber_clone/screens/home/ride_now.dart';
 class Home extends StatefulWidget {
   static const String route = '/home';
 
-  Home();
 
   @override
   _HomeState createState() => _HomeState();
@@ -71,7 +70,7 @@ class _HomeState extends State<Home> {
                           width: 55,
                           child: Icon(Icons.menu, size: 30,),
                         ),
-                        onTap: () async =>  await Provider.of<CachedDataProvider>(context, listen: false).deleteDriverDirectory(),
+                        onTap: () async =>  await Provider.of<CachedDataService>(context, listen: false).deleteDriverDirectory(),
                       ),
                     ),
                   )
@@ -89,7 +88,7 @@ class _HomeState extends State<Home> {
                           width: 55,
                           child: Icon(Icons.menu, size: 30,),
                         ),
-                        onTap: () async =>  await Provider.of<CachedDataProvider>(context, listen: false).deleteUserPicture(),
+                        onTap: () async =>  await Provider.of<CachedDataService>(context, listen: false).deleteUserPicture(),
                       ),
                     ),
                   )

@@ -2,7 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
-import 'package:uber_clone/providers/cached_data_provider.dart';
+import 'package:uber_clone/providers/cached_data_service.dart';
+import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/providers/settings/ride_verification.dart';
 import 'package:uber_clone/providers/trips_provider.dart';
 import 'package:uber_clone/providers/user_data_provider.dart';
@@ -41,11 +42,15 @@ class MyApp extends StatelessWidget {
           create: (context) => context.read<AuthenticationService>().authStateChanges,
         ),
         ChangeNotifierProvider(
-          create: (context) => CachedDataProvider(),
+          create: (context) => ProfilePicturesProvider(),
           lazy: false,
         ),
         ChangeNotifierProvider(
           create: (context) => UserDataProvider(),
+          lazy: false,
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CachedDataService(),
           lazy: false,
         )
       ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
+import 'package:uber_clone/services/firebase/auth/uber_auth.dart';
 
 class GetStarted extends StatelessWidget {
 
@@ -8,7 +9,9 @@ class GetStarted extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    var x = UberAuth.instance.currentUser;
+    if(x == null) print('user is null');
+    else print(x.uid);
     return Scaffold(
       body: AnnotatedRegion(
         value: SystemUiOverlayStyle(

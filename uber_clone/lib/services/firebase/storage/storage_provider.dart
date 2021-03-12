@@ -58,7 +58,7 @@ class FirebaseStorageProvider {
 
 
   static Future<Uint8List> getDriverPicture(String driverId) async {
-    print('skidanje slika sa storage');
+    print('skidanje slika sa storage ' + driverId );
     return await storageReference.child("images/drivers/$driverId.jpg").getData(1000000000);
   }
 
@@ -78,6 +78,7 @@ class FirebaseStorageProvider {
       return picture;
     }
     catch(err) {
+      print('nije uspjelo dobavljanje');
       print(err.toString());
       return null;
     }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
 import 'package:uber_clone/models/user_data.dart';
-import 'package:uber_clone/providers/cached_data_provider.dart';
+import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/providers/user_data_provider.dart';
 import 'package:uber_clone/services/firebase/authentication_service.dart';
 
@@ -36,7 +36,8 @@ class ChooseAccount extends StatelessWidget {
                             print('ZAVRSENO SA SVIM SPASAVANJEM');
                             if(result != null) {
                              Provider.of<UserDataProvider>(context, listen: false).userData = result;
-                             await Provider.of<CachedDataProvider>(context, listen: false).loadCachedPictures();
+                             //await Provider.of<CachedDataService>(context, listen: false).loadCachedPictures();
+                             await Provider.of<ProfilePicturesProvider>(context, listen: false).loadCachedData();
                              await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
                             }
                           },
@@ -61,9 +62,9 @@ class ChooseAccount extends StatelessWidget {
 
                             if( result != null) {
                               Provider.of<UserDataProvider>(context, listen: false).userData = result;
-                              await Provider.of<CachedDataProvider>(context, listen: false).loadCachedPictures();
-
-                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
+                              //await Provider.of<CachedDataService>(context, listen: false).loadCachedPictures();
+                              await Provider.of<ProfilePicturesProvider>(context, listen: false).loadCachedData();
+                              await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
                             }
                           },
                           child: Container(

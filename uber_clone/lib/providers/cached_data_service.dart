@@ -5,27 +5,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:uber_clone/services/cached_data/temp_directory_service.dart';
 import 'package:uber_clone/services/firebase/storage/storage_provider.dart';
 
-class CachedDataProvider extends ChangeNotifier {
+class CachedDataService extends ChangeNotifier {
 
   Map<String, File> driverPictures = {};
   File userProfilePicture;
+
   final TempDirectoryService _tempDirectoryService = TempDirectoryService();
   final FirebaseStorageProvider _storageProvider = FirebaseStorageProvider();
-  CachedDataProvider() {
 
-    loadCachedPictures();
 
-    print('called cached data provider');
-
+  CachedDataService() {
+    //if(UberAuth.instance.currentUser != null)
+    //loadCachedPictures();
   }
 
-
-
   Future<void> loadCachedPictures() async {
+
     userProfilePicture = await _loadUserPicture();
+
     driverPictures = await _loadDriversPictures();
     notifyListeners();
-    print('finished loading');
+
+
   }
 
   Future<File> _loadUserPicture() async {
@@ -43,12 +44,25 @@ class CachedDataProvider extends ChangeNotifier {
     return await _tempDirectoryService.loadDriversPictures();
   }
 
-  Future<void> storeDriverPicture(String driverId) async {
+  /*Future<void> storeDriverPicture(String driverId) async {
 
     Uint8List list = await FirebaseStorageProvider.getDriverPicture(driverId);
     driverPictures[driverId] = await TempDirectoryService.storeDriverPicture(driverId, list);
     notifyListeners();
 
+    print('storo je ' + driverId);
+
+  }*/
+
+
+  Future<File> storeDriverPicture(String driverId, Uint8List list) async {
+    try {
+      return driverPictures[driverId] = await TempDirectoryService.storeDriverPicture(driverId, list);
+    }
+    catch (err) {
+        print(err.toString());
+        return null;
+    }
   }
 
   Future<void> deleteDriverDirectory() async {

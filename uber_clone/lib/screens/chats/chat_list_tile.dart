@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:uber_clone/models/chat_info.dart';
-import 'package:uber_clone/providers/cached_data_provider.dart';
+import 'package:uber_clone/providers/profile_pictures_provider.dart';
 
 class ChatListTile extends StatefulWidget {
 
@@ -28,10 +28,11 @@ class _ChatListTileState extends State<ChatListTile> {
 
   @override
   Widget build(BuildContext context) {
-  File picture = Provider.of<CachedDataProvider>(context).driverPictures[widget.chatInfo.firebaseUserId];
+  File picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures[widget.chatInfo.firebaseUserId];
   if(picture == null) {
-    Provider.of<CachedDataProvider>(context, listen: false).storeDriverPicture(widget.chatInfo.firebaseUserId);
+    picture = Provider.of<ProfilePicturesProvider>(context).driverProfilePictures[widget.chatInfo.firebaseUserId];
   }
+
   return picture == null ? Container() :
   ElevatedButton(
     onPressed: ( ) async => await Navigator.pushNamed(context, '/chat', arguments: widget.chatInfo),
@@ -51,7 +52,7 @@ class _ChatListTileState extends State<ChatListTile> {
           CircleAvatar(
               radius: 30.0,
               backgroundColor: Colors.transparent,
-              backgroundImage: FileImage(Provider.of<CachedDataProvider>(context, listen: false).driverPictures[widget.chatInfo.firebaseUserId])
+              backgroundImage: picture == null ? AssetImage('assets/images/new_york.jpg') : FileImage(picture)
           ),
           Expanded(
             child: Container(
