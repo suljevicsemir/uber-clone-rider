@@ -72,7 +72,11 @@ class MyApp extends StatelessWidget {
           DriverContact.route: (context) => DriverContact(mockDriver: ModalRoute.of(context).settings.arguments,),
           AccountSettings.route : (context) => AccountSettings(),
           Chats.route : (context) => Chats(),
-          Chat.route: (context) => Chat(chatInfo: ModalRoute.of(context).settings.arguments,),
+          Chat.route: (context) {
+            final arguments = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+            return Chat(chatInfo: arguments['chatInfo'], picture: arguments['picture'],);
+
+          },
           RideVerification.route : (context) => ChangeNotifierProvider(
               create: (context) => RideVerificationProvider(),
               child: RideVerification()

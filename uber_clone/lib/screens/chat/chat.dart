@@ -96,7 +96,7 @@ class _ChatState extends State<Chat> {
                     //create chat in chats collection and in users-chats
                     chatProvider.createChat();
                     return Center(
-                      child: Text('There are no messages'),
+                      child: Text('No messages with ' + widget.chatInfo.firstName + ' ' + widget.chatInfo.lastName)
                     );
                   }
                   return Container(
@@ -200,29 +200,28 @@ class _ChatState extends State<Chat> {
   
   _buildMessage(BuildContext context, Message message ) {
     bool sentMessage = message.firebaseUserId == FirebaseAuth.instance.currentUser.uid ? true : false;
-    return Align(
-      alignment: sentMessage == true ? Alignment.centerRight : Alignment.centerLeft,
-      child: Row(
-        children: [
-          CircleAvatar(
-              radius: 30.0,
-              backgroundColor: Colors.transparent,
-              backgroundImage: FileImage(widget.picture),
+    return Row(
+      mainAxisAlignment: sentMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+      children: [
+        sentMessage ? Container() :
+        CircleAvatar(
+            radius: 22.0,
+            backgroundColor: Colors.transparent,
+            backgroundImage: FileImage(widget.picture),
+        ),
+        Container(
+          padding: EdgeInsets.all(10),
+          margin: sentMessage == true ? EdgeInsets.only(right: 10, bottom: 10) : EdgeInsets.only(left: 10, bottom: 10),
+          decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(20)
           ),
-          Container(
-            padding: EdgeInsets.all(10),
-            margin: sentMessage == true ? EdgeInsets.only(right: 10, bottom: 10) : EdgeInsets.only(left: 10, bottom: 10),
-            decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(20)
-            ),
-            constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width / 1.5
-            ),
-            child: Text(message.message, style: TextStyle(color: Colors.black, fontSize: 20),),
+          constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width / 1.5
           ),
-        ],
-      )
+          child: Text(message.message, style: TextStyle(color: Colors.black, fontSize: 20),),
+        ),
+      ],
     );
   }
 

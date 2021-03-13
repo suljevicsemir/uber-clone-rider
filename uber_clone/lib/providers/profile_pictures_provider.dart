@@ -63,7 +63,14 @@ class ProfilePicturesProvider extends ChangeNotifier{
     print('obavijestio je listenere');
   }
 
-  Future<void> getDriverPicture(String driverId) async{
+  Future<File> getDriverPicture(String driverId) async{
+    if(driverProfilePictures[driverId] != null) {
+      return driverProfilePictures[driverId];
+    }
+
+    Uint8List list = await FirebaseStorageProvider.getDriverPicture(driverId);
+    driverProfilePictures[driverId] = await TempDirectoryService.storeDriverPicture(driverId, list);
+    return driverProfilePictures[driverId];
 
   }
 

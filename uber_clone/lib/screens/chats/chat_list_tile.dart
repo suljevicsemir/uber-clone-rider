@@ -35,7 +35,7 @@ class _ChatListTileState extends State<ChatListTile> {
 
   return picture == null ? Container() :
   ElevatedButton(
-    onPressed: ( ) async => await Navigator.pushNamed(context, '/chat', arguments: widget.chatInfo),
+    onPressed: ( ) async => await Navigator.pushNamed(context, '/chat', arguments: {'chatInfo': widget.chatInfo, 'picture': picture}),
     style: ElevatedButton.styleFrom(
       primary: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0.0,

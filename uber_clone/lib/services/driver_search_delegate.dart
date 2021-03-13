@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:uber_clone/screens/driver_contact/driver_contact.dart';
 
 
 class MockDriver {
@@ -80,7 +81,9 @@ class DriverSearchDelegate extends SearchDelegate {
         itemCount: _drivers.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () async => await Navigator.pushNamed(context, '/driverProfile', arguments: MockDriver.fromObject(_drivers.elementAt(index))),
+            onTap: () async => await Navigator.pushNamed(context, DriverContact.route, arguments:
+            MockDriver.fromObject(_drivers.elementAt(index))
+            ),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Container(
