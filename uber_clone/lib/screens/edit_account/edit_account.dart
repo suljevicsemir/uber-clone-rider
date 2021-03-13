@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/models/user_data.dart';
+import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/providers/user_data_provider.dart';
 
 class EditAccount extends StatefulWidget {
@@ -23,6 +26,7 @@ class _EditAccountState extends State<EditAccount> {
   @override
   Widget build(BuildContext context) {
     final UserData user = Provider.of<UserDataProvider>(context, listen: false).userData;
+    final File picture = Provider.of<ProfilePicturesProvider>(context, listen: false).profilePicture;
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -51,7 +55,7 @@ class _EditAccountState extends State<EditAccount> {
                             background: Container(
                               decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    //image: FileImage(user.profilePicture),
+                                    image: FileImage(picture),
                                     fit: BoxFit.cover,
                                   )
                               ),
