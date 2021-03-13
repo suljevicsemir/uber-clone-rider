@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
 import 'package:uber_clone/models/user_data.dart';
+import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/providers/user_data_provider.dart';
 import 'package:uber_clone/services/firebase/authentication_service.dart';
 import 'package:uber_clone/theme/palette.dart';
@@ -27,6 +30,7 @@ class _AccountSettingsState extends State<AccountSettings> {
   @override
   Widget build(BuildContext context) {
     final UserData user = Provider.of<UserDataProvider>(context, listen: false).userData;
+    final File picture = Provider.of<ProfilePicturesProvider>(context, listen: false).profilePicture;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -44,7 +48,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      //backgroundImage: FileImage(user.profilePicture),
+                      backgroundImage: FileImage(picture),
                       backgroundColor: Colors.transparent,
                     ),
                     Container(
