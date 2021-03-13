@@ -3,6 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 class CallDriver extends StatefulWidget {
+
+  final String phoneNumber;
+
+
+  CallDriver({@required this.phoneNumber});
+
   @override
   _CallDriverState createState() => _CallDriverState();
 }
@@ -19,8 +25,19 @@ class _CallDriverState extends State<CallDriver> {
 
   Future<void> onTap() async {
     changePressedValue();
+    final uri = "tel://" + widget.phoneNumber;
+    if(await canLaunch("tel://" + widget.phoneNumber)) {
+      launch(uri);
+    }
+    else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Problem with dialing driver number'))
+      );
+    }
     await Future.delayed(const Duration(milliseconds: 250), () {
-      launch("tel://062972494");
+
       changePressedValue();
     });
   }

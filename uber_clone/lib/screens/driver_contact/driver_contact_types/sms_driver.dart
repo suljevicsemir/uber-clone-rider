@@ -1,9 +1,14 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 class SMSDriver extends StatefulWidget {
+
+  final String phoneNumber;
+
+
+  SMSDriver({@required this.phoneNumber});
+
   @override
   _SMSDriverState createState() => _SMSDriverState();
 }
@@ -20,15 +25,19 @@ class _SMSDriverState extends State<SMSDriver> {
 
   Future<void> onTap() async {
     changePressedValue();
-    Timer(const Duration(milliseconds: 450), () {
-      if(Platform.isAndroid) {
-        const uri = 'sms:+38762923491?body=hello%20there';
+    Timer(const Duration(milliseconds: 450), () async{
+      final uri = 'sms:' + widget.phoneNumber;
+      if(await canLaunch(uri)) {
         launch(uri);
       }
-      else if(Platform.isIOS) {
-        const uri = 'sms:+38762923491&body=hello%20there';
-        launch(uri);
+      else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              backgroundColor: Colors.red,
+              content: Text('Problem opening messaging app'))
+        );
       }
+
       changePressedValue();
     }
     );

@@ -74,7 +74,18 @@ class _ChatState extends State<Chat> {
           IconButton(
             icon: Icon(Icons.call),
             onPressed: () async{
-              await launch("tel://" + widget.chatInfo.phoneNumber);
+              final uri = "tel://" + widget.chatInfo.phoneNumber;
+              if(await canLaunch(uri)) {
+                launch(uri);
+              }
+              else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: Colors.red,
+                    content: Text('Problem opening opening the calling app on your phone'),
+                  )
+                );
+              }
           })
         ],
       ),

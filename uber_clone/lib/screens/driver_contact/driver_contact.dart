@@ -203,8 +203,8 @@ class _DriverContactState extends State<DriverContact> with TickerProviderStateM
                         Container(
                           child: Column(
                             children: [
-                              SMSDriver(),
-                              CallDriver(),
+                              SMSDriver(phoneNumber: widget.mockDriver.phoneNumber,),
+                              CallDriver(phoneNumber: widget.mockDriver.phoneNumber,),
                               ScheduleRide(),
                             ],
                           ),
