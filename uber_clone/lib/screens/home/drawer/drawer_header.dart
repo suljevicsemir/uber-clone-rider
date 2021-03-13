@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/providers/user_data_provider.dart';
+import 'package:uber_clone/screens/edit_account/edit_account.dart';
 
 
 
@@ -28,28 +29,31 @@ class HomeDrawerHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  margin: EdgeInsets.only(left: 20),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 35,
-                        backgroundImage: FileImage(picture),
-                        backgroundColor: Colors.transparent,
-                      ),
-                      Container(
-                          margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
-                          child: RichText(
-                            text: TextSpan(
-                              text: userData.firstName,
-                              style: TextStyle(color: Colors.white),
-                              children: [
-                                TextSpan( text: ' ' + userData.lastName)
-                              ]
-                            ),
-                          )
-                      )
-                    ],
+                GestureDetector(
+                  onTap: () async => await Navigator.pushNamed(context, EditAccount.route),
+                  child: Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 35,
+                          backgroundImage: FileImage(picture),
+                          backgroundColor: Colors.transparent,
+                        ),
+                        Container(
+                            margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
+                            child: RichText(
+                              text: TextSpan(
+                                text: userData.firstName,
+                                style: TextStyle(color: Colors.white),
+                                children: [
+                                  TextSpan( text: ' ' + userData.lastName)
+                                ]
+                              ),
+                            )
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: 20,),
