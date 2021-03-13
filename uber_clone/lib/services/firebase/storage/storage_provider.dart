@@ -71,7 +71,7 @@ class FirebaseStorageProvider {
 
   }
 
-  static Future<Uint8List> getCurrentUserPicture() async {
+   Future<Uint8List> getCurrentUserPicture() async {
     String path = 'images/riders/' + UberAuth.userId;
     try {
       Uint8List picture = await storageReference.child(path).getData(1000000000000);

@@ -8,6 +8,7 @@ import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:uber_clone/models/chat_info.dart';
 import 'package:uber_clone/models/message.dart';
 import 'package:uber_clone/providers/chat_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 class Chat extends StatefulWidget {
 
   static const route = '/chat';
@@ -70,7 +71,10 @@ class _ChatState extends State<Chat> {
         elevation: 0.0,
         title: Text(widget.chatInfo.firstName),
         actions: [
-          IconButton(icon: Icon(Icons.call), onPressed: () {
+          IconButton(
+            icon: Icon(Icons.call),
+            onPressed: () async{
+              await launch("tel://" + widget.chatInfo.phoneNumber);
           })
         ],
       ),

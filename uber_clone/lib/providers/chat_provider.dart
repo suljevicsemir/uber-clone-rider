@@ -15,7 +15,7 @@ class ChatProvider {
   final FirebaseFirestore _instance = FirebaseFirestore.instance;
 
 
-  final CollectionReference _usersReference = FirebaseFirestore.instance.collection('users');
+
   final ChatInfo chatInfo;
 
 
@@ -95,7 +95,8 @@ class ChatProvider {
           chat_list.lastName                    : chatInfo.lastName,
           chat_list.lastMessage                 : '',
           chat_list.lastMessageTimestamp        : null,
-          chat_list.lastMessageSenderFirebaseId : null
+          chat_list.lastMessageSenderFirebaseId : null,
+          chat_list.phoneNumber                 : chatInfo.phoneNumber
       });
     });
 
@@ -107,7 +108,8 @@ class ChatProvider {
         chat_list.lastName                    : userData.lastName,
         chat_list.lastMessage                 : '',
         chat_list.lastMessageTimestamp        : null,
-        chat_list.lastMessageSenderFirebaseId : null
+        chat_list.lastMessageSenderFirebaseId : null,
+        chat_list.phoneNumber                 : userData.phoneNumber
       });
     });
 

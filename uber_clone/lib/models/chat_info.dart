@@ -10,6 +10,7 @@ class ChatInfo {
       //other participant user id
       firebaseUserId,
       firstName,
+      phoneNumber,
       lastName;
    Timestamp lastMessageTimestamp;
 
@@ -20,11 +21,13 @@ class ChatInfo {
       lastMessageTimestamp        = snapshot.get(fields.lastMessageTimestamp),
       firebaseUserId              = snapshot[fields.firebaseUserId],
       firstName                   = snapshot[fields.firstName],
-      lastName                    = snapshot[fields.lastName];
+      lastName                    = snapshot[fields.lastName],
+      phoneNumber                 = snapshot[fields.phoneNumber];
 
     ChatInfo.fromDriver(MockDriver driver)  {
       firstName = driver.firstName;
       lastName = driver.lastName;
+      phoneNumber = driver.phoneNumber;
       firebaseUserId = driver.id;
       chatId = 'chat' +  (FirebaseAuth.instance.currentUser.uid.compareTo(driver.id) < 0 ?
       (FirebaseAuth.instance.currentUser.uid + driver.id) : (driver.id + FirebaseAuth.instance.currentUser.uid));

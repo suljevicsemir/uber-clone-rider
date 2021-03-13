@@ -14,6 +14,7 @@ class HomeDrawerHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final UserData userData = Provider.of<UserDataProvider>(context, listen:false).userData;
     final File picture = Provider.of<ProfilePicturesProvider>(context, listen: false).profilePicture;
+
     return userData == null  ? CircularProgressIndicator() : Container(
       color: Colors.black,
       child: DrawerHeader(

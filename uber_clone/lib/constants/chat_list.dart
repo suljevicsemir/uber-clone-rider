@@ -8,4 +8,5 @@ String
     lastName                    = 'lastName',
     lastMessage                 = 'lastMessage' ,
     lastMessageTimestamp        = 'lastMessageTimestamp',
-    lastMessageSenderFirebaseId = 'lastMessageSenderFirebaseId';
+    lastMessageSenderFirebaseId = 'lastMessageSenderFirebaseId',
+    phoneNumber                 = 'phoneNumber';

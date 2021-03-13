@@ -32,7 +32,7 @@ class ProfilePicturesProvider extends ChangeNotifier{
   Future<void> _loadProfilePicture() async {
     profilePicture = await tempDirectoryService.loadUserPicture();
     if( profilePicture == null) {
-      Uint8List list = await FirebaseStorageProvider.getCurrentUserPicture();
+      Uint8List list = await storageProvider.getCurrentUserPicture();
       profilePicture = await TempDirectoryService.storeUserPicture(list);
       if(profilePicture == null)
         print('There was an error storing the profile picture');
