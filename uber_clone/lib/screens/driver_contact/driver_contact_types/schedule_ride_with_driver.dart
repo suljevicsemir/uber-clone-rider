@@ -15,7 +15,12 @@ class _ScheduleRideState extends State<ScheduleRide> {
     setState(() {
       pressed = !pressed;
     });
-    // TODO call number
+  }
+
+  Future<void> onLongPress() async {
+    changePressedValue();
+    Timer(const Duration(milliseconds: 450), () => changePressedValue());
+
   }
 
 
@@ -23,10 +28,7 @@ class _ScheduleRideState extends State<ScheduleRide> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: changePressedValue,
-      onLongPress: () async{
-        changePressedValue();
-        Timer(const Duration(milliseconds: 450), () => changePressedValue());
-      },
+      onLongPress: onLongPress,
       child: AnimatedContainer(
           padding: EdgeInsets.only(top: 15, bottom: 15, left: 5),
           duration: const Duration(milliseconds: 300),
@@ -36,9 +38,9 @@ class _ScheduleRideState extends State<ScheduleRide> {
             margin: EdgeInsets.only(left: 20),
             child: Row(
               children: [
-                Icon(Icons.calendar_today_sharp),
+                Icon(Icons.account_circle),
                 SizedBox(width: 20,),
-                Text('Schedule a ride', style: TextStyle(fontSize: 20),)
+                Text('Open profile', style: TextStyle(fontSize: 20),)
               ],
             ),
           )

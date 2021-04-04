@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uber_clone/components/call_number.dart';
 import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/models/message.dart';
 import 'package:uber_clone/models/user_data.dart';
@@ -103,7 +102,7 @@ class _ChatState extends State<Chat> {
           ),
         ),
         actions: [
-          CallNumber(phoneNumber: widget.driver.phoneNumber)
+          //CallNumber(phoneNumber: widget.driver.phoneNumber)
         ],
       ),
       body: Stack(

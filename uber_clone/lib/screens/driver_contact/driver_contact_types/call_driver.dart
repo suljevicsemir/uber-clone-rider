@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:uber_clone/components/app_utils.dart' as app;
 class CallDriver extends StatefulWidget {
 
   final String phoneNumber;
@@ -23,25 +23,6 @@ class _CallDriverState extends State<CallDriver> {
     });
   }
 
-  Future<void> onTap() async {
-    changePressedValue();
-    final uri = "tel://" + widget.phoneNumber;
-    if(await canLaunch("tel://" + widget.phoneNumber)) {
-      launch(uri);
-    }
-    else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            backgroundColor: Colors.red,
-            content: Text('Problem with dialing driver number'))
-      );
-    }
-    await Future.delayed(const Duration(milliseconds: 250), () {
-
-      changePressedValue();
-    });
-  }
-
   Future<void> onLongPress() async {
     changePressedValue();
     Timer(const Duration(milliseconds: 450), () => changePressedValue());
@@ -50,22 +31,43 @@ class _CallDriverState extends State<CallDriver> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () async {
+        changePressedValue();
+        Timer(const Duration(milliseconds: 200), () async {
+          await app.callNumber(context, phoneNumber: widget.phoneNumber);
+          changePressedValue();
+        });
+      },
       onLongPress: onLongPress,
       child: AnimatedContainer(
-          padding: EdgeInsets.only(top: 15, bottom: 15, left: 5),
+          padding: EdgeInsets.only(top: 15, left: 5),
           duration: const Duration(milliseconds: 300),
           color: pressed ? Colors.grey : Colors.transparent,
           curve: Curves.fastOutSlowIn,
           child: Container(
             margin: EdgeInsets.only(left: 20),
-            child: Row(
+            child: Column(
               children: [
-                Icon(Icons.phone),
-                SizedBox(width: 20,),
-                Text('Call driver', style: TextStyle(fontSize: 20),)
+                Row(
+                  children: [
+                    Icon(Icons.phone),
+                    SizedBox(width: 20,),
+                    Text('Call driver', style: TextStyle(fontSize: 20),)
+                  ],
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 45, bottom: 5, top: 5),
+                  width: double.infinity,
+                  child: Text('Mobile carrier\'s rates apply', style: TextStyle(fontSize: 14, color: Colors.black54),),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 45, bottom: 5, top: 5),
+                  height: 1,
+                  width: double.infinity,
+                  color: Colors.black26,
+                ),
               ],
-            ),
+            )
           )
       ),
     );

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-   void callNumber(BuildContext context, {required String phoneNumber}) async{
+   Future<void> callNumber(BuildContext context, {required String phoneNumber}) async{
     if(await canLaunch("tel://" + phoneNumber))
       launch("tel://" + phoneNumber);
     else {
@@ -15,7 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
     }
   }
 
-   void sendSMS(BuildContext context, {required String phoneNumber}) async {
+   Future<void> sendSMS(BuildContext context, {required String phoneNumber}) async {
     if(await canLaunch('sms:' + phoneNumber)) {
       launch('sms:' + phoneNumber);
     }
