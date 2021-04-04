@@ -1,13 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:uber_clone/screens/driver_profile/driver_profile.dart';
 
-class ScheduleRide extends StatefulWidget {
+class OpenDriverProfile extends StatefulWidget {
+
+
+  final String driverId;
+
+  OpenDriverProfile({required this.driverId});
+
   @override
-  _ScheduleRideState createState() => _ScheduleRideState();
+  _OpenDriverProfileState createState() => _OpenDriverProfileState();
 }
 
-class _ScheduleRideState extends State<ScheduleRide> {
+class _OpenDriverProfileState extends State<OpenDriverProfile> {
 
   bool pressed = false;
 
@@ -27,7 +34,11 @@ class _ScheduleRideState extends State<ScheduleRide> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: changePressedValue,
+      onTap: () async {
+        changePressedValue();
+        await Navigator.pushNamed(context, DriverProfile.route, arguments: widget.driverId);
+        changePressedValue();
+      },
       onLongPress: onLongPress,
       child: AnimatedContainer(
           padding: EdgeInsets.only(top: 15, bottom: 15, left: 5),

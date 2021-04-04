@@ -11,6 +11,10 @@ class Wallet extends StatefulWidget {
 class _WalletState extends State<Wallet> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: Center(
+        child: Text('Valjda ce bit nekad nesto'),
+      ),
+    );
   }
 }

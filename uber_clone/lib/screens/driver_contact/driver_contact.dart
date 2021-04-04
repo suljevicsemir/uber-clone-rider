@@ -64,7 +64,7 @@ class _DriverContactState extends State<DriverContact> with TickerProviderStateM
               children: [
                 ContactButtons(driver: widget.driver),
                 SizedBox(height: 20,),
-                ExpandBody(phoneNumber: widget.driver.phoneNumber,)
+                ExpandBody(phoneNumber: widget.driver.phoneNumber, driverId: widget.driver.id)
 
               ],
             ),

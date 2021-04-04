@@ -5,15 +5,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uber_clone/components/app_utils.dart' as app;
 import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/models/message.dart';
 import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/providers/chat_provider.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/providers/user_data_provider.dart';
-import 'package:uber_clone/screens/driver_contact/driver_contact.dart';
+import 'package:uber_clone/screens/driver_profile/driver_profile.dart';
 import 'package:uber_clone/services/firebase/auth/uber_auth.dart';
-
 
 class Chat extends StatefulWidget {
 
@@ -30,14 +30,12 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> {
 
-
-
-  late ChatProvider chatProvider;
   final TextEditingController textController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   File? picture;
-
   bool hasText = false;
+
+
 
   @override
   void didChangeDependencies() {
@@ -57,7 +55,7 @@ class _ChatState extends State<Chat> {
     });
 
     UserData x = Provider.of<UserDataProvider>(context, listen: false).userData!;
-    chatProvider = ChatProvider(driver: widget.driver, userData: x);
+
     _scrollChatToBottom();
     picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![widget.driver.id];
   }
@@ -87,7 +85,7 @@ class _ChatState extends State<Chat> {
       appBar: AppBar(
         elevation: 0.0,
         title: GestureDetector(
-          onTap: () async => await Navigator.pushNamed(context, DriverContact.route, arguments: widget.driver),
+          onTap: () async => await Navigator.pushNamed(context, DriverProfile.route, arguments: widget.driver.id),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -102,7 +100,10 @@ class _ChatState extends State<Chat> {
           ),
         ),
         actions: [
-          //CallNumber(phoneNumber: widget.driver.phoneNumber)
+          IconButton(
+            onPressed: () async => await app.callNumber(context, phoneNumber: widget.driver.phoneNumber),
+            icon: Icon(Icons.call),
+          )
         ],
       ),
       body: Stack(
@@ -112,7 +113,7 @@ class _ChatState extends State<Chat> {
             child: Container(
               margin: EdgeInsets.only(top: 10),
               child: StreamBuilder(
-                stream: FirebaseFirestore.instance.collection('chats').doc(chatProvider.chatId).collection('messages').limit(100).snapshots(),
+                stream: FirebaseFirestore.instance.collection('chats').doc(Provider.of<ChatProvider>(context,listen: false).chatId).collection('messages').limit(100).snapshots(),
                 builder: (context, AsyncSnapshot snapshot)  {
                   if(!snapshot.hasData) {
                     return Center(
@@ -125,7 +126,7 @@ class _ChatState extends State<Chat> {
                   }
                   if( snapshot.data.docs.isEmpty) {
                     //create chat in chats collection and in users-chats
-                    chatProvider.createChat();
+                    Provider.of<ChatProvider>(context, listen: false).createChat();
                     return Center(
                       child: Text('No messages with ' + widget.driver.firstName + ' ' + widget.driver.lastName)
                     );
@@ -204,7 +205,7 @@ class _ChatState extends State<Chat> {
                               Timestamp timestamp = Timestamp.now();
                               Message message = Message(message: textController.text, timestamp: timestamp, firebaseUserId: FirebaseAuth.instance.currentUser!.uid);
                               textController.clear();
-                              await chatProvider.sendMessage(message);
+                              await Provider.of<ChatProvider>(context, listen: false).sendMessage(message);
                               _scrollChatToBottom();
                             },
                             icon: Icon(Icons.send)
@@ -240,7 +241,7 @@ class _ChatState extends State<Chat> {
       children: [
         shouldHavePicture ? GestureDetector(
           onTap: () async {
-            await Navigator.pushNamed(context, DriverContact.route, arguments: widget.driver);
+            await Navigator.pushNamed(context, DriverProfile.route, arguments: widget.driver.id);
           },
           child: Container(
             margin: EdgeInsets.only(left: 5),

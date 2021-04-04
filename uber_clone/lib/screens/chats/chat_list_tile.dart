@@ -6,6 +6,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:uber_clone/models/chat_info.dart';
 import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
+import 'package:uber_clone/providers/user_data_provider.dart';
 import 'package:uber_clone/screens/chat/chat.dart';
 class ChatListTile extends StatefulWidget {
 
@@ -36,7 +37,12 @@ class _ChatListTileState extends State<ChatListTile> {
 
   return picture == null ? Container() :
   ElevatedButton(
-    onPressed: () async => await Navigator.pushNamed(context, Chat.route, arguments: Driver.fromChatInfo(widget.chatInfo)),
+    onPressed: () async {
+      Map<String, dynamic> map = {};
+      map['driver'] = Driver.fromChatInfo(widget.chatInfo);
+      map['user'] = Provider.of<UserDataProvider>(context, listen: false).userData;
+      await Navigator.pushNamed(context, Chat.route, arguments: map);
+    },
     style: ElevatedButton.styleFrom(
       primary: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0.0,

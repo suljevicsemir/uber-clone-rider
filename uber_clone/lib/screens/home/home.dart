@@ -4,8 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/screens/home/drawer/drawer.dart';
 import 'package:uber_clone/screens/home/drawer_menu_icon.dart';
-import 'package:uber_clone/screens/home/pick_destination.dart';
-import 'package:uber_clone/screens/home/ride_now.dart';
+
+import 'file:///C:/Users/semir/FlutterProjects/uber-clone-rider/uber_clone/lib/screens/home/home_components/pick_destination.dart';
+import 'file:///C:/Users/semir/FlutterProjects/uber-clone-rider/uber_clone/lib/screens/home/home_components/ride_now.dart';
 
 class Home extends StatefulWidget {
   static const String route = '/home';

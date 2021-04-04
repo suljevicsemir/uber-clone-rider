@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:uber_clone/screens/home/pick_saved_place.dart';
-import 'package:uber_clone/screens/home/where_to.dart';
+
+import 'file:///C:/Users/semir/FlutterProjects/uber-clone-rider/uber_clone/lib/screens/home/home_components/pick_saved_place.dart';
+import 'file:///C:/Users/semir/FlutterProjects/uber-clone-rider/uber_clone/lib/screens/home/home_components/where_to.dart';
 class PickDestination extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

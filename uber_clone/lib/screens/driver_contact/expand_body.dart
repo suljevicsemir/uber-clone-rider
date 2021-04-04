@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:uber_clone/screens/driver_contact/driver_contact_types/call_driver.dart';
-import 'package:uber_clone/screens/driver_contact/driver_contact_types/schedule_ride_with_driver.dart';
+import 'package:uber_clone/screens/driver_contact/driver_contact_types/open_driver_profile.dart';
 import 'package:uber_clone/screens/driver_contact/driver_contact_types/sms_driver.dart';
 
 class ExpandBody extends StatefulWidget {
 
 
   final String phoneNumber;
-
-  ExpandBody({required this.phoneNumber});
+  final String driverId;
+  ExpandBody({required this.phoneNumber, required this.driverId});
 
 
   @override
@@ -95,7 +95,7 @@ class _ExpandBodyState extends State<ExpandBody> with TickerProviderStateMixin{
               children: [
                 SMSDriver(phoneNumber: widget.phoneNumber,),
                 CallDriver(phoneNumber: widget.phoneNumber,),
-                ScheduleRide(),
+                OpenDriverProfile(driverId: widget.driverId),
               ],
             ),
           ) : Container(),
