@@ -1,35 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:uber_clone/constants/chat_list.dart' as fields;
-import 'package:uber_clone/services/driver_search_delegate.dart';
 
+@immutable
 class ChatInfo {
-    String chatId,
+  final String
+  chatId,
       lastMessage,
       lastMessageSenderFirebaseId,
-      //other participant user id
       firebaseUserId,
       firstName,
       phoneNumber,
       lastName;
-   Timestamp lastMessageTimestamp;
+  final Timestamp lastMessageTimestamp;
 
   ChatInfo.fromSnapshot(DocumentSnapshot snapshot) :
-      chatId                      = snapshot.id,
-      lastMessage                 = snapshot.get(fields.lastMessage),
-      lastMessageSenderFirebaseId = snapshot.get(fields.lastMessageSenderFirebaseId),
-      lastMessageTimestamp        = snapshot.get(fields.lastMessageTimestamp),
-      firebaseUserId              = snapshot[fields.firebaseUserId],
-      firstName                   = snapshot[fields.firstName],
-      lastName                    = snapshot[fields.lastName],
-      phoneNumber                 = snapshot[fields.phoneNumber];
-
-    ChatInfo.fromDriver(MockDriver driver)  {
-      firstName = driver.firstName;
-      lastName = driver.lastName;
-      phoneNumber = driver.phoneNumber;
-      firebaseUserId = driver.id;
-      chatId = 'chat' +  (FirebaseAuth.instance.currentUser.uid.compareTo(driver.id) < 0 ?
-      (FirebaseAuth.instance.currentUser.uid + driver.id) : (driver.id + FirebaseAuth.instance.currentUser.uid));
-    }
+        chatId                      = snapshot.id,
+        lastMessage                 = snapshot.get(fields.lastMessage),
+        lastMessageSenderFirebaseId = snapshot.get(fields.lastMessageSenderFirebaseId),
+        lastMessageTimestamp        = snapshot.get(fields.lastMessageTimestamp),
+        firebaseUserId              = snapshot[fields.firebaseUserId],
+        firstName                   = snapshot[fields.firstName],
+        lastName                    = snapshot[fields.lastName],
+        phoneNumber                 = snapshot[fields.phoneNumber];
 }

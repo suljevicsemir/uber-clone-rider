@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
+import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/providers/settings/ride_verification.dart';
 import 'package:uber_clone/providers/trips_provider.dart';
@@ -21,7 +22,6 @@ import 'package:uber_clone/screens/wallet/wallet.dart';
 import 'package:uber_clone/services/firebase/authentication_service.dart';
 import 'package:uber_clone/theme/theme.dart';
 
-
 void main()  async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthenticationService(),
         ),
         StreamProvider(
+          initialData: null,
           create: (context) => context.read<AuthenticationService>().authStateChanges,
         ),
         ChangeNotifierProvider(
@@ -64,14 +65,10 @@ class MyApp extends StatelessWidget {
           Help.route : (context) => Help(),
           Wallet.route : (context) => Wallet(),
           EditAccount.route : (context) => EditAccount(),
-          DriverContact.route: (context) => DriverContact(mockDriver: ModalRoute.of(context).settings.arguments,),
+          DriverContact.route: (context) => DriverContact(driver: ModalRoute.of(context)!.settings.arguments as Driver),
           AccountSettings.route : (context) => AccountSettings(),
           Chats.route : (context) => Chats(),
-          Chat.route: (context) {
-            final arguments = ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-            return Chat(chatInfo: arguments['chatInfo'], picture: arguments['picture'],);
-
-          },
+          Chat.route : (context) => Chat(driver: ModalRoute.of(context)!.settings.arguments as Driver,),
           RideVerification.route : (context) => ChangeNotifierProvider(
               create: (context) => RideVerificationProvider(),
               child: RideVerification()

@@ -6,9 +6,9 @@ import 'package:uber_clone/user_data_fields.dart' as globals;
 
 class UserData {
 
-  final String firstName, lastName, phoneNumber, email, providerUserId, firebaseUserId, profilePicture;
+  final String firstName, lastName, phoneNumber, email, providerUserId, firebaseUserId;
   final SignedInType signedInType;
-
+  String? profilePicture;
   //UserData({ this.firstName, this.lastName,this.phoneNumber, this.email, this.providerUserId, this.firebaseUserId, this.profilePicture, this.signedInType});
 
 

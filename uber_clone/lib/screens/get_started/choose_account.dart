@@ -32,11 +32,10 @@ class ChooseAccount extends StatelessWidget {
                         child: InkWell(
                           splashColor: Colors.grey,
                           onTap: () async {
-                            final UserData result = await Provider.of<AuthenticationService>(context, listen: false).signInWithFacebook();
+                            final UserData? result = await Provider.of<AuthenticationService>(context, listen: false).signInWithFacebook();
                             print('ZAVRSENO SA SVIM SPASAVANJEM');
                             if(result != null) {
                              Provider.of<UserDataProvider>(context, listen: false).userData = result;
-                             //await Provider.of<CachedDataService>(context, listen: false).loadCachedPictures();
                              await Provider.of<ProfilePicturesProvider>(context, listen: false).loadCachedData();
                              await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
                             }
@@ -58,11 +57,10 @@ class ChooseAccount extends StatelessWidget {
                         child: InkWell(
                           splashColor: Colors.grey,
                           onTap: ()  async{
-                            final UserData result = await Provider.of<AuthenticationService>(context, listen: false).signInWithGoogle();
+                            final UserData? result = await Provider.of<AuthenticationService>(context, listen: false).signInWithGoogle();
 
                             if( result != null) {
                               Provider.of<UserDataProvider>(context, listen: false).userData = result;
-                              //await Provider.of<CachedDataService>(context, listen: false).loadCachedPictures();
                               await Provider.of<ProfilePicturesProvider>(context, listen: false).loadCachedData();
                               await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
                             }

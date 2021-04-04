@@ -2,13 +2,13 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/screens/driver_contact/driver_contact.dart';
-
 
 class MockDriver {
   final String firstName, lastName, id, phoneNumber;
 
-  MockDriver({@required this.firstName,@required this.lastName, @required this.id, @required this.phoneNumber});
+  MockDriver({required this.firstName, required this.lastName, required this.id, required this.phoneNumber});
   MockDriver.fromSnapshot(DocumentSnapshot snapshot):
       firstName = snapshot.get('firstName'),
       lastName = snapshot.get('lastName'),
@@ -26,7 +26,7 @@ class MockDriver {
 class DriverSearchDelegate extends SearchDelegate {
 
 
-  List<MockDriver> _drivers = [];
+  List<Driver> _drivers = [];
 
 
   DriverSearchDelegate() {
@@ -39,7 +39,7 @@ class DriverSearchDelegate extends SearchDelegate {
       QuerySnapshot drivers = await FirebaseFirestore.instance.collection('drivers').get();
       var list = drivers.docs;
       for(int i = 0; i < list.length; i++) {
-        _drivers.add(MockDriver.fromSnapshot(list.elementAt(i)));
+        _drivers.add(Driver.fromSnapshot(list.elementAt(i)));
       }
   }
 
@@ -82,7 +82,7 @@ class DriverSearchDelegate extends SearchDelegate {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () async => await Navigator.pushNamed(context, DriverContact.route, arguments:
-            MockDriver.fromObject(_drivers.elementAt(index))
+            _drivers.elementAt(index)
             ),
             child: Align(
               alignment: Alignment.centerLeft,

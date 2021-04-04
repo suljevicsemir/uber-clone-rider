@@ -9,7 +9,7 @@ class UserDataProvider extends ChangeNotifier {
   final SecureStorage _secureStorage = SecureStorage();
   final UserDataFirestore _dataFirestore = UserDataFirestore();
 
-  UserData _userData;
+  UserData? _userData;
 
   UserDataProvider() {
     print('user data provider konstruktor');
@@ -26,9 +26,9 @@ class UserDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  UserData get userData => _userData;
+  UserData? get userData => _userData;
 
-  set userData(UserData value) {
+  set userData(UserData? value) {
     _userData = value;
     notifyListeners();
   }

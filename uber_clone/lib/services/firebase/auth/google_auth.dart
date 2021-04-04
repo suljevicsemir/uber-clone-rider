@@ -16,9 +16,9 @@ class GoogleAuth extends UberAuth {
   }
 
   @override
-  Future<UserData> signIn() async{
+  Future<UserData?> signIn() async{
     try {
-      GoogleSignInAccount accountUser = await googleSignIn.signIn();
+      GoogleSignInAccount? accountUser = await googleSignIn.signIn();
 
       if( accountUser == null)
         return null;
@@ -31,7 +31,7 @@ class GoogleAuth extends UberAuth {
 
       await UberAuth.instance.signInWithCredential(credential);
 
-      final Map<String, dynamic> payloadMap = _parseGoogleToken(googleAuth.idToken);
+      final Map<String, dynamic> payloadMap = _parseGoogleToken(googleAuth.idToken!)!;
       Map<String, dynamic> createUserData = _userData(payloadMap, accountUser);
 
       return UserData.fromMap(createUserData);
@@ -47,7 +47,7 @@ class GoogleAuth extends UberAuth {
     await googleSignIn.signOut();
   }
 
-  Map<String, dynamic> _parseGoogleToken(String token) {
+  Map<String, dynamic>? _parseGoogleToken(String? token) {
     if( token == null)
       return null;
 

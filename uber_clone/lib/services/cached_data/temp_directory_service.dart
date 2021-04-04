@@ -1,13 +1,14 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uber_clone/services/firebase/auth/uber_auth.dart';
 
 
 class TempDirectoryService {
 
-   Future<File> loadUserPicture() async {
+   Future<File?> loadUserPicture() async {
     final Directory temp = await getTemporaryDirectory();
     final File profilePicture = File('${temp.path}/${UberAuth.userId}');
 
@@ -20,13 +21,14 @@ class TempDirectoryService {
     //picture does not exist, return null
     return null;
   }
-  static Future<File> storeUserPicture(Uint8List list) async {
+  static Future<File?> storeUserPicture(Uint8List list) async {
     try {
       final Directory temp = await getTemporaryDirectory();
       File picture = File('${temp.path}/${UberAuth.userId}');
 
       if(await picture.exists()) {
-        print('Profile picture for ' + UberAuth.userId + ' account is already cached');
+        print('Profile picture for ' + FirebaseAuth.instance.currentUser!.uid + ' account is already cached');
+        await picture.delete();
       }
 
       return await picture.writeAsBytes(list);
@@ -41,7 +43,7 @@ class TempDirectoryService {
 
 
 
-   Future<Map<String, File>> loadDriversPictures() async {
+   Future<Map<String, File>?> loadDriversPictures() async {
     final Directory temp = await getTemporaryDirectory();
     Map<String, File> map = {};
 
@@ -67,7 +69,7 @@ class TempDirectoryService {
   }
 
 
-  Future<File> loadDriverPicture(String driverId) async {
+  Future<File?> loadDriverPicture(String driverId) async {
     try {
       final Directory temp = await getTemporaryDirectory();
       final File file = File('${temp.path}/drivers/$driverId');
@@ -79,7 +81,7 @@ class TempDirectoryService {
     }
   }
 
-  static Future<File> storeDriverPicture(String driverId, Uint8List list) async {
+  static Future<File?> storeDriverPicture(String driverId, Uint8List list) async {
 
    try {
      final Directory temp = await getTemporaryDirectory();

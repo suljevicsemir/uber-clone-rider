@@ -7,7 +7,7 @@ class SMSDriver extends StatefulWidget {
   final String phoneNumber;
 
 
-  SMSDriver({@required this.phoneNumber});
+  SMSDriver({required this.phoneNumber});
 
   @override
   _SMSDriverState createState() => _SMSDriverState();

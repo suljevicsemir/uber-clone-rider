@@ -14,23 +14,35 @@ class FacebookLogin extends UberAuth {
 
   @override
   Future<bool> isSignedIn() async {
-    return (await facebookAuth.isLogged) != null;
+    //TODO check if is logged via facebook
+    return false;
   }
 
   @override
-  Future<UserData> signIn() async {
+  Future<UserData?> signIn() async {
     try {
-      final AccessToken  accessToken = await FacebookAuth.instance.login();
-      final AuthCredential credential = FacebookAuthProvider.credential(accessToken.token);
+      final LoginResult? loginResult = await FacebookAuth.instance.login();
+
+      if(loginResult == null)
+        return null;
+
+      final AuthCredential credential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
       await UberAuth.instance.signInWithCredential(credential);
-      String url = 'https://graph.facebook.com/v9.0/me?fields=name,picture.width(400).height(400),first_name,last_name,email&access_token=${accessToken.token}';
+
+
+      String url = 'https://graph.facebook.com/v9.0/me?fields=name,picture.width(1200).height(800),first_name,last_name,email&access_token=${loginResult.accessToken!.token}';
+      Uri uri = Uri.parse(url);
+
 
       //Facebook profile picture must be downloaded from the facebook API
-      http.Response x = await http.get(url);
+      http.Response x = await http.get(uri);
 
       final profile = json.decode(x.body);
       var pictureData = profile["picture"];
+      print('ISPOD PRINTAM PROFILE:');
+      print(profile);
       var picture = pictureData["data"];
+      print('ISPOD PRINTAM URL SLIKE');
       print(picture["url"]);
       final Map<String, dynamic> data = {
         user_data_fields.firstName : profile["first_name"],
@@ -45,9 +57,9 @@ class FacebookLogin extends UberAuth {
       };
 
       return UserData.fromMap(data);
-    } on FacebookAuthException catch(error) {
+    }  catch(error) {
       print('GRESKA PRI SIGN IN');
-      print(error.errorCode);
+      print(error.toString());
       return null;
     }
   }

@@ -8,6 +8,7 @@ class AppTheme extends StatelessWidget  {
       data: ThemeData(
 
       ),
+      child: Container(),
     );
   }
 

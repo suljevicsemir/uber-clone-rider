@@ -13,8 +13,8 @@ class ProfilePicturesProvider extends ChangeNotifier{
 
   final FirebaseStorageProvider storageProvider = FirebaseStorageProvider();
   final TempDirectoryService tempDirectoryService = TempDirectoryService();
-  File profilePicture;
-  Map<String, File> driverProfilePictures = {};
+  late File? profilePicture;
+  Map<String, File>? driverProfilePictures = {};
 
   ProfilePicturesProvider() {
     if(UberAuth.instance.currentUser != null) {
@@ -24,6 +24,7 @@ class ProfilePicturesProvider extends ChangeNotifier{
   }
 
   Future<void> loadCachedData() async {
+    print('POZVALO SE CITANJE LOAD COACHED DATA IN PROFILE PICTURES PROVIDER!');
     await _loadDriversPictures();
     await _loadProfilePicture();
     notifyListeners();
@@ -32,15 +33,15 @@ class ProfilePicturesProvider extends ChangeNotifier{
   Future<void> _loadProfilePicture() async {
     profilePicture = await tempDirectoryService.loadUserPicture();
     if( profilePicture == null) {
-      Uint8List list = await storageProvider.getCurrentUserPicture();
-      profilePicture = await TempDirectoryService.storeUserPicture(list);
+      Uint8List? list = await storageProvider.getCurrentUserPicture();
+      profilePicture = await TempDirectoryService.storeUserPicture(list!);
       if(profilePicture == null)
         print('There was an error storing the profile picture');
     }
   }
 
   Future<void> _loadDriversPictures() async{
-      driverProfilePictures = await tempDirectoryService.loadDriversPictures();
+      driverProfilePictures = (await tempDirectoryService.loadDriversPictures())!;
   }
 
 
@@ -49,28 +50,30 @@ class ProfilePicturesProvider extends ChangeNotifier{
     print('get list se pozvo');
     driverIds.forEach((driverId) async {
       //driver picture isn't cached, get from the storage
-      if( driverProfilePictures[driverId] == null) {
-        Uint8List list = await FirebaseStorageProvider.getDriverPicture(driverId);
-        driverProfilePictures[driverId] = await TempDirectoryService.storeDriverPicture(driverId, list);
-        if(driverProfilePictures[driverId] == null) {
+      if( driverProfilePictures![driverId] == null) {
+        Uint8List list = (await FirebaseStorageProvider.getDriverPicture(driverId))!;
+        driverProfilePictures![driverId] = (await TempDirectoryService.storeDriverPicture(driverId, list))!;
+        if(driverProfilePictures![driverId] == null) {
           print('Error caching driver picture');
         }
       }
       notifyListeners();
+      print('obavijestio je listenere za slike iz get list from chats');
     });
 
 
-    print('obavijestio je listenere');
+
   }
 
-  Future<File> getDriverPicture(String driverId) async{
-    if(driverProfilePictures[driverId] != null) {
-      return driverProfilePictures[driverId];
+  Future<File?> getDriverPicture(String driverId) async{
+    if(driverProfilePictures![driverId] != null) {
+      print('its local');
+      return driverProfilePictures![driverId];
     }
 
-    Uint8List list = await FirebaseStorageProvider.getDriverPicture(driverId);
-    driverProfilePictures[driverId] = await TempDirectoryService.storeDriverPicture(driverId, list);
-    return driverProfilePictures[driverId];
+    Uint8List? list = await FirebaseStorageProvider.getDriverPicture(driverId);
+    driverProfilePictures![driverId] = (await TempDirectoryService.storeDriverPicture(driverId, list!))!;
+    return driverProfilePictures![driverId];
 
   }
 

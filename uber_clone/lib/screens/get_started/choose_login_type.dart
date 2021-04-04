@@ -48,7 +48,7 @@ class _LoginTypePickerState extends State<LoginTypePicker> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       FittedBox(
-                          child: Text('Enter your mobile number', style: Theme.of(context).textTheme.headline5.copyWith(fontWeight: FontWeight.w700, letterSpacing: 2, fontSize: 100))
+                          child: Text('Enter your mobile number', style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.w700, letterSpacing: 2, fontSize: 100))
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 30),

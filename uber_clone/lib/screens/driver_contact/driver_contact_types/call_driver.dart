@@ -7,7 +7,7 @@ class CallDriver extends StatefulWidget {
   final String phoneNumber;
 
 
-  CallDriver({@required this.phoneNumber});
+  CallDriver({required this.phoneNumber});
 
   @override
   _CallDriverState createState() => _CallDriverState();

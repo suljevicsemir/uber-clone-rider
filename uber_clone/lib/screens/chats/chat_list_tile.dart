@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:uber_clone/models/chat_info.dart';
+import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
-
+import 'package:uber_clone/screens/chat/chat.dart';
 class ChatListTile extends StatefulWidget {
 
 
   final ChatInfo chatInfo;
 
-  ChatListTile({@required this.chatInfo});
+  ChatListTile({required this.chatInfo});
 
   @override
   _ChatListTileState createState() => _ChatListTileState();
@@ -28,14 +29,14 @@ class _ChatListTileState extends State<ChatListTile> {
 
   @override
   Widget build(BuildContext context) {
-  File picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures[widget.chatInfo.firebaseUserId];
+  File? picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![widget.chatInfo.firebaseUserId];
   if(picture == null) {
-    picture = Provider.of<ProfilePicturesProvider>(context).driverProfilePictures[widget.chatInfo.firebaseUserId];
+    picture = Provider.of<ProfilePicturesProvider>(context).driverProfilePictures![widget.chatInfo.firebaseUserId];
   }
 
   return picture == null ? Container() :
   ElevatedButton(
-    onPressed: ( ) async => await Navigator.pushNamed(context, '/chat', arguments: {'chatInfo': widget.chatInfo, 'picture': picture}),
+    onPressed: () async => await Navigator.pushNamed(context, Chat.route, arguments: Driver.fromChatInfo(widget.chatInfo)),
     style: ElevatedButton.styleFrom(
       primary: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0.0,
@@ -52,7 +53,7 @@ class _ChatListTileState extends State<ChatListTile> {
           CircleAvatar(
               radius: 30.0,
               backgroundColor: Colors.transparent,
-              backgroundImage: picture == null ? AssetImage('assets/images/new_york.jpg') : FileImage(picture)
+              backgroundImage: FileImage(picture)
           ),
           Expanded(
             child: Container(

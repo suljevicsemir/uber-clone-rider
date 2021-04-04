@@ -11,7 +11,7 @@ class FirebaseStorageProvider {
 
   static Future<void> uploadPictureFromFile(File file) async {
 
-    String path = "images/riders/" + UberAuth.userId;
+
     TaskSnapshot x = await storageReference.child("images/riders/${UberAuth.userId}").putFile(file);
 
     if(x.state == TaskState.running) {
@@ -57,9 +57,9 @@ class FirebaseStorageProvider {
   }
 
 
-  static Future<Uint8List> getDriverPicture(String driverId) async {
+  static Future<Uint8List?> getDriverPicture(String driverId) async {
     print('skidanje slika sa storage ' + driverId );
-    return await storageReference.child("images/drivers/$driverId.jpg").getData(1000000000);
+    return await storageReference.child("images/drivers/$driverId").getData(1000000000);
   }
 
 
@@ -71,10 +71,11 @@ class FirebaseStorageProvider {
 
   }
 
-   Future<Uint8List> getCurrentUserPicture() async {
-    String path = 'images/riders/' + UberAuth.userId;
+   Future<Uint8List?> getCurrentUserPicture() async {
+    String? host = 'images/riders/';
+    String? path = host + UberAuth.userId!;
     try {
-      Uint8List picture = await storageReference.child(path).getData(1000000000000);
+      Uint8List? picture = await storageReference.child(path).getData(10485750);
       return picture;
     }
     catch(err) {

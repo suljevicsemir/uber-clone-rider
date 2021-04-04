@@ -11,7 +11,7 @@ class AuthenticationWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<User>(context);
+    final User? user = Provider.of<User?>(context);
     return user != null ? Home() : GetStarted();
 
   }

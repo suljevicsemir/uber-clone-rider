@@ -23,7 +23,7 @@ class UserSettingsService extends FirestoreService {
     });
   }
 
-  Future<void> updateRideVerification({bool isUserUsingPIN, bool isNightTimeOnly}) async {
+  Future<void> updateRideVerification({ required bool isUserUsingPIN, required bool isNightTimeOnly}) async {
     await FirebaseFirestore.instance.runTransaction((transaction) async {
       transaction.update(FirestoreService.userSettings, {
         settings_fields.isNightTimeOnly : isUserUsingPIN ? isNightTimeOnly : false,

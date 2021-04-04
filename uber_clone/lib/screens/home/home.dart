@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import 'package:provider/provider.dart';
+import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/screens/home/drawer/drawer.dart';
 import 'package:uber_clone/screens/home/drawer_menu_icon.dart';
 import 'package:uber_clone/screens/home/pick_destination.dart';
@@ -24,14 +25,6 @@ class _HomeState extends State<Home> {
     super.initState();
 
   }
-
-
-
-  Future<void> changeStatusBarColor() async {
-    await FlutterStatusbarcolor.setStatusBarColor(Colors.transparent, animate: true);
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +50,25 @@ class _HomeState extends State<Home> {
 
               //Drawer Menu Icon
               DrawerMenu(),
+
+              Positioned(
+                  left: 80.0,
+                  top: 10.0,
+                  child: ClipOval(
+                    child: Material(
+                      color: Colors.white,
+                      child: InkWell(
+                        splashColor: Colors.black,
+                        child: SizedBox(
+                          height: 55,
+                          width: 55,
+                          child: Icon(Icons.menu, size: 30,),
+                        ),
+                        onTap: () => Provider.of<ProfilePicturesProvider>(context, listen: false).tempDirectoryService.deleteDriverDirectory(),
+                      ),
+                    ),
+                  )
+              )
             ]
           )
         ),

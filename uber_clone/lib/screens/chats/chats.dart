@@ -37,7 +37,7 @@ class _ChatsState extends State<Chats> {
         child: Container(
           child: StreamBuilder(
             stream: provider.chats,
-            builder: (context, snapshot) {
+            builder: (context, AsyncSnapshot snapshot) {
               if(snapshot.hasError)
                 return Text('There was an error!');
               if(!snapshot.hasData)
@@ -61,12 +61,12 @@ class _ChatsState extends State<Chats> {
 
               for(int i = 0; i < snapshot.data.docs.length; i++) {
                 String id = snapshot.data.docs[i].get('firebaseUserId');
-                if(Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures[id] == null) {
+                if(Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![id] == null) {
                   driverIds.add(id);
                 }
               }
               if(driverIds.length > 0) {
-                SchedulerBinding.instance.addPostFrameCallback((_) async {
+                SchedulerBinding.instance!.addPostFrameCallback((_) async {
                   await Provider.of<ProfilePicturesProvider>(
                       context, listen: false).getList(driverIds);
                 });

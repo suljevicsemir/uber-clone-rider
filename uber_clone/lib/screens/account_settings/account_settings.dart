@@ -29,8 +29,8 @@ class _AccountSettingsState extends State<AccountSettings> {
 
   @override
   Widget build(BuildContext context) {
-    final UserData user = Provider.of<UserDataProvider>(context, listen: false).userData;
-    final File picture = Provider.of<ProfilePicturesProvider>(context, listen: false).profilePicture;
+    final UserData user = Provider.of<UserDataProvider>(context, listen: false).userData!;
+    final File picture = Provider.of<ProfilePicturesProvider>(context, listen: false).profilePicture!;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -85,13 +85,13 @@ class _AccountSettingsState extends State<AccountSettings> {
                           style: Palette.greyElevatedStyleLeftPadding,
                           onPressed: () {},
                           icon: Icon(Icons.home_filled, color: Colors.black,),
-                          label: Text('Add Home', style: Theme.of(context).textTheme.headline3.copyWith(fontWeight: FontWeight.w400)),
+                          label: Text('Add Home', style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w400)),
                         ),
                         ElevatedButton.icon(
                           style: Palette.greyElevatedStyleLeftPadding,
                           onPressed: () {},
                           icon: Icon(Icons.work, color: Colors.black,),
-                          label: Text('Add Work', style: Theme.of(context).textTheme.headline3.copyWith(fontWeight: FontWeight.w400)),
+                          label: Text('Add Work', style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w400)),
                         ),
                         ElevatedButton(
                           style: Palette.greyElevatedStyleLeftPadding,
@@ -128,7 +128,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Manage Trusted Contacts', style: Theme.of(context).textTheme.headline3.copyWith(fontWeight: FontWeight.w400)),
+                                  Text('Manage Trusted Contacts', style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w400)),
                                   Container(
                                     width: MediaQuery.of(context).size.width - 100,
                                     child: Text('Share your trip status with family and friends in a single tap',
@@ -189,7 +189,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Privacy', style: Theme.of(context).textTheme.headline3.copyWith(fontWeight: FontWeight.w400),),
+                      Text('Privacy', style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w400),),
                       Text('Manage the data you share with us', style: Theme.of(context).textTheme.headline4,)
                     ],
                   )

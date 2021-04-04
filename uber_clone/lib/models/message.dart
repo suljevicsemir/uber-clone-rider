@@ -11,9 +11,9 @@ class Message {
   final Timestamp timestamp;
 
   Message({
-    @required this.message,
-    @required this.timestamp,
-    this.firebaseUserId
+    required this.message,
+    required this.timestamp,
+    required this.firebaseUserId
   });
 
 

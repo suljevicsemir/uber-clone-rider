@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:uber_clone/screens/home/drawer/drawer_header.dart';
 import 'package:uber_clone/screens/home/drawer/drawer_item.dart';
 class HomeDrawer extends StatefulWidget {
@@ -14,11 +13,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
   @override
   void initState() {
     super.initState();
-  }
-
-
-  Future<void> changeStatusBarColor() async {
-    await FlutterStatusbarcolor.setStatusBarColor(Colors.black, animate: false);
   }
 
 

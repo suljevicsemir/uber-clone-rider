@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:uber_clone/models/user_data.dart';
@@ -16,7 +18,7 @@ class AuthenticationService{
   final UserDataService userDataService = UserDataService();
   final UserSettingsService settingsService = UserSettingsService();
 
-  Stream<User> get authStateChanges => FirebaseAuth.instance.authStateChanges();
+  Stream<User?> get authStateChanges => FirebaseAuth.instance.authStateChanges();
 
 
   Future<void> signOut() async {
@@ -29,8 +31,8 @@ class AuthenticationService{
     await UberAuth.instance.signOut();
   }
 
-  Future<UserData> signInWithFacebook() async {
-    UserData userData = await facebookLogin.signIn();
+  Future<UserData?> signInWithFacebook() async {
+    UserData? userData = await facebookLogin.signIn();
     if(userData == null)
       return null;
 
@@ -38,27 +40,34 @@ class AuthenticationService{
     await settingsService.saveRideVerification();
 
 
-    http.Response response = await http.get(userData.profilePicture);
+    Uri uri = Uri.parse(userData.profilePicture!);
+
+
+
+    http.Response response = await http.get(uri);
     print('DOHVACENA SLIKA PROFILA');
 
-    await TempDirectoryService.storeUserPicture(response.bodyBytes);
+    File? picture = await TempDirectoryService.storeUserPicture(response.bodyBytes);
     print('SPASENA LOKALNO');
 
-    await FirebaseStorageProvider.uploadPictureFromList(response.bodyBytes);
+    await FirebaseStorageProvider.uploadPictureFromFile(picture!);
     print('SPASENA U STORAGE');
 
     return userData;
   }
 
-  Future<UserData> signInWithGoogle() async {
+  Future<UserData?> signInWithGoogle() async {
 
-    UserData userData = await googleAuth.signIn();
+    UserData? userData = await googleAuth.signIn();
     if(userData == null)
       return null;
     await userDataService.saveUserData(userData);
     await settingsService.saveRideVerification();
 
-    http.Response response = await http.get(userData.profilePicture);
+
+    Uri uri = Uri.parse(userData.profilePicture!);
+
+    http.Response response = await http.get(uri);
 
     await TempDirectoryService.storeUserPicture(response.bodyBytes);
     await FirebaseStorageProvider.uploadPictureFromList(response.bodyBytes);

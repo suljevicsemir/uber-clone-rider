@@ -12,8 +12,8 @@ import 'package:uber_clone/screens/edit_account/edit_account.dart';
 class HomeDrawerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final UserData userData = Provider.of<UserDataProvider>(context, listen:false).userData;
-    final File picture = Provider.of<ProfilePicturesProvider>(context, listen: false).profilePicture;
+    final UserData? userData = Provider.of<UserDataProvider>(context, listen:false).userData!;
+    final File? picture = Provider.of<ProfilePicturesProvider>(context, listen: false).profilePicture!;
 
     return userData == null  ? CircularProgressIndicator() : Container(
       color: Colors.black,
@@ -38,7 +38,7 @@ class HomeDrawerHeader extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 35,
-                          backgroundImage: FileImage(picture),
+                          backgroundImage: FileImage(picture!),
                           backgroundColor: Colors.transparent,
                         ),
                         Container(
