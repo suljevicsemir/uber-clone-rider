@@ -27,7 +27,7 @@ class _EditAccountState extends State<EditAccount> {
   @override
   Widget build(BuildContext context) {
     final UserData user = Provider.of<UserDataProvider>(context, listen: false).userData!;
-    final File picture = Provider.of<ProfilePicturesProvider>(context, listen: false).profilePicture!;
+    final File picture = Provider.of<ProfilePicturesProvider>(context).profilePicture!;
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,

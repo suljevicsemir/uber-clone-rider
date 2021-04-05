@@ -1,9 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:uber_clone/components/bottom_sheet.dart' as sheet;
-import 'package:uber_clone/providers/profile_pictures_provider.dart';
 
 class ProfileSliver extends StatefulWidget {
 
@@ -55,7 +53,7 @@ class _ProfileSliverState extends State<ProfileSliver> {
                   background: Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: FileImage(Provider.of<ProfilePicturesProvider>(context).profilePicture!),
+                        image: FileImage(widget.picture!),
                         fit: BoxFit.cover
                       )
                     ),

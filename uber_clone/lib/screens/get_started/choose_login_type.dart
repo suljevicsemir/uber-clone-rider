@@ -54,7 +54,7 @@ class _LoginTypePickerState extends State<LoginTypePicker> {
                         margin: EdgeInsets.only(top: 30),
                         child: Row(
                           children: [
-                            Image.asset('icons/flags/png/ba.png', package: 'country_icons', scale: 2,),
+                            //Image.asset('icons/flags/png/ba.png', package: 'country_icons', scale: 2,),
                             Icon(Icons.keyboard_arrow_down, color: Colors.grey,),
                             Text('+387'),
                             Flexible(

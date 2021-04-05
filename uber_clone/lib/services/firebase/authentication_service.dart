@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/services/cached_data/temp_directory_service.dart';
@@ -38,7 +39,7 @@ class AuthenticationService{
 
     await userDataService.saveUserData(userData);
     await settingsService.saveRideVerification();
-
+    FacebookPermissions x;
 
     Uri uri = Uri.parse(userData.profilePicture!);
 

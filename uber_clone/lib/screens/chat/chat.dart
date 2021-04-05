@@ -113,7 +113,7 @@ class _ChatState extends State<Chat> {
             child: Container(
               margin: EdgeInsets.only(top: 10),
               child: StreamBuilder(
-                stream: FirebaseFirestore.instance.collection('chats').doc(Provider.of<ChatProvider>(context,listen: false).chatId).collection('messages').limit(100).snapshots(),
+                stream: FirebaseFirestore.instance.collection('chats').doc(Provider.of<ChatProvider>(context,listen: false).chatId).collection('messages').snapshots(),
                 builder: (context, AsyncSnapshot snapshot)  {
                   if(!snapshot.hasData) {
                     return Center(
