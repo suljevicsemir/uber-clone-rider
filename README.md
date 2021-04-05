@@ -1,7 +1,7 @@
 # uber-clone
  Uber clone driver app made with Flutter as a final project for college.
  
- Current features:
+# Current features:
  Login with Gmail and Facebook.
  Custom data storing both online and offline.
  Account profile picture management, keeping in cache and storing online, user enabled to change profile picture.
