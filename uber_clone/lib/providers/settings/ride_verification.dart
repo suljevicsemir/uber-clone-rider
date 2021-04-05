@@ -27,7 +27,7 @@ class RideVerificationProvider extends ChangeNotifier {
   Future<void> updateVerification() async {
    if(!_shouldUpdate())
      return;
-  print('it will update');
+
    await _settingsService.updateRideVerification(isUserUsingPIN: _isUserUsingPIN, isNightTimeOnly: _isNightTimeOnly);
   }
 

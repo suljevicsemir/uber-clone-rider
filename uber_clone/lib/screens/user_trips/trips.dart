@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/providers/trips_provider.dart';
 import 'package:uber_clone/screens/user_trips/ride_types_overlay/ride_types_overlap.dart';
@@ -22,9 +21,7 @@ class _UserTripsState extends State<UserTrips> with TickerProviderStateMixin {
   }
 
 
-  void changeStatusBarColor() async {
-    await FlutterStatusbarcolor.setStatusBarColor(Colors.blue);
-  }
+
 
 
 

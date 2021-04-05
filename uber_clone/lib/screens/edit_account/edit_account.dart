@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:uber_clone/components/profile_sliver.dart';
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/models/user_data.dart';
-import 'package:uber_clone/services/firebase/authentication_service.dart';
+import 'package:uber_clone/providers/profile_pictures_provider.dart';
+import 'package:uber_clone/providers/user_data_provider.dart';
 
 class EditAccount extends StatefulWidget {
 
@@ -22,7 +26,8 @@ class _EditAccountState extends State<EditAccount> {
 
   @override
   Widget build(BuildContext context) {
-    final UserData user = Provider.of<AuthenticationService>(context, listen: false).userData;
+    final UserData user = Provider.of<UserDataProvider>(context, listen: false).userData!;
+    final File picture = Provider.of<ProfilePicturesProvider>(context, listen: false).profilePicture!;
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -31,37 +36,7 @@ class _EditAccountState extends State<EditAccount> {
         body: NestedScrollView(
           headerSliverBuilder: (context, isScrolled) {
             return [
-              SliverOverlapAbsorber(
-                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: SliverSafeArea(
-                  top: false,
-                  sliver: SliverAppBar(
-                      iconTheme: IconThemeData(
-                          color: Colors.white
-                      ),
-                      brightness: Brightness.dark,
-                      elevation: 0.0,
-                      expandedHeight: MediaQuery.of(context).size.height * 0.45,
-                      pinned: true,
-                      flexibleSpace: LayoutBuilder(
-                        builder: (context, constraints) {
-                          return  FlexibleSpaceBar(
-                            centerTitle: false,
-                            title: Text( user.firstName, style: TextStyle(color: Colors.white, fontSize: 22),),
-                            background: Container(
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: FileImage(user.profilePicture),
-                                    fit: BoxFit.cover,
-                                  )
-                              ),
-                            ),
-                          );
-                        },
-                      )
-                  ),
-                ),
-              )
+              ProfileSliver(picture: picture, firstName: user.firstName, hasEdit: true,)
             ];
           },
           body: SingleChildScrollView(
@@ -102,7 +77,7 @@ class _EditAccountState extends State<EditAccount> {
 
                       Container(
                           margin: EdgeInsets.only(bottom: 10),
-                          child: Text('Verified' ,style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.green, fontWeight: FontWeight.w300),))
+                          child: Text('Verified' ,style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.green, fontWeight: FontWeight.w300),))
                     ],
                   ),
                   SizedBox(height: 40,),
@@ -116,7 +91,7 @@ class _EditAccountState extends State<EditAccount> {
                      // Spacer(),
                       Container(
                           margin: EdgeInsets.only(bottom: 10),
-                          child: Text('Verified', style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.green, fontWeight: FontWeight.w300),))
+                          child: Text('Verified', style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.green, fontWeight: FontWeight.w300),))
                     ],
                   ),
                   SizedBox(height: 40,),
@@ -129,7 +104,7 @@ class _EditAccountState extends State<EditAccount> {
                       SizedBox(width: 20,),
                       Text( user.signedInType.parseSignedInType() , style: Theme.of(context).textTheme.headline6,),
                       Spacer(),
-                      Text('Connected', style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.green, fontWeight: FontWeight.w300),)
+                      Text('Connected', style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.green, fontWeight: FontWeight.w300),)
                     ],
                   ),
                   SizedBox(height: 40,),
@@ -142,7 +117,7 @@ class _EditAccountState extends State<EditAccount> {
                       SizedBox(width: 20,),
                       Text(user.signedInType == SignedInType.Google ? 'Facebook' : 'Google', style: Theme.of(context).textTheme.headline6,),
                       Spacer(),
-                      Text('Not Connected', style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.red),)
+                      Text('Not Connected', style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.red),)
                     ],
                   ),
 

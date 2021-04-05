@@ -11,7 +11,7 @@ class RideTypePicker extends StatefulWidget {
 
 class _RideTypePickerState extends State<RideTypePicker>  with TickerProviderStateMixin{
 
-  AnimationController clickedController;
+  late AnimationController clickedController;
   bool isClicked = false;
   double begin = 0, end = 0.5;
 

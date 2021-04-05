@@ -6,7 +6,7 @@ class DrawerItem extends StatelessWidget {
 
   final String itemTitle, route;
 
-  DrawerItem({@required this.itemTitle, @required this.route});
+  DrawerItem({required this.itemTitle, required this.route});
 
 
 

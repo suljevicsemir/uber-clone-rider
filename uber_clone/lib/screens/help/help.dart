@@ -12,8 +12,8 @@ class _HelpState extends State<Help> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Text('sadkjas'),
+      body: Center(
+        child: Text('Valjda će bit nekad nesto'),
       ),
     );
   }

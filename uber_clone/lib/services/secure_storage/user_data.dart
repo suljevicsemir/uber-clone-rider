@@ -23,10 +23,11 @@ class SecureStorage {
     }
   }
 
-  Future<UserData> loadUser() async {
+  Future<UserData?> loadUser() async {
     Map<String, String> data = await _flutterSecureStorage.readAll();
     if(data.isEmpty)
       return null;
+    print(data);
     return UserData.fromMap(data);
   }
 

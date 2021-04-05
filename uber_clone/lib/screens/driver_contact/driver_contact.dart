@@ -1,20 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
-import 'package:uber_clone/models/chat_info.dart';
-import 'package:uber_clone/screens/driver_contact//driver_contact_types/call_driver.dart';
-import 'package:uber_clone/screens/driver_contact/driver_contact_types/schedule_ride_with_driver.dart';
-import 'package:uber_clone/screens/driver_contact/driver_contact_types/sms_driver.dart';
-import 'package:uber_clone/services/driver_search_delegate.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
+import 'package:uber_clone/components/profile_sliver.dart';
+import 'package:uber_clone/models/driver.dart';
+import 'package:uber_clone/providers/profile_pictures_provider.dart';
+import 'package:uber_clone/screens/driver_contact/contact_buttons.dart';
+import 'package:uber_clone/screens/driver_contact/expand_body.dart';
 
 class DriverContact extends StatefulWidget {
 
-  static const route = '/driverProfile';
-  final MockDriver mockDriver;
+  static const route = '/driverContact';
+  final Driver driver;
 
-
-  DriverContact({@required this.mockDriver});
+  DriverContact({required this.driver});
 
   @override
   _DriverContactState createState() => _DriverContactState();
@@ -23,102 +24,36 @@ class DriverContact extends StatefulWidget {
 class _DriverContactState extends State<DriverContact> with TickerProviderStateMixin{
 
   double top = 0;
-
-  AnimationController clickedController;
-  bool showContactTypes = true;
-  double begin = 0.5, end = 1;
-
-
+  File? picture;
 
   @override
-  void initState() {
-    super.initState();
-    clickedController = AnimationController(
-        duration: const Duration(milliseconds: 300),
-        vsync: this
-    );
-
-    //changeStatusBarColor();
-  }
-
-  Future<void> changeStatusBarColor() async {
-    await FlutterStatusbarcolor.setStatusBarColor(Colors.pink, animate: true);
-  }
-
-
-  void rotateIcon() {
-    clickedController.reset();
-    if(!showContactTypes) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    SchedulerBinding.instance!.addPostFrameCallback((_) async {
+      File x = (await Provider.of<ProfilePicturesProvider>(context, listen: false).getDriverPicture(widget.driver.id))!;
       setState(() {
-        begin = 0;
-        end = 0.5;
-        showContactTypes = !showContactTypes;
+        picture = x;
       });
-    }
-    else {
-      setState(() {
-        begin = 0.5;
-        end = 1;
-        showContactTypes = !showContactTypes;
-      });
-    }
-    clickedController.forward();
-  }
-
-
-  @override
-  void dispose() {
-    clickedController.dispose();
-    super.dispose();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion(
-      value: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent
-      ),
-      child: Scaffold(
-        body: NestedScrollView(
+
+    if( picture == null)
+      return Center(
+        child: CircularProgressIndicator(),
+    );
+
+    return Scaffold(
+      body: AnnotatedRegion(
+        value: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent
+        ),
+        child: NestedScrollView(
           headerSliverBuilder: (context, isScrolled) {
             return [
-              SliverOverlapAbsorber(
-                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: SliverSafeArea(
-                  top: false,
-                  sliver: SliverAppBar(
-                    iconTheme: IconThemeData(
-                      color: Colors.white
-                    ),
-                    brightness: Brightness.dark,
-                    elevation: 0.0,
-                    expandedHeight: MediaQuery.of(context).size.height * 0.45,
-                    pinned: true,
-                    actions: [
-                      IconButton(
-                        icon: Icon(Icons.star_border),
-                        onPressed: () {}
-                      ),
-                    ],
-                    flexibleSpace: LayoutBuilder(
-                      builder: (context, constraints) {
-                        return  FlexibleSpaceBar(
-                          centerTitle: false,
-                          title: Text(widget.mockDriver.firstName, style: TextStyle(color: Colors.white, fontSize: 22),),
-                          background: Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage('assets/images/new_york.jpg'),
-                                    fit: BoxFit.cover,
-                                )
-                            ),
-                          ),
-                        );
-                      },
-                    )
-                  ),
-                ),
-              )
+              ProfileSliver(picture: picture, firstName: widget.driver.firstName, hasEdit: false,)
             ];
           },
           body: SingleChildScrollView(
@@ -127,80 +62,10 @@ class _DriverContactState extends State<DriverContact> with TickerProviderStateM
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Spacer(),
-                    MaterialButton(
-                      minWidth: 150,
-                      height: 50,
-                      color: Colors.black,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)
-                      ),
-                      onPressed: () async => await launch("tel://" + widget.mockDriver.phoneNumber),
-                      child: Text('Phone call', style: TextStyle(color: Colors.white, fontSize: 16),),
-                      splashColor: Colors.white,
-                    ),
-                    Spacer(),
-                    MaterialButton(
-                      minWidth: 150,
-                      height: 50,
-                      color: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)
-                      ),
-                      onPressed: () async {
-                        ChatInfo info = ChatInfo.fromDriver(widget.mockDriver);
-
-                        await Navigator.pushNamed(context, '/chat', arguments: info);
-                      },
-                      child: Text('Send message', style: TextStyle(color: Colors.white, fontSize: 16),),
-                      splashColor: Colors.white,
-                    ),
-                    Spacer()
-                  ],
-                ),
+                ContactButtons(driver: widget.driver),
                 SizedBox(height: 20,),
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: rotateIcon,
-                    splashColor: Colors.grey,
-                    child: Container(
-                      padding: EdgeInsets.only(top: 10, bottom: 10),
-                      margin: EdgeInsets.only(left: 20, right: 20),
-                      child: Row(
-                        children: [
-                          Text(widget.mockDriver.phoneNumber, style: TextStyle(fontSize: 18),),
-                          Spacer(),
-                          RotationTransition(
-                              turns: Tween<double>(begin: begin, end: end).animate(clickedController),
-                              child: Icon(Icons.keyboard_arrow_down_outlined, color: Colors.black,)
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                    margin: EdgeInsets.only(left: 20, right: 20),
-                    child: Divider(height: 30, color: Colors.grey, thickness: 0.5,)),
-                AnimatedSize(
-                  vsync: this,
-                  duration: const Duration(milliseconds: 200),
-                  child: showContactTypes ?
-                  Container(
-                    child: Column(
-                      children: [
-                        SMSDriver(),
-                        CallDriver(),
-                        ScheduleRide(),
-                      ],
-                    ),
-                  ) : Container(),
+                ExpandBody(phoneNumber: widget.driver.phoneNumber, driverId: widget.driver.id)
 
-                ),
               ],
             ),
           ),

@@ -1,14 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/models/user_data.dart';
-import 'package:uber_clone/services/firebase/authentication_service.dart';
+import 'package:uber_clone/providers/profile_pictures_provider.dart';
+import 'package:uber_clone/providers/user_data_provider.dart';
+import 'package:uber_clone/screens/edit_account/edit_account.dart';
+
 
 
 class HomeDrawerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final UserData userData = Provider.of<AuthenticationService>(context, listen:false).userData;
-    return Container(
+    final UserData? userData = Provider.of<UserDataProvider>(context, listen:false).userData!;
+    final File? picture = Provider.of<ProfilePicturesProvider>(context).profilePicture!;
+
+    return userData == null  ? CircularProgressIndicator() : Container(
       color: Colors.black,
       child: DrawerHeader(
         margin: EdgeInsets.zero,
@@ -21,32 +28,36 @@ class HomeDrawerHeader extends StatelessWidget {
             margin: EdgeInsets.only( top: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  margin: EdgeInsets.only(left: 20),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 30,
-                        //backgroundImage: FileImage(userData.profilePicture),
-                        backgroundColor: Colors.transparent,
-                      ),
-                      Container(
-                          margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
-                          child: RichText(
-                            text: TextSpan(
-                              text: userData.firstName,
-                              style: TextStyle(color: Colors.white),
-                              children: [
-                                TextSpan( text: ' ' + userData.lastName)
-                              ]
-                            ),
-                          )
-                      )
-                    ],
+                GestureDetector(
+                  onTap: () async => await Navigator.pushNamed(context, EditAccount.route),
+                  child: Container(
+                    margin: EdgeInsets.only(left: 20),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 35,
+                          backgroundImage: FileImage(picture!),
+                          backgroundColor: Colors.transparent,
+                        ),
+                        Container(
+                            margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
+                            child: RichText(
+                              text: TextSpan(
+                                text: userData.firstName,
+                                style: TextStyle(color: Colors.white),
+                                children: [
+                                  TextSpan( text: ' ' + userData.lastName)
+                                ]
+                              ),
+                            )
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                SizedBox(height: 25,),
+                SizedBox(height: 20,),
                 Divider(color: Colors.grey, height: 1,),
                 Expanded(
                   child: Material(

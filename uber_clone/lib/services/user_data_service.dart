@@ -7,8 +7,8 @@ class UserDataService {
   final SecureStorage _secureStorage = SecureStorage();
   final UserDataFirestore _dataFirestore = UserDataFirestore();
 
-  Future<UserData> loadUser() async {
-    UserData data = await _secureStorage.loadUser();
+  Future<UserData?> loadUser() async {
+    UserData? data = await _secureStorage.loadUser();
     if(data != null)
       return data;
 
@@ -22,10 +22,13 @@ class UserDataService {
       return true;
     }
     catch(err) {
+      print('GRESKA PRI SPASAVANJU');
       print(err.toString());
       return false;
     }
   }
+
+
 
 
 }

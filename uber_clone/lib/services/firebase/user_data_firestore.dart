@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/models/user_data.dart';
+import 'package:uber_clone/services/firebase/auth/uber_auth.dart';
 import 'package:uber_clone/services/firebase/firestore/firestore_service.dart';
 import 'package:uber_clone/user_data_fields.dart' as user_data_fields;
 
@@ -9,6 +10,12 @@ class UserDataFirestore extends FirestoreService {
 
   Future<bool> saveUser(UserData userData) async {
     try {
+
+      DocumentSnapshot x = await FirebaseFirestore.instance.collection('users').doc(UberAuth.userId).get();
+      if(x.exists)
+        return true;
+
+
       await FirebaseFirestore.instance.runTransaction((transaction) async {
           transaction.set(FirestoreService.user, {
             user_data_fields.firstName : userData.firstName,
@@ -28,7 +35,7 @@ class UserDataFirestore extends FirestoreService {
     }
   }
 
-  Future<UserData> loadUser() async {
+  Future<UserData?> loadUser() async {
     try {
       DocumentSnapshot snapshot = await FirestoreService.user.get();
       return UserData.fromFirestoreSnapshot(snapshot);

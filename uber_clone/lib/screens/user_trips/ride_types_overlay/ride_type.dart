@@ -5,7 +5,7 @@ import 'package:uber_clone/providers/trips_provider.dart';
 class RideType extends StatelessWidget{
 
   final TripType tripType;
-  RideType({@required this.tripType});
+  RideType({required this.tripType});
 
   @override
   Widget build(BuildContext context) {

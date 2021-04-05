@@ -1,13 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:uber_clone/screens/driver_profile/driver_profile.dart';
 
-class ScheduleRide extends StatefulWidget {
+class OpenDriverProfile extends StatefulWidget {
+
+
+  final String driverId;
+
+  OpenDriverProfile({required this.driverId});
+
   @override
-  _ScheduleRideState createState() => _ScheduleRideState();
+  _OpenDriverProfileState createState() => _OpenDriverProfileState();
 }
 
-class _ScheduleRideState extends State<ScheduleRide> {
+class _OpenDriverProfileState extends State<OpenDriverProfile> {
 
   bool pressed = false;
 
@@ -15,18 +22,24 @@ class _ScheduleRideState extends State<ScheduleRide> {
     setState(() {
       pressed = !pressed;
     });
-    // TODO call number
+  }
+
+  Future<void> onLongPress() async {
+    changePressedValue();
+    Timer(const Duration(milliseconds: 450), () => changePressedValue());
+
   }
 
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: changePressedValue,
-      onLongPress: () async{
+      onTap: () async {
         changePressedValue();
-        Timer(const Duration(milliseconds: 450), () => changePressedValue());
+        await Navigator.pushNamed(context, DriverProfile.route, arguments: widget.driverId);
+        changePressedValue();
       },
+      onLongPress: onLongPress,
       child: AnimatedContainer(
           padding: EdgeInsets.only(top: 15, bottom: 15, left: 5),
           duration: const Duration(milliseconds: 300),
@@ -36,9 +49,9 @@ class _ScheduleRideState extends State<ScheduleRide> {
             margin: EdgeInsets.only(left: 20),
             child: Row(
               children: [
-                Icon(Icons.calendar_today_sharp),
+                Icon(Icons.account_circle),
                 SizedBox(width: 20,),
-                Text('Schedule a ride', style: TextStyle(fontSize: 20),)
+                Text('Open profile', style: TextStyle(fontSize: 20),)
               ],
             ),
           )

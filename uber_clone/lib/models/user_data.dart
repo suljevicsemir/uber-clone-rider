@@ -1,4 +1,4 @@
-import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/user_data_fields.dart' as globals;
@@ -8,7 +8,7 @@ class UserData {
 
   final String firstName, lastName, phoneNumber, email, providerUserId, firebaseUserId;
   final SignedInType signedInType;
-  File profilePicture;
+  String? profilePicture;
   //UserData({ this.firstName, this.lastName,this.phoneNumber, this.email, this.providerUserId, this.firebaseUserId, this.profilePicture, this.signedInType});
 
 
@@ -21,6 +21,7 @@ class UserData {
       email = map[globals.email],
       providerUserId = map[globals.providerUserId],
       firebaseUserId = map[globals.firebaseUserId],
+      profilePicture = map[globals.profilePicture],
       signedInType = map[globals.signedInType] == "Google" ? SignedInType.Google : SignedInType.Facebook;
 
 
@@ -31,7 +32,7 @@ class UserData {
       email = snapshot[globals.email],
       providerUserId = snapshot[globals.providerUserId],
       firebaseUserId = snapshot.id,
-      //profilePicture = snapshot[globals.profilePicture],
+      profilePicture = snapshot[globals.profilePicture],
       signedInType = snapshot[globals.signedInType] == "Google" ? SignedInType.Google : SignedInType.Facebook;
 
 
