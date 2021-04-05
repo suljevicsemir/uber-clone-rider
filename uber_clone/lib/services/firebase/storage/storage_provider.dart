@@ -9,8 +9,7 @@ class FirebaseStorageProvider {
 
   static final Reference storageReference = FirebaseStorage.instance.ref();
 
-  static Future<void> uploadPictureFromFile(File file) async {
-
+  static Future<TaskSnapshot?> uploadPictureFromFile(File file) async {
 
     TaskSnapshot x = await storageReference.child("images/riders/${UberAuth.userId}").putFile(file);
 
@@ -32,7 +31,7 @@ class FirebaseStorageProvider {
       print('Success');
     }
 
-
+    return x;
   }
 
   static Future<void> uploadPictureFromList(Uint8List list)  async{

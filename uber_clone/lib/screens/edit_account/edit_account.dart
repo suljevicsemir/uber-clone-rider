@@ -36,7 +36,7 @@ class _EditAccountState extends State<EditAccount> {
         body: NestedScrollView(
           headerSliverBuilder: (context, isScrolled) {
             return [
-              ProfileSliver(picture: picture, firstName: user.firstName)
+              ProfileSliver(picture: picture, firstName: user.firstName, hasEdit: true,)
             ];
           },
           body: SingleChildScrollView(

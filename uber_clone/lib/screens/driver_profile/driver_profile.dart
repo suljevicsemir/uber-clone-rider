@@ -60,7 +60,7 @@ class _DriverProfileState extends State<DriverProfile> {
         child: NestedScrollView(
           headerSliverBuilder: (context, isScrolled) {
             return [
-              ProfileSliver(firstName: Provider.of<DriverProfileProvider>(context, listen: false).driver!.firstName, picture: picture,)
+              ProfileSliver(firstName: Provider.of<DriverProfileProvider>(context, listen: false).driver!.firstName, picture: picture, hasEdit: false,)
             ];
           },
           body: SingleChildScrollView(

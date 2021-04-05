@@ -3,7 +3,9 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uber_clone/services/cached_data/temp_directory_service.dart';
 import 'package:uber_clone/services/firebase/auth/uber_auth.dart';
 import 'package:uber_clone/services/firebase/storage/storage_provider.dart';
@@ -13,7 +15,7 @@ class ProfilePicturesProvider extends ChangeNotifier{
 
   final FirebaseStorageProvider storageProvider = FirebaseStorageProvider();
   final TempDirectoryService tempDirectoryService = TempDirectoryService();
-  late File? profilePicture;
+  late File? _profilePicture;
   Map<String, File>? driverProfilePictures = {};
 
   ProfilePicturesProvider() {
@@ -31,11 +33,11 @@ class ProfilePicturesProvider extends ChangeNotifier{
   }
 
   Future<void> _loadProfilePicture() async {
-    profilePicture = await tempDirectoryService.loadUserPicture();
-    if( profilePicture == null) {
+    _profilePicture = await tempDirectoryService.loadUserPicture();
+    if( _profilePicture == null) {
       Uint8List? list = await storageProvider.getCurrentUserPicture();
-      profilePicture = await TempDirectoryService.storeUserPicture(list!);
-      if(profilePicture == null)
+      _profilePicture = await TempDirectoryService.storeUserPicture(list!);
+      if(_profilePicture == null)
         print('There was an error storing the profile picture');
     }
   }
@@ -77,4 +79,24 @@ class ProfilePicturesProvider extends ChangeNotifier{
 
   }
 
+  Future<File?> pickImageFromSource(ImageSource source) async {
+    final ImagePicker picker = ImagePicker();
+    final PickedFile? pickedFile = await picker.getImage(source: source);
+
+    if(pickedFile == null) {
+      return null;
+    }
+
+    Uint8List list = await pickedFile.readAsBytes();
+    final File? picture = await TempDirectoryService.storeUserPicture(list);
+    if( picture == null) return null;
+    TaskSnapshot? snapshot = await FirebaseStorageProvider.uploadPictureFromFile(picture);
+    if(snapshot == null)
+      return null;
+    _profilePicture = File(pickedFile.path);
+    notifyListeners();
+    return picture;
+  }
+
+  File? get profilePicture => _profilePicture;
 }

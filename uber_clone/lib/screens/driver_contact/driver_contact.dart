@@ -53,7 +53,7 @@ class _DriverContactState extends State<DriverContact> with TickerProviderStateM
         child: NestedScrollView(
           headerSliverBuilder: (context, isScrolled) {
             return [
-              ProfileSliver(picture: picture, firstName: widget.driver.firstName,)
+              ProfileSliver(picture: picture, firstName: widget.driver.firstName, hasEdit: false,)
             ];
           },
           body: SingleChildScrollView(

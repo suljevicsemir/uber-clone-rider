@@ -1,12 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:uber_clone/components/bottom_sheet.dart' as sheet;
+import 'package:uber_clone/providers/profile_pictures_provider.dart';
 
 class ProfileSliver extends StatefulWidget {
 
   final File? picture;
   final String firstName;
-  ProfileSliver({required this.picture, required this.firstName});
+  final bool hasEdit;
+  ProfileSliver({required this.picture, required this.firstName, required this.hasEdit});
 
 
   @override
@@ -26,6 +30,23 @@ class _ProfileSliverState extends State<ProfileSliver> {
             elevation: 0.0,
             expandedHeight: MediaQuery.of(context).size.height * 0.45,
             pinned: true,
+            actions: [
+              widget.hasEdit ? IconButton(
+                onPressed: () async {
+                  await showModalBottomSheet(
+                      context: context,
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(20),
+                          topLeft: Radius.circular(20)
+                        )
+                      ),
+                      builder: (context) => sheet.BottomSheet());
+                },
+                icon: Icon(Icons.edit),
+              ) : Container()
+            ],
             flexibleSpace: LayoutBuilder(
               builder: (context, constraints) {
                 return FlexibleSpaceBar(
@@ -34,7 +55,7 @@ class _ProfileSliverState extends State<ProfileSliver> {
                   background: Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: FileImage(widget.picture!),
+                        image: FileImage(Provider.of<ProfilePicturesProvider>(context).profilePicture!),
                         fit: BoxFit.cover
                       )
                     ),
