@@ -12,10 +12,27 @@ import 'package:uber_clone/screens/edit_account/edit_account.dart';
 class HomeDrawerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final UserData? userData = Provider.of<UserDataProvider>(context, listen:false).userData!;
-    final File? picture = Provider.of<ProfilePicturesProvider>(context).profilePicture!;
+    UserData? userData = Provider.of<UserDataProvider>(context, listen: false).userData;
+    if(userData == null) {
+      userData = Provider.of<UserDataProvider>(context).userData;
+    }
 
-    return userData == null  ? CircularProgressIndicator() : Container(
+    final File? picture = Provider.of<ProfilePicturesProvider>(context).profilePicture;
+
+    return userData == null ?
+    Container(
+      color: Colors.black,
+      child: DrawerHeader(
+        margin: EdgeInsets.zero,
+        padding: EdgeInsets.zero,
+        child: Container(
+          color: Colors.black,
+          child: LinearProgressIndicator(
+            backgroundColor: Colors.grey[800],
+          )
+        ),
+      ),
+    ) : Container(
       color: Colors.black,
       child: DrawerHeader(
         margin: EdgeInsets.zero,
@@ -36,9 +53,15 @@ class HomeDrawerHeader extends StatelessWidget {
                     margin: EdgeInsets.only(left: 20),
                     child: Row(
                       children: [
+                        picture == null ?
                         CircleAvatar(
                           radius: 35,
-                          backgroundImage: FileImage(picture!),
+                          backgroundColor: Colors.white,
+                          child: Text(userData.firstName[0] + userData.lastName[0], style: TextStyle(fontSize: 30, color: Colors.black)),
+                        ):
+                        CircleAvatar(
+                          radius: 35,
+                          backgroundImage: FileImage(picture),
                           backgroundColor: Colors.transparent,
                         ),
                         Container(

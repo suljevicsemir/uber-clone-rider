@@ -9,18 +9,9 @@ class HomeDrawer extends StatefulWidget {
 
 class _HomeDrawerState extends State<HomeDrawer> {
 
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      //elevation: 16.0,
       child: Container(
         child: ListView(
           padding: EdgeInsets.zero,

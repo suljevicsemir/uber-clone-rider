@@ -1,5 +1,6 @@
 
 
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -15,7 +16,7 @@ class ProfilePicturesProvider extends ChangeNotifier{
 
   final FirebaseStorageProvider storageProvider = FirebaseStorageProvider();
   final TempDirectoryService tempDirectoryService = TempDirectoryService();
-  late File? _profilePicture;
+  File? _profilePicture;
   Map<String, File>? driverProfilePictures = {};
 
   ProfilePicturesProvider() {
