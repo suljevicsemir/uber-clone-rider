@@ -120,7 +120,7 @@ class UberRouter {
           )
         );
 
-      default:
+        default:
         return MaterialPageRoute(
           builder: (_) => AuthenticationWrapper()
         );

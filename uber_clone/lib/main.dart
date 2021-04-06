@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uber_clone/components/authentication_wrapper.dart';
 import 'package:uber_clone/components/uber_router.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/providers/user_data_provider.dart';
@@ -43,7 +44,7 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
         theme: AppTheme.appTheme(),
-        initialRoute: '/',
+        initialRoute: AuthenticationWrapper.route,
         onGenerateRoute: UberRouter.generateRoute,
       ),
     );

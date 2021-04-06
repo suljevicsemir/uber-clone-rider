@@ -18,7 +18,7 @@ class ProfilePicturesProvider extends ChangeNotifier{
   final TempDirectoryService tempDirectoryService = TempDirectoryService();
   File? _profilePicture;
   Map<String, File>? driverProfilePictures = {};
-
+  final ImagePicker imagePicker = ImagePicker();
   ProfilePicturesProvider() {
     if(UberAuth.instance.currentUser != null) {
       loadCachedData();
@@ -80,12 +80,30 @@ class ProfilePicturesProvider extends ChangeNotifier{
 
   }
 
+  Future<PickedFile?> _getLostData() async {
+    LostData lostData = await imagePicker.getLostData();
+    if(lostData.isEmpty) {
+      print('nothing has been lost');
+      return null;
+    }
+
+    if(lostData.file != null) {
+      return lostData.file;
+    }
+    print('something has been lost but file is null');
+    return null;
+  }
+
   Future<File?> pickImageFromSource(ImageSource source) async {
-    final ImagePicker picker = ImagePicker();
-    final PickedFile? pickedFile = await picker.getImage(source: source);
+
+    PickedFile? pickedFile = await imagePicker.getImage(source: source);
 
     if(pickedFile == null) {
       return null;
+    }
+    PickedFile? file = await _getLostData();
+    if( file != null) {
+      pickedFile = file;
     }
 
     Uint8List list = await pickedFile.readAsBytes();

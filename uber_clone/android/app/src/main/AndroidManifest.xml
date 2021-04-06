@@ -5,6 +5,7 @@
 
     <application
         android:label="uber_clone"
+        android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">
 
 

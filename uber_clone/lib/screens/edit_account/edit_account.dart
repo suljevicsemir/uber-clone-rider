@@ -22,12 +22,24 @@ class _EditAccountState extends State<EditAccount> {
   final globalKey = GlobalKey<ScaffoldState>();
 
 
-
+  @override
+  void deactivate() {
+    super.deactivate();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final UserData user = Provider.of<UserDataProvider>(context, listen: false).userData!;
-    final File picture = Provider.of<ProfilePicturesProvider>(context).profilePicture!;
+    final UserData? user = Provider.of<UserDataProvider>(context, listen: false).userData;
+    final File? picture = Provider.of<ProfilePicturesProvider>(context).profilePicture;
+
+    if( user == null || picture == null) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
