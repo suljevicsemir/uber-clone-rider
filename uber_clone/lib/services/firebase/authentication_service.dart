@@ -1,7 +1,6 @@
-import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/services/cached_data/temp_directory_service.dart';
@@ -19,20 +18,23 @@ class AuthenticationService{
   final UserDataService userDataService = UserDataService();
   final UserSettingsService settingsService = UserSettingsService();
 
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+
   Stream<User?> get authStateChanges => FirebaseAuth.instance.authStateChanges();
 
 
   Future<void> signOut() async {
-    if( await facebookLogin.isSignedIn()) {
-      await facebookLogin.signOut();
-    }
-    else {
-      await googleAuth.signOut();
-    }
+    await googleAuth.signOut();
     await UberAuth.instance.signOut();
   }
 
-  Future<UserData?> signInWithFacebook() async {
+  Future<GoogleSignInAccount?> pickAccount() async {
+    print('pick account is called');
+    return await googleSignIn.signIn();
+  }
+
+
+  /*Future<UserData?> signInWithFacebook() async {
     UserData? userData = await facebookLogin.signIn();
     if(userData == null)
       return null;
@@ -55,13 +57,14 @@ class AuthenticationService{
     print('SPASENA U STORAGE');
 
     return userData;
-  }
+  }*/
 
   Future<UserData?> signInWithGoogle() async {
 
     UserData? userData = await googleAuth.signIn();
     if(userData == null)
       return null;
+
     await userDataService.saveUserData(userData);
     await settingsService.saveRideVerification();
 

@@ -2,11 +2,13 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
 import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/providers/chat_provider.dart';
 import 'package:uber_clone/providers/driver_profile_provider.dart';
+import 'package:uber_clone/providers/google_login_provider.dart';
 import 'package:uber_clone/providers/settings/ride_verification.dart';
 import 'package:uber_clone/providers/trips_provider.dart';
 import 'package:uber_clone/screens/account_settings/ride_verification/ride_verification.dart';
@@ -14,6 +16,7 @@ import 'package:uber_clone/screens/export.dart';
 import 'package:uber_clone/screens/facebook_login/facebook_login.dart';
 import 'package:uber_clone/screens/get_started/choose_account.dart';
 import 'package:uber_clone/screens/get_started/choose_login_type.dart';
+import 'package:uber_clone/screens/google_login/google_login.dart';
 
 class UberRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -106,6 +109,15 @@ class UberRouter {
       case FacebookLoginProgress.route:
         return MaterialPageRoute(
           builder: (_) => FacebookLoginProgress()
+        );
+
+      case GoogleLogin.route:
+        return MaterialPageRoute(
+          builder: (_) => ChangeNotifierProvider(
+              lazy: false,
+              create: (context) => GoogleLoginProvider( account: settings.arguments as GoogleSignInAccount),
+              child: GoogleLogin()
+          )
         );
 
       default:

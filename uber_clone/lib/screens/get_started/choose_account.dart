@@ -1,11 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
-import 'package:uber_clone/components/authentication_wrapper.dart';
-import 'package:uber_clone/models/user_data.dart';
-import 'package:uber_clone/providers/profile_pictures_provider.dart';
-import 'package:uber_clone/providers/user_data_provider.dart';
+import 'package:uber_clone/screens/google_login/google_login.dart';
 import 'package:uber_clone/services/firebase/authentication_service.dart';
 class ChooseAccount extends StatelessWidget {
 
@@ -74,6 +72,15 @@ class ChooseAccount extends StatelessWidget {
                           onTap: ()  async{
 
                             Timer(const Duration(milliseconds: 200), () async {
+                              GoogleSignInAccount? account = await Provider.of<AuthenticationService>(context, listen: false).pickAccount();
+                              if( account != null) {
+                                await Navigator.pushNamed(context, GoogleLogin.route, arguments: account);
+                              }
+                            });
+
+
+
+                            /*Timer(const Duration(milliseconds: 200), () async {
                               final UserData? result = await Provider.of<AuthenticationService>(context, listen: false).signInWithGoogle();
 
                               if( result != null) {
@@ -81,7 +88,7 @@ class ChooseAccount extends StatelessWidget {
                                 await Provider.of<ProfilePicturesProvider>(context, listen: false).loadCachedData();
                                 await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
                               }
-                            });
+                            });*/
 
                           },
                           child: Container(
