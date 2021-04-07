@@ -29,7 +29,7 @@ class GoogleAuth extends UberAuth {
           idToken: googleAuth.idToken
       );
 
-      await UberAuth.instance.signInWithCredential(credential);
+      await FirebaseAuth.instance.signInWithCredential(credential);
 
       final Map<String, dynamic> payloadMap = _parseGoogleToken(googleAuth.idToken!)!;
       Map<String, dynamic> createUserData = _userData(payloadMap, accountUser);
@@ -73,7 +73,7 @@ class GoogleAuth extends UberAuth {
       user_data_fields.providerUserId : account.id,
       user_data_fields.profilePicture : account.photoUrl,
       user_data_fields.signedInType : SignedInType.Google.parseSignedInType(),
-      user_data_fields.firebaseUserId : UberAuth.userId,
+      user_data_fields.firebaseUserId : FirebaseAuth.instance.currentUser!.uid,
       user_data_fields.phoneNumber : 'THIS IS A MOCK PHONE NUMBER'
     };
   }

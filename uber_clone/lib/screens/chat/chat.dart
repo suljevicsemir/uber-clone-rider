@@ -13,7 +13,6 @@ import 'package:uber_clone/providers/chat_provider.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/providers/user_data_provider.dart';
 import 'package:uber_clone/screens/driver_profile/driver_profile.dart';
-import 'package:uber_clone/services/firebase/auth/uber_auth.dart';
 
 class Chat extends StatefulWidget {
 
@@ -226,9 +225,9 @@ class _ChatState extends State<Chat> {
   _buildMessage(BuildContext context, Message message, Message? nextMessage, bool isLast) {
 
     bool isNextSent = false;
-    bool sentMessage = message.firebaseUserId == UberAuth.userId ? true : false;
+    bool sentMessage = message.firebaseUserId == FirebaseAuth.instance.currentUser!.uid ? true : false;
     if( nextMessage != null) {
-      isNextSent = nextMessage.firebaseUserId == UberAuth.userId;
+      isNextSent = nextMessage.firebaseUserId == FirebaseAuth.instance.currentUser!.uid;
     }
 
     bool shouldHavePicture = (isNextSent && !sentMessage) || (isLast && !sentMessage);

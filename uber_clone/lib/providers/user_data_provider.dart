@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uber_clone/models/user_data.dart';
-import 'package:uber_clone/services/firebase/auth/uber_auth.dart';
 import 'package:uber_clone/services/firebase/user_data_firestore.dart';
 import 'package:uber_clone/services/secure_storage/user_data.dart';
 
@@ -15,7 +15,7 @@ class UserDataProvider extends ChangeNotifier {
 
   UserDataProvider() {
     print('user data provider konstruktor');
-    if(UberAuth.instance.currentUser != null) {
+    if(FirebaseAuth.instance.currentUser != null) {
       _loadUser();
     }
   }

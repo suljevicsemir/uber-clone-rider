@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uber_clone/constants/chat_list.dart' as chat_list;
 import 'package:uber_clone/constants/message.dart' as message_fields;
 import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/models/message.dart';
 import 'package:uber_clone/models/user_data.dart';
-import 'package:uber_clone/services/firebase/auth/uber_auth.dart';
 class ChatProvider {
 
 
@@ -38,7 +38,7 @@ class ChatProvider {
        transaction.update(_usersReference.doc(userData.firebaseUserId).collection('chats').doc(chatId), {
          chat_list.lastMessage                 : message.message,
          chat_list.lastMessageTimestamp        : message.timestamp,
-         chat_list.lastMessageSenderFirebaseId : UberAuth.userId
+         chat_list.lastMessageSenderFirebaseId : FirebaseAuth.instance.currentUser!.uid
        });
      });
 
@@ -47,7 +47,7 @@ class ChatProvider {
        transaction.update(_driversReference.doc(driver.id).collection('chats').doc(chatId), {
          chat_list.lastMessage                 : message.message,
          chat_list.lastMessageTimestamp        : message.timestamp,
-         chat_list.lastMessageSenderFirebaseId : UberAuth.userId
+         chat_list.lastMessageSenderFirebaseId : FirebaseAuth.instance.currentUser!.uid
        });
      });
 
@@ -57,7 +57,7 @@ class ChatProvider {
 
   Map<String, dynamic> _buildMessage(Message message) {
     return {
-      message_fields.firebaseUserId   : UberAuth.userId,
+      message_fields.firebaseUserId   : FirebaseAuth.instance.currentUser!.uid,
       message_fields.message          : message.message,
       message_fields.timestamp        : message.timestamp
     };
@@ -76,7 +76,7 @@ class ChatProvider {
     // if not, we need to create three new collections
     _instance.runTransaction((transaction) async {
       transaction.set(_chatReference.doc(chatId), {
-        'firebaseUserId1' : UberAuth.userId,
+        'firebaseUserId1' : FirebaseAuth.instance.currentUser!.uid,
         'firebaseUserId2' : driver.id,
       });
     });
@@ -100,7 +100,7 @@ class ChatProvider {
     //chat list of driver the user is chatting with (of the driver)
     _instance.runTransaction((transaction) async {
       transaction.set(_driversReference.doc(driver.id).collection('chats').doc(chatId), {
-        chat_list.firebaseUserId              : UberAuth.userId,
+        chat_list.firebaseUserId              : FirebaseAuth.instance.currentUser!.uid,
         chat_list.firstName                   : userData.firstName,
         chat_list.lastName                    : userData.lastName,
         chat_list.lastMessage                 : '',

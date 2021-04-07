@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:http/http.dart' as http;
-import 'package:uber_clone/services/firebase/auth/uber_auth.dart';
 
 class FacebookLoginProgress extends StatefulWidget {
 
@@ -86,7 +85,7 @@ class _FacebookLoginProgressState extends State<FacebookLoginProgress> {
                   }
                   final AuthCredential credential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
                   print(credential.token);
-                  UserCredential uc = await UberAuth.instance.signInWithCredential(credential);
+                  UserCredential uc = await FirebaseAuth.instance.signInWithCredential(credential);
                   setState(() {
                     firebaseLogin = true;
                   });

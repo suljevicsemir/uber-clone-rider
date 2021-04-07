@@ -3,14 +3,13 @@ import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:uber_clone/services/firebase/auth/uber_auth.dart';
 
 
 class TempDirectoryService {
 
    Future<File?> loadUserPicture() async {
     final Directory temp = await getTemporaryDirectory();
-    final File profilePicture = File('${temp.path}/${UberAuth.userId}');
+    final File profilePicture = File('${temp.path}/${FirebaseAuth.instance.currentUser!.uid}');
 
     //profile picture is in the temp directory
     if(await profilePicture.exists()) {
@@ -24,7 +23,7 @@ class TempDirectoryService {
   static Future<File?> storeUserPicture(Uint8List list) async {
     try {
       final Directory temp = await getTemporaryDirectory();
-      File picture = File('${temp.path}/${UberAuth.userId}');
+      File picture = File('${temp.path}/${FirebaseAuth.instance.currentUser!.uid}');
 
       if(await picture.exists()) {
         print('Profile picture for ' + FirebaseAuth.instance.currentUser!.uid + ' account is already cached');
@@ -131,7 +130,7 @@ class TempDirectoryService {
   Future<void> deleteUserPicture() async {
      try {
        final Directory temp = await getTemporaryDirectory();
-       await Directory('${temp.path}/${UberAuth.userId}').delete(recursive: true);
+       await Directory('${temp.path}/${FirebaseAuth.instance.currentUser!.uid}').delete(recursive: true);
        print('Uspješno obrisano');
      }
      catch(err) {

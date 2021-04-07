@@ -27,7 +27,7 @@ class FacebookLogin extends UberAuth {
         return null;
 
       final AuthCredential credential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
-      await UberAuth.instance.signInWithCredential(credential);
+      await FirebaseAuth.instance.signInWithCredential(credential);
 
 
       String url = 'https://graph.facebook.com/v9.0/me?fields=name,picture.width(1200).height(800),first_name,last_name,email&access_token=${loginResult.accessToken!.token}';
@@ -51,7 +51,7 @@ class FacebookLogin extends UberAuth {
         user_data_fields.providerUserId : profile["id"],
         user_data_fields.profilePicture : picture["url"],
         user_data_fields.signedInType : SignedInType.Facebook.parseSignedInType(),
-        user_data_fields.firebaseUserId : UberAuth.userId,
+        user_data_fields.firebaseUserId : FirebaseAuth.instance.currentUser!.uid,
         user_data_fields.phoneNumber : 'THIS IS A MOCK PHONE NUMBER',
 
       };

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uber_clone/constants/user_settings/ride_verification.dart' as fields;
-import 'package:uber_clone/services/firebase/firestore/firestore_service.dart';
 import 'package:uber_clone/services/firebase/ride_verification_service.dart';
 class RideVerificationProvider extends ChangeNotifier {
 
@@ -15,7 +15,7 @@ class RideVerificationProvider extends ChangeNotifier {
   }
   
   Future<void> _loadVerificationSettings() async {
-    DocumentSnapshot snapshot = await FirestoreService.userSettings.get();
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('user_settings').doc(FirebaseAuth.instance.currentUser!.uid).get();
     _isUserUsingPIN  = _initialUsingPIN  = snapshot.get(fields.isUserUsingPIN);
 
     if(_isUserUsingPIN) {

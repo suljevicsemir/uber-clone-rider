@@ -4,11 +4,11 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uber_clone/services/cached_data/temp_directory_service.dart';
-import 'package:uber_clone/services/firebase/auth/uber_auth.dart';
 import 'package:uber_clone/services/firebase/storage/storage_provider.dart';
 
 class ProfilePicturesProvider extends ChangeNotifier{
@@ -20,7 +20,7 @@ class ProfilePicturesProvider extends ChangeNotifier{
   Map<String, File>? driverProfilePictures = {};
   final ImagePicker imagePicker = ImagePicker();
   ProfilePicturesProvider() {
-    if(UberAuth.instance.currentUser != null) {
+    if(FirebaseAuth.instance.currentUser != null) {
       loadCachedData();
     }
 

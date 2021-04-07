@@ -6,7 +6,6 @@ import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/services/cached_data/temp_directory_service.dart';
 import 'package:uber_clone/services/firebase/auth/facebook_login.dart';
 import 'package:uber_clone/services/firebase/auth/google_auth.dart';
-import 'package:uber_clone/services/firebase/auth/uber_auth.dart';
 import 'package:uber_clone/services/firebase/ride_verification_service.dart';
 import 'package:uber_clone/services/firebase/storage/storage_provider.dart';
 import 'package:uber_clone/services/user_data_service.dart';
@@ -25,7 +24,7 @@ class AuthenticationService{
 
   Future<void> signOut() async {
     await googleAuth.signOut();
-    await UberAuth.instance.signOut();
+    await FirebaseAuth.instance.signOut();
   }
 
   Future<GoogleSignInAccount?> pickAccount() async {
