@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">Uber clone</string>
-    <string name="facebook_app_id">255147542847321</string>
-    <string name="fb_login_protocol_scheme">fb255147542847321</string>
-
-</resources>
