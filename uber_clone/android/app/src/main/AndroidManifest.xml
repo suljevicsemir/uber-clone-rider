@@ -8,6 +8,8 @@
         android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">
 
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBYY7LCEoiRsU6LVCsKvRPpml9HHmHta4Q"/>
 
         <activity
             android:name=".MainActivity"

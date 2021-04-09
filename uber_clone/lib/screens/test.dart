@@ -18,7 +18,6 @@ class _TestingState extends State<Testing> {
                   child: Container(
                     height: 400,
                     width: 400,
-                    color: Colors.red,
                       child: Image.asset('assets/images/driver_rider_mask.png', fit: BoxFit.cover,)))
             ],
           ),

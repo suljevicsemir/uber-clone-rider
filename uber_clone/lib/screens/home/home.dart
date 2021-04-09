@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:uber_clone/providers/profile_pictures_provider.dart';
+import 'package:uber_clone/providers/home_provider.dart';
 import 'package:uber_clone/screens/home/drawer/drawer.dart';
 import 'package:uber_clone/screens/home/drawer_menu_icon.dart';
+import 'package:uber_clone/screens/home/map/map.dart';
 
 import 'file:///C:/Users/semir/FlutterProjects/uber-clone-rider/uber_clone/lib/screens/home/home_components/pick_destination.dart';
 import 'file:///C:/Users/semir/FlutterProjects/uber-clone-rider/uber_clone/lib/screens/home/home_components/ride_now.dart';
@@ -30,48 +31,34 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
+
       key: globalKey,
-      backgroundColor: Colors.grey,
       body: AnnotatedRegion(
         value: SystemUiOverlayStyle(
-          statusBarColor:  Colors.transparent,
+          statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.light
         ),
-        child: SafeArea(
-          child: Stack(
-            fit: StackFit.loose,
-            children: [
+        child: Stack(
+          fit: StackFit.loose,
+          children: [
 
-              //BOTTOM WHERE TO AND SAVED PLACE PART
-              PickDestination(),
+            HomeMap(),
 
-              //BLUE RIDE NOW PART
-              RideNow(),
 
-              //Drawer Menu Icon
-              DrawerMenu(),
 
-              Positioned(
-                  left: 80.0,
-                  top: 10.0,
-                  child: ClipOval(
-                    child: Material(
-                      color: Colors.white,
-                      child: InkWell(
-                        splashColor: Colors.black,
-                        child: SizedBox(
-                          height: 55,
-                          width: 55,
-                          child: Icon(Icons.menu, size: 30,),
-                        ),
-                        onTap: () => Provider.of<ProfilePicturesProvider>(context, listen: false).tempDirectoryService.deleteDriverDirectory(),
-                      ),
-                    ),
-                  )
-              )
-            ]
-          )
+            Provider.of<HomeProvider>(context).isOverlayShown ?
+            //BOTTOM WHERE TO AND SAVED PLACE PART
+            PickDestination() : Container(),
+
+            Provider.of<HomeProvider>(context).isOverlayShown ?
+            //BLUE RIDE NOW PART
+            RideNow() : Container(),
+
+            //Drawer Menu Icon
+            DrawerMenu(),
+
+
+          ]
         ),
       ),
       drawer: HomeDrawer(),
