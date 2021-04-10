@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uber_clone/screens/where_to_search/where_to_search.dart';
 
 class WhereTo extends StatelessWidget {
   @override
@@ -10,10 +11,14 @@ class WhereTo extends StatelessWidget {
           color: const Color(0xffededed)
       ),
       child: Row(
-
         children: [
-          Text('Where to?', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w600),),
-          Spacer(),
+          Expanded(
+            child: GestureDetector(
+              onTap: () async => await Navigator.pushNamed(context, WhereToSearch.route),
+              child: Text('Where to?', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w600),)
+            )
+          ),
+          //Spacer(),
           Container(
             width: 3,
             height: 30,
@@ -22,27 +27,29 @@ class WhereTo extends StatelessWidget {
               borderRadius: BorderRadius.circular(20)
             ),
           ),
-          Spacer(),
-          Container(
-            constraints: BoxConstraints(
-                minWidth: 0.3 * MediaQuery.of(context).size.width,
-                minHeight: 0.058 * MediaQuery.of(context).size.height
-            ),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20)
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ClipOval(
-                  child: Container(
-                      color: Colors.black,
-                      child: Icon(Icons.schedule, color: Colors.white,)),
-                ),
-                Text('Now'),
-                Icon(Icons.arrow_drop_down)
-              ],
+
+          Expanded(
+            child: Container(
+              constraints: BoxConstraints(
+                  minWidth: 0.3 * MediaQuery.of(context).size.width,
+                  minHeight: 0.058 * MediaQuery.of(context).size.height
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20)
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ClipOval(
+                    child: Container(
+                        color: Colors.black,
+                        child: Icon(Icons.schedule, color: Colors.white,)),
+                  ),
+                  Text('Now'),
+                  Icon(Icons.arrow_drop_down)
+                ],
+              ),
             ),
           )
         ],

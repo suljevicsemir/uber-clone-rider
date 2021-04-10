@@ -17,6 +17,8 @@ import 'package:uber_clone/screens/facebook_login/facebook_login.dart';
 import 'package:uber_clone/screens/get_started/choose_account.dart';
 import 'package:uber_clone/screens/get_started/choose_login_type.dart';
 import 'package:uber_clone/screens/google_login/google_login.dart';
+import 'package:uber_clone/screens/where_to_search/where_to_search.dart';
+
 
 class UberRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -118,6 +120,11 @@ class UberRouter {
               create: (context) => GoogleLoginProvider( account: settings.arguments as GoogleSignInAccount),
               child: GoogleLogin()
           )
+        );
+
+      case WhereToSearch.route:
+        return MaterialPageRoute(
+          builder: (_) => WhereToSearch()
         );
 
         default:

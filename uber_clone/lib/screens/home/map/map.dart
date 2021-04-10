@@ -65,11 +65,9 @@ class _HomeMapState extends State<HomeMap> {
 
     tracker.onLocationChanged.listen((LocationData? data) async{
       if(lastLocation != null &&  lastLocation!.longitude == data!.longitude && lastLocation!.latitude == data.latitude) {
-        print('ista je ko zadnja');
         return;
       }
       lastLocation = data;
-      print('location changed' + DateTime.now().toString());
         await mapController.future.then((GoogleMapController controller) async {
           if(data == null || data.longitude == null || data.latitude == null )
             return;

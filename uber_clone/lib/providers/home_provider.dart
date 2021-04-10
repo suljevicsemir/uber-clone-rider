@@ -12,18 +12,20 @@ class HomeProvider extends ChangeNotifier{
   LocationData? lastLocation;
   CameraPosition? cameraPosition;
   CameraPosition? initialCameraPosition;
-  bool _hasPermission = false;
-  Location locationTracker = Location();
 
+  Location locationTracker = Location();
+  PermissionStatus? _permissionStatus;
 
   HomeProvider() {
-
+    _checkPermission();
   }
 
   Future<void> _checkPermission() async {
-    if((await locationTracker.hasPermission()) == PermissionStatus.denied) {
-      locationTracker.requestPermission();
+    _permissionStatus = await locationTracker.hasPermission();
+    if(_permissionStatus == PermissionStatus.denied) {
+      _permissionStatus = await locationTracker.requestPermission();
     }
+    notifyListeners();
   }
 
 
@@ -52,4 +54,5 @@ class HomeProvider extends ChangeNotifier{
 
   bool get isOverlayShown => _isOverlayShown;
 
+  PermissionStatus? get permissionStatus => _permissionStatus;
 }
