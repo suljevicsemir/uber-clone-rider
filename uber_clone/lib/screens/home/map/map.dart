@@ -20,16 +20,13 @@ class _HomeMapState extends State<HomeMap> {
   String? mapStyle;
   Marker? marker;
   Circle? circle;
-
+  LocationData? lastLocation;
   CameraPosition? initialCameraPosition;
 
 
   Location tracker = Location();
 
-  static final CameraPosition kGooglePlex = CameraPosition(
-    target: LatLng(43.7843792859, 18.1524735956),
-    zoom: 16,
-  );
+
 
   Future<void> updateMarkerAndCircle(LocationData data) async{
     LatLng latLng = LatLng(data.latitude!, data.longitude!);
@@ -53,16 +50,6 @@ class _HomeMapState extends State<HomeMap> {
         fillColor: Colors.blue.withAlpha(70)
       );
     });
-    await mapController.future.then((value) {
-      value.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(
-              bearing: 0,
-              target: LatLng(data.latitude!, data.longitude!),
-              tilt: 0
-          )
-      ));
-
-    });
   }
 
 
@@ -73,23 +60,30 @@ class _HomeMapState extends State<HomeMap> {
   @override
   void initState() {
     super.initState();
-
     getCurrentLocation();
 
-    /*subscription = tracker.onLocationChanged.listen((LocationData? data) async{
-        await mapController.future.then((GoogleMapController controller)  {
+    subscription = tracker.onLocationChanged.listen((LocationData? data) async{
+      if(lastLocation != null &&  lastLocation!.longitude == data!.longitude && lastLocation!.latitude == data.latitude) {
+        print('ista je ko zadnja');
+        return;
+      }
+      lastLocation = data;
+      print('location changed' + DateTime.now().toString());
+        await mapController.future.then((GoogleMapController controller) async {
           if(data == null || data.longitude == null || data.latitude == null )
             return;
+          double zoomLevel = await controller.getZoomLevel();
           controller.animateCamera(CameraUpdate.newCameraPosition(
             CameraPosition(
               bearing: 0,
               target: LatLng(data.latitude!, data.longitude!),
-              tilt: 0
+              tilt: 0,
+              zoom: zoomLevel
             )
           ));
           updateMarkerAndCircle(data);
         });
-    });*/
+    });
 
   }
 
@@ -100,10 +94,9 @@ class _HomeMapState extends State<HomeMap> {
           target: LatLng(data.latitude!, data.longitude!),
           zoom: 15
       );
+      lastLocation = data;
     });
-
-   // updateMarkerAndCircle(data);
-
+    updateMarkerAndCircle(data);
 
   }
 
@@ -122,54 +115,23 @@ class _HomeMapState extends State<HomeMap> {
   @override
   Widget build(BuildContext context) {
 
-    /*if( marker == null || circle == null ) {
+    if( marker == null || circle == null || initialCameraPosition == null || mapStyle == null) {
       return Container(
-        color: Colors.red,
+        color: Colors.amberAccent,
       );
-    }*/
-
-    if( initialCameraPosition == null || mapStyle == null)
-      return Container(
-
-      );
-
-    return GestureDetector(
-
-      child: GoogleMap(
-        onTap: (LatLng latLng) => Provider.of<HomeProvider>(context, listen: false).updateOverlay(),
-        //mapType: MapType.hybrid,
-        initialCameraPosition: initialCameraPosition!,
-        onMapCreated: (GoogleMapController controller) async{
-
-          mapController.complete(controller);
-          await mapController.future.then((GoogleMapController controller) => controller.setMapStyle(mapStyle));
-        },
-        //markers: Set.of((marker != null) ? [marker!] : []),
-        //circles: Set.of((circle != null) ? [circle!] : []),
-        onCameraMove: (CameraPosition position) {
-          print(position.zoom.toString());
-        },
-        /*onCameraMove: (CameraPosition position) async{
-          await mapController.future.then((GoogleMapController controller) {
-            controller.animateCamera(
-                CameraUpdate.newCameraPosition(
-                    CameraPosition(
-                        bearing: 0,
-                        target: position.target,
-                        tilt: 0,
-                        zoom: position.zoom
-                    )
-                ));
-            LocationData data = LocationData.fromMap({
-              'latitude' : position.target.latitude,
-              'longitude' : position.target.longitude
-            });
-            updateMarkerAndCircle(data);
-          });
-        },*/
+    }
 
 
-      ),
+    return GoogleMap(
+      onTap: (LatLng latLng) => Provider.of<HomeProvider>(context, listen: false).updateOverlay(),
+      initialCameraPosition: initialCameraPosition!,
+      onMapCreated: (GoogleMapController controller) async{
+        controller.setMapStyle(mapStyle);
+        mapController.complete(controller);
+      },
+      zoomControlsEnabled: false,
+      markers: Set.of([marker!]),
+      circles: Set.of([circle!])
     );
   }
 
