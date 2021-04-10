@@ -16,7 +16,8 @@ class HomeMap extends StatefulWidget {
 class _HomeMapState extends State<HomeMap> {
 
   Completer<GoogleMapController> mapController = Completer();
-  StreamSubscription? subscription;
+
+
   String? mapStyle;
   Marker? marker;
   Circle? circle;
@@ -62,7 +63,7 @@ class _HomeMapState extends State<HomeMap> {
     super.initState();
     getCurrentLocation();
 
-    subscription = tracker.onLocationChanged.listen((LocationData? data) async{
+    tracker.onLocationChanged.listen((LocationData? data) async{
       if(lastLocation != null &&  lastLocation!.longitude == data!.longitude && lastLocation!.latitude == data.latitude) {
         print('ista je ko zadnja');
         return;
@@ -137,7 +138,6 @@ class _HomeMapState extends State<HomeMap> {
 
   @override
   void dispose() {
-    print("dispose called");
     super.dispose();
   }
 }
