@@ -31,6 +31,7 @@ class _HomeMapState extends State<HomeMap> {
 
 
   Future<void> updateMarkerAndCircle(LocationData data) async{
+    print('update called');
     LatLng latLng = LatLng(data.latitude!, data.longitude!);
     setState(() {
       marker = Marker(
@@ -65,11 +66,15 @@ class _HomeMapState extends State<HomeMap> {
     getCurrentLocation();
 
     tracker.onLocationChanged.listen((LocationData? data) async{
-      if(data == null || lastLocation == null)
-        return;
-      if(geolocator.Geolocator.distanceBetween(lastLocation!.latitude!, lastLocation!.longitude!, data.latitude!, data.longitude!) < 0.5)
+      if(data == null)
         return;
 
+      if(lastLocation == null)
+        return;
+
+      if(geolocator.Geolocator.distanceBetween(lastLocation!.latitude!, lastLocation!.longitude!, data.latitude!, data.longitude!) < 5)
+        return;
+      print('pomjerilo se');
       lastLocation = data;
         await mapController.future.then((GoogleMapController controller) async {
           if(data.longitude == null || data.latitude == null )
