@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
@@ -64,12 +65,14 @@ class _HomeMapState extends State<HomeMap> {
     getCurrentLocation();
 
     tracker.onLocationChanged.listen((LocationData? data) async{
-      if(lastLocation != null &&  lastLocation!.longitude == data!.longitude && lastLocation!.latitude == data.latitude) {
+      if(data == null || lastLocation == null)
         return;
-      }
+      if(geolocator.Geolocator.distanceBetween(lastLocation!.latitude!, lastLocation!.longitude!, data.latitude!, data.longitude!) < 0.5)
+        return;
+
       lastLocation = data;
         await mapController.future.then((GoogleMapController controller) async {
-          if(data == null || data.longitude == null || data.latitude == null )
+          if(data.longitude == null || data.latitude == null )
             return;
           double zoomLevel = await controller.getZoomLevel();
           controller.animateCamera(CameraUpdate.newCameraPosition(
@@ -87,6 +90,7 @@ class _HomeMapState extends State<HomeMap> {
   }
 
   Future<void> getCurrentLocation() async {
+    await tracker.changeSettings(accuracy: LocationAccuracy.navigation);
     LocationData data = await tracker.getLocation();
     setState(() {
       initialCameraPosition = CameraPosition(
