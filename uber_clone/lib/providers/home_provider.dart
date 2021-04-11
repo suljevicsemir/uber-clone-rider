@@ -13,6 +13,8 @@ class HomeProvider extends ChangeNotifier{
   CameraPosition? cameraPosition;
   CameraPosition? initialCameraPosition;
 
+  bool _isBottomSheetVisible = false;
+
   Location locationTracker = Location();
   PermissionStatus? _permissionStatus;
 
@@ -28,6 +30,10 @@ class HomeProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  void updateBottomSheet() {
+    _isBottomSheetVisible = !_isBottomSheetVisible;
+    notifyListeners();
+  }
 
   void updateOverlay() {
     _isOverlayShown = !_isOverlayShown;
@@ -55,4 +61,6 @@ class HomeProvider extends ChangeNotifier{
   bool get isOverlayShown => _isOverlayShown;
 
   PermissionStatus? get permissionStatus => _permissionStatus;
+
+  bool get isBottomSheetVisible => _isBottomSheetVisible;
 }

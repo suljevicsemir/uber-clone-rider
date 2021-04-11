@@ -28,7 +28,6 @@ class PickDestination extends StatelessWidget {
               Expanded(
                   child: PickSavedPlace()
               )
-
             ],
           ),
         ),

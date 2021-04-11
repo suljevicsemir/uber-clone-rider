@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uber_clone/screens/home/home_components/home_bottom_sheet//bottom_sheet.dart';
 import 'package:uber_clone/screens/where_to_search/where_to_search.dart';
 
 class WhereTo extends StatelessWidget {
@@ -12,13 +13,11 @@ class WhereTo extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () async => await Navigator.pushNamed(context, WhereToSearch.route),
-              child: Text('Where to?', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w600),)
-            )
+          GestureDetector(
+            onTap: () async => await Navigator.pushNamed(context, WhereToSearch.route),
+            child: Text('Where to?', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w600),)
           ),
-          //Spacer(),
+          Spacer(),
           Container(
             width: 3,
             height: 30,
@@ -27,8 +26,13 @@ class WhereTo extends StatelessWidget {
               borderRadius: BorderRadius.circular(20)
             ),
           ),
-
-          Expanded(
+          Spacer(),
+          GestureDetector(
+            onTap: () => showModalBottomSheet(
+              context: context ,
+              isScrollControlled: true,
+              builder: (context) => HomeBottomSheet()
+            ),
             child: Container(
               constraints: BoxConstraints(
                   minWidth: 0.3 * MediaQuery.of(context).size.width,
