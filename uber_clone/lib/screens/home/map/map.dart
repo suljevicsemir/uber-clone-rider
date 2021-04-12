@@ -31,7 +31,7 @@ class _HomeMapState extends State<HomeMap> {
 
 
   Future<void> updateMarkerAndCircle(LocationData data) async{
-    print('update called');
+
     LatLng latLng = LatLng(data.latitude!, data.longitude!);
     setState(() {
       marker = Marker(
@@ -74,7 +74,7 @@ class _HomeMapState extends State<HomeMap> {
 
       if(geolocator.Geolocator.distanceBetween(lastLocation!.latitude!, lastLocation!.longitude!, data.latitude!, data.longitude!) < 5)
         return;
-      print('pomjerilo se');
+
       lastLocation = data;
         await mapController.future.then((GoogleMapController controller) async {
           if(data.longitude == null || data.latitude == null )
@@ -143,8 +143,13 @@ class _HomeMapState extends State<HomeMap> {
     );
   }
 
+  Future<void> disposeController() async {
+    await mapController.future.then((value) => value.dispose());
+  }
+
   @override
   void dispose() {
     super.dispose();
+    disposeController();
   }
 }
