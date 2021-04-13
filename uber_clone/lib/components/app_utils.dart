@@ -29,3 +29,55 @@ import 'package:url_launcher/url_launcher.dart';
 
   }
 
+
+  SnackBar connectivityOnlineSnackBar() {
+    return SnackBar(
+      padding: EdgeInsets.zero,
+      duration: const Duration(seconds: 2),
+      backgroundColor: const Color(0xff2C2f33),
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('You are back online!', style: TextStyle(fontSize: 18, color: Colors.white)),
+        ],
+      ),
+    );
+  }
+
+  Row connectivityOfflineBanner() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Container(
+          height: 5,
+          width: 3,
+          color: Colors.red,
+        ),
+        SizedBox(width: 1,),
+        Container(
+          color: const Color(0xff23272A),
+          child: SizedBox(
+            height: 8,
+            width: 3,
+          ),
+        ),
+        SizedBox(width: 1,),
+        Container(
+          color: const Color(0xff23272A),
+          child: SizedBox(
+            height: 11,
+            width: 3,
+          ),
+        ),
+        SizedBox(width: 10,),
+        Expanded(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text('Network connectivity limited or unavailable.', style: TextStyle(fontSize: 18),)
+          ),
+        )
+      ],
+    );
+  }
+

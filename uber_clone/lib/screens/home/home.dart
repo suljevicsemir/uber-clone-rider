@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:uber_clone/components/connectivity_notifier.dart';
 import 'package:uber_clone/providers/home_provider.dart';
 import 'package:uber_clone/screens/home/drawer/drawer.dart';
 import 'package:uber_clone/screens/home/drawer_menu_icon.dart';
@@ -62,6 +63,13 @@ class _HomeState extends State<Home> {
 
               //Drawer Menu Icon
               DrawerMenu(),
+
+              Positioned(
+                top: 50,
+                left: 80,
+                right: 0,
+                child: ConnectivityNotifier()
+              )
 
 
             ]
