@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uber_clone/screens/home/home_components/home_bottom_sheet//bottom_sheet.dart';
-import 'package:uber_clone/screens/where_to_search/where_to_search.dart';
+import 'package:uber_clone/screens/place_search//where_to_search.dart';
 
 class WhereTo extends StatelessWidget {
   @override

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
 import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/providers/user_data_provider.dart';
+import 'package:uber_clone/screens/place_search/where_to_search.dart';
 import 'package:uber_clone/services/firebase/authentication_service.dart';
 import 'package:uber_clone/theme/palette.dart';
 
@@ -81,13 +82,13 @@ class _AccountSettingsState extends State<AccountSettings> {
                       children: [
                         ElevatedButton.icon(
                           style: Palette.greyElevatedStyleLeftPadding,
-                          onPressed: () {},
+                          onPressed: () async =>  Navigator.pushNamed(context, WhereToSearch.route),
                           icon: Icon(Icons.home_filled, color: Colors.black,),
                           label: Text('Add Home', style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w400)),
                         ),
                         ElevatedButton.icon(
                           style: Palette.greyElevatedStyleLeftPadding,
-                          onPressed: () {},
+                          onPressed: () async => Navigator.pushNamed(context, WhereToSearch.route),
                           icon: Icon(Icons.work, color: Colors.black,),
                           label: Text('Add Work', style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w400)),
                         ),
