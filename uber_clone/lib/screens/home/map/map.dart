@@ -30,7 +30,6 @@ class _HomeMapState extends State<HomeMap> {
   Location tracker = Location();
   Set<Marker> markers = Set<Marker>();
   Set<CustomMarkerId> markerIds = Set<CustomMarkerId>();
-
   Uint8List? whiteCar, redCar;
 
   Future<void> updateMarkerAndCircle(LocationData data) async{
@@ -55,8 +54,6 @@ class _HomeMapState extends State<HomeMap> {
   @override
   void initState() {
     super.initState();
-
-
 
     tracker.onLocationChanged.listen((LocationData? data) async{
       if(data == null || lastLocation == null)
@@ -102,7 +99,7 @@ class _HomeMapState extends State<HomeMap> {
     super.didChangeDependencies();
     SchedulerBinding.instance!.addPostFrameCallback((timeStamp) async{
       String value = await DefaultAssetBundle.of(context).loadString('assets/map/style.json');
-      //ByteData byteData = await DefaultAssetBundle.of(context).load('assets/images/location.png');
+
       ByteData whiteCarData = await DefaultAssetBundle.of(context).load('assets/images/white_car.png');
       ByteData redCarData = await DefaultAssetBundle.of(context).load('assets/images/red_car.png');
 
@@ -115,11 +112,6 @@ class _HomeMapState extends State<HomeMap> {
       Uint8List whiteCarList = (await whiteCarFrameInfo.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
       Uint8List redCarList = (await redCarFrameInfo.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
 
-
-      //ui.Codec codec = await ui.instantiateImageCodec(byteData.buffer.asUint8List(), targetWidth: 60, targetHeight: 120);
-      //ui.FrameInfo fi = await codec.getNextFrame();
-      //Uint8List list =  (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
-
       setState(() {
         mapStyle = value;
         whiteCar = whiteCarList;
@@ -127,39 +119,46 @@ class _HomeMapState extends State<HomeMap> {
 
       });
 
-      x = FirebaseFirestore.instance.collection('driver_locations').snapshots().listen((QuerySnapshot snapshot) {
+       FirebaseFirestore.instance.collection('driver_locations').snapshots().listen((QuerySnapshot snapshot) {
         List<QueryDocumentSnapshot> list = snapshot.docs;
-        list.forEach((QueryDocumentSnapshot documentSnapshot) {
-          GeoPoint geoPoint = documentSnapshot.get('location');
-          bool markerExists = markerIds.contains(CustomMarkerId(id: documentSnapshot.id));
+
+
+        for(int i = 0; i < list.length; i++) {
+
+          DocumentSnapshot snapshot = list.elementAt(i);
+
+          GeoPoint geoPoint = snapshot.get('location');
+          bool markerExists = markerIds.contains(CustomMarkerId(id: snapshot.id));
+
           if(markerExists) {
-            markers.removeWhere((Marker marker) => marker.markerId.value == documentSnapshot.id);
+            setState(() {
+              markers.removeWhere((Marker marker) => marker.markerId.value == snapshot.id);
+              markerIds.remove(CustomMarkerId(id: snapshot.id));
+            });
           }
+          if(!snapshot.get('status')) {
+            continue;
+          }
+
           bool isRed = false;
-          if(documentSnapshot.get('carColor') == 'red')
+          if(snapshot.get('carColor') == 'red')
             isRed = true;
+
           setState(() {
             markers.add(Marker(
-                markerId: MarkerId(documentSnapshot.id),
+                markerId: MarkerId(snapshot.id),
                 position: LatLng(geoPoint.latitude, geoPoint.longitude),
                 draggable: false,
                 zIndex: 2,
+                rotation: snapshot.get('heading'),
                 flat: true,
                 anchor: Offset(0.5, 0.5),
                 icon: isRed ? BitmapDescriptor.fromBytes(redCar!) : BitmapDescriptor.fromBytes(whiteCar!)
             ));
-            markerIds.add(CustomMarkerId(id: documentSnapshot.id));
+            markerIds.add(CustomMarkerId(id: snapshot.id));
           });
-        });
+        }
       });
-      /*fi.image.toByteData(format: ui.ImageByteFormat.png).then((ByteData? byteData) {
-        setState(() {
-          mapStyle = value;
-          imageData = byteData!.buffer.asUint8List();
-        });
-        getCurrentLocation();
-      });*/
-
     });
   }
 
