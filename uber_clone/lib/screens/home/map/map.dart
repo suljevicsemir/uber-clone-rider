@@ -116,26 +116,16 @@ class _HomeMapState extends State<HomeMap> {
         mapStyle = value;
         whiteCar = whiteCarList;
         redCar = redCarList;
-
       });
 
        FirebaseFirestore.instance.collection('driver_locations').snapshots().listen((QuerySnapshot snapshot) {
         List<QueryDocumentSnapshot> list = snapshot.docs;
-
+        Set<Marker> tempMarkers = Set<Marker>();
 
         for(int i = 0; i < list.length; i++) {
-
           DocumentSnapshot snapshot = list.elementAt(i);
-
           GeoPoint geoPoint = snapshot.get('location');
-          bool markerExists = markerIds.contains(CustomMarkerId(id: snapshot.id));
 
-          if(markerExists) {
-            setState(() {
-              markers.removeWhere((Marker marker) => marker.markerId.value == snapshot.id);
-              markerIds.remove(CustomMarkerId(id: snapshot.id));
-            });
-          }
           if(!snapshot.get('status')) {
             continue;
           }
@@ -144,20 +134,21 @@ class _HomeMapState extends State<HomeMap> {
           if(snapshot.get('carColor') == 'red')
             isRed = true;
 
-          setState(() {
-            markers.add(Marker(
-                markerId: MarkerId(snapshot.id),
-                position: LatLng(geoPoint.latitude, geoPoint.longitude),
-                draggable: false,
-                zIndex: 2,
-                rotation: snapshot.get('heading'),
-                flat: true,
-                anchor: Offset(0.5, 0.5),
-                icon: isRed ? BitmapDescriptor.fromBytes(redCar!) : BitmapDescriptor.fromBytes(whiteCar!)
-            ));
-            markerIds.add(CustomMarkerId(id: snapshot.id));
-          });
+          tempMarkers.add(Marker(
+            markerId: MarkerId(snapshot.id),
+            position: LatLng(geoPoint.latitude, geoPoint.longitude),
+            draggable: false,
+            zIndex: 2,
+            rotation: snapshot.get('heading'),
+            flat: true,
+            anchor: Offset(0.5, 0.5),
+            icon: isRed ? BitmapDescriptor.fromBytes(redCar!) : BitmapDescriptor.fromBytes(whiteCar!)
+          ));
         }
+        setState(() {
+          //markers.clear();
+          markers = tempMarkers;
+        });
       });
     });
   }
@@ -201,6 +192,6 @@ class _HomeMapState extends State<HomeMap> {
   void dispose() {
     super.dispose();
     disposeController();
-    x.cancel();
+    //x.cancel();
   }
 }

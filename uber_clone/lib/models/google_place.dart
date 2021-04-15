@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 @immutable
@@ -22,6 +23,22 @@ class GooglePlace {
 
 
   }
+  
+  factory GooglePlace.fromSnapshot(QueryDocumentSnapshot snapshot) {
+    String placeName = '', state = '', country = '';
+    
+    placeName = snapshot.get('placeName');
+    if(snapshot.get('country') != null)
+      country = snapshot.get('country');
+    if(snapshot.get('state') != null)
+      state = snapshot.get('state');
+
+    return GooglePlace(placeName: placeName, state: state, country: country);
+    
+    
+  }
+  
+  
 
 
 

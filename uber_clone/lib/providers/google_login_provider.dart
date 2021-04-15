@@ -72,7 +72,7 @@ class GoogleLoginProvider extends ChangeNotifier{
         return null;
       print(userData.toString());
       await userDataService.saveUserData(userData);
-
+      await settingsService.saveRideVerification();
       progress.savingData = true;
       notifyListeners();
 

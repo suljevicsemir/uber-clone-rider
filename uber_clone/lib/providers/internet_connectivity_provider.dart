@@ -27,6 +27,8 @@ class ConnectivityProvider extends ChangeNotifier {
   }
 
   bool isConnected() {
-    return (_currentConnectivity == ConnectivityResult.mobile || _currentConnectivity == ConnectivityResult.wifi) ? true : false;
+    return !(_currentConnectivity == ConnectivityResult.none);
   }
+
+  ConnectivityResult get currentConnectivity => _currentConnectivity;
 }

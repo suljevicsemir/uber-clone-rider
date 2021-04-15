@@ -2,26 +2,25 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_place/google_place.dart' as aa;
 import 'package:uber_clone/constants/api_key.dart' as api;
 import 'package:uber_clone/models/google_place.dart';
-import 'package:uber_clone/screens/place_search//google_place_item.dart';
+import 'package:uber_clone/screens/favorites_search/google_place_item.dart';
 import 'package:uuid/uuid.dart';
 
-class WhereToSearch extends StatefulWidget {
+class FavoritePlaceSearch extends StatefulWidget {
 
   static const String route = '/whereToSearch';
+  final String type;
+
+  FavoritePlaceSearch({required this.type});
 
   @override
-  _WhereToSearchState createState() => _WhereToSearchState();
+  _FavoritePlaceSearchState createState() => _FavoritePlaceSearchState();
 }
 
-class _WhereToSearchState extends State<WhereToSearch> {
+class _FavoritePlaceSearchState extends State<FavoritePlaceSearch> {
 
 
-
-  aa.GooglePlace gp = aa.GooglePlace(api.apiKey);
-  List<aa.AutocompletePrediction> list = [];
 
   final TextEditingController controller = TextEditingController();
   List<GooglePlace> places = <GooglePlace>[];
@@ -37,7 +36,7 @@ class _WhereToSearchState extends State<WhereToSearch> {
     }
 
     String baseURL = 'https://maps.googleapis.com/maps/api/place/autocomplete/json';
-    String type = 'geocode';
+    String type = '(regions)';
 
     String request = '$baseURL?input=$input&key=${api.apiKey}&type=$type&sessiontoken=$token&fields=geometry';
     Response response = await Dio().get(request);
@@ -103,7 +102,6 @@ class _WhereToSearchState extends State<WhereToSearch> {
                             style: const TextStyle(color: Colors.black),
                             cursorColor: Colors.teal.shade800,
                             cursorHeight: 24,
-                            //autofocus: true,
                             decoration: InputDecoration(
                               floatingLabelBehavior: FloatingLabelBehavior.never,
                               labelText: 'Where to?',
@@ -137,32 +135,10 @@ class _WhereToSearchState extends State<WhereToSearch> {
                     ],
                   ),
                 ),
-
-                /*Container(
-                  margin: const EdgeInsets.only(left: 15, right: 15),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.rectangle,
-                  ),
-                  child: const TextField(
-                    decoration: const InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
-                        isDense: true,
-                        filled: true,
-                        fillColor: const Color(0xffededed),
-                        border: InputBorder.none,
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.grey, width: 2.0),
-                        ),
-                        hintText: 'Home',
-                        hintStyle: const TextStyle(color: Colors.grey, fontSize: 18)
-                    ),
-                  ),
-                ),*/
-
                 Expanded(
                   child: ListView.builder(
                     itemCount: places.length,
-                    itemBuilder: (context, int index) => GooglePlaceItem(place: places.elementAt(index))
+                    itemBuilder: (context, int index) => GooglePlaceItem(place: places.elementAt(index), type: widget.type,)
                   )
                 )
               ],

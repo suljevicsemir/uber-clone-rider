@@ -15,7 +15,7 @@ class RideVerificationProvider extends ChangeNotifier {
   }
   
   Future<void> _loadVerificationSettings() async {
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('user_settings').doc(FirebaseAuth.instance.currentUser!.uid).get();
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('account_settings').doc(FirebaseAuth.instance.currentUser!.uid).get();
     _isUserUsingPIN  = _initialUsingPIN  = snapshot.get(fields.isUserUsingPIN);
 
     if(_isUserUsingPIN) {

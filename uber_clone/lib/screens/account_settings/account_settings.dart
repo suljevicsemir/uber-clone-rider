@@ -2,9 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
+import 'package:uber_clone/models/google_place.dart';
 import 'package:uber_clone/models/user_data.dart';
+import 'package:uber_clone/providers/settings/account_settings.dart';
 import 'package:uber_clone/providers/user_data_provider.dart';
-import 'package:uber_clone/screens/place_search/where_to_search.dart';
+import 'package:uber_clone/screens/favorites_search//where_to_search.dart';
 import 'package:uber_clone/services/firebase/authentication_service.dart';
 import 'package:uber_clone/theme/palette.dart';
 
@@ -30,6 +32,10 @@ class _AccountSettingsState extends State<AccountSettings> {
   Widget build(BuildContext context) {
     final UserData user = Provider.of<UserDataProvider>(context, listen: false).userData!;
     //final File picture = Provider.of<ProfilePicturesProvider>(context, listen: false).profilePicture!;
+
+    GooglePlace? home = Provider.of<FavoritePlacesProvider>(context).home;
+    GooglePlace? work = Provider.of<FavoritePlacesProvider>(context).work;
+    List<GooglePlace>? savedPlaces = Provider.of<FavoritePlacesProvider>(context).savedPlaces;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -82,19 +88,41 @@ class _AccountSettingsState extends State<AccountSettings> {
                       children: [
                         ElevatedButton.icon(
                           style: Palette.greyElevatedStyleLeftPadding,
-                          onPressed: () async =>  Navigator.pushNamed(context, WhereToSearch.route),
+                          onPressed: () async =>  Navigator.pushNamed(context, FavoritePlaceSearch.route, arguments: 'home'),
                           icon: Icon(Icons.home_filled, color: Colors.black,),
-                          label: Text('Add Home', style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w400)),
+                          label: Row(
+                            children: [
+                              Text('Add Home', style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w400)),
+                              Spacer(),
+                              home != null ?
+                              Container(
+                                margin: EdgeInsets.only(right: 10),
+                                child: Text(home.placeName, style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w400)))
+                              : Container()
+                            ],
+                          ),
                         ),
                         ElevatedButton.icon(
                           style: Palette.greyElevatedStyleLeftPadding,
-                          onPressed: () async => Navigator.pushNamed(context, WhereToSearch.route),
+                          onPressed: () async => Navigator.pushNamed(context, FavoritePlaceSearch.route, arguments: 'work'),
                           icon: Icon(Icons.work, color: Colors.black,),
-                          label: Text('Add Work', style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w400)),
+                          label: Row(
+                            children: [
+                              Text('Add Work', style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w400)),
+                              Spacer(),
+                              work != null ?
+                              Container(
+                                margin: const EdgeInsets.only(right: 10),
+                                child: Text(work.placeName, style: Theme.of(context).textTheme.headline3!.copyWith(fontWeight: FontWeight.w400))
+                              )
+                              :
+                              Container()
+                            ],
+                          ),
                         ),
                         ElevatedButton(
                           style: Palette.greyElevatedStyleLeftPadding,
-                          onPressed: () {},
+                          onPressed: () async => Navigator.pushNamed(context, FavoritePlaceSearch.route, arguments: 'more'),
                           child: Text('More Saved places', style: TextStyle(fontSize: 18, color: Colors.blue, fontWeight: FontWeight.w400),),
                         )
                       ],

@@ -90,9 +90,9 @@ class ChatProvider {
           chat_list.firebaseUserId              : driver.id,
           chat_list.firstName                   : driver.firstName,
           chat_list.lastName                    : driver.lastName,
-          chat_list.lastMessage                 : '',
-          chat_list.lastMessageTimestamp        : null,
-          chat_list.lastMessageSenderFirebaseId : null,
+          //chat_list.lastMessage                 : '',
+          //chat_list.lastMessageTimestamp        : null,
+          //chat_list.lastMessageSenderFirebaseId : null,
           chat_list.phoneNumber                 : driver.phoneNumber
       });
     });
@@ -103,9 +103,9 @@ class ChatProvider {
         chat_list.firebaseUserId              : FirebaseAuth.instance.currentUser!.uid,
         chat_list.firstName                   : userData.firstName,
         chat_list.lastName                    : userData.lastName,
-        chat_list.lastMessage                 : '',
-        chat_list.lastMessageTimestamp        : null,
-        chat_list.lastMessageSenderFirebaseId : null,
+        //chat_list.lastMessage                 : '',
+        //chat_list.lastMessageTimestamp        : null,
+        //chat_list.lastMessageSenderFirebaseId : null,
         chat_list.phoneNumber                 : userData.phoneNumber
       });
     });

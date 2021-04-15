@@ -10,13 +10,13 @@ class UserSettingsService  {
 
     //first we check if there is already data - in case user is logging in again
 
-    DocumentSnapshot data = await FirebaseFirestore.instance.collection('user_settings').doc(FirebaseAuth.instance.currentUser!.uid).get();
+    DocumentSnapshot data = await FirebaseFirestore.instance.collection('account_settings').doc(FirebaseAuth.instance.currentUser!.uid).get();
 
     if(data.exists)
       return;
 
      await FirebaseFirestore.instance.runTransaction((transaction) async {
-      transaction.set(FirebaseFirestore.instance.collection('user_settings').doc(FirebaseAuth.instance.currentUser!.uid), {
+      transaction.set(FirebaseFirestore.instance.collection('account_settings').doc(FirebaseAuth.instance.currentUser!.uid), {
         settings_fields.isNightTimeOnly : false,
         settings_fields.isUserUsingPIN  : false
       });
@@ -25,7 +25,7 @@ class UserSettingsService  {
 
   Future<void> updateRideVerification({ required bool isUserUsingPIN, required bool isNightTimeOnly}) async {
     await FirebaseFirestore.instance.runTransaction((transaction) async {
-      transaction.update(FirebaseFirestore.instance.collection('user_settings').doc(FirebaseAuth.instance.currentUser!.uid), {
+      transaction.update(FirebaseFirestore.instance.collection('account_settings').doc(FirebaseAuth.instance.currentUser!.uid), {
         settings_fields.isNightTimeOnly : isUserUsingPIN ? isNightTimeOnly : false,
         settings_fields.isUserUsingPIN  : isUserUsingPIN
       });

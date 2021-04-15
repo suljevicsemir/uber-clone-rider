@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -14,10 +12,10 @@ import 'package:uber_clone/providers/trips_provider.dart';
 import 'package:uber_clone/screens/account_settings/ride_verification/ride_verification.dart';
 import 'package:uber_clone/screens/export.dart';
 import 'package:uber_clone/screens/facebook_login/facebook_login.dart';
+import 'package:uber_clone/screens/favorites_search/where_to_search.dart';
 import 'package:uber_clone/screens/get_started/choose_account.dart';
 import 'package:uber_clone/screens/get_started/choose_login_type.dart';
 import 'package:uber_clone/screens/google_login/google_login.dart';
-import 'package:uber_clone/screens/place_search//where_to_search.dart';
 
 
 class UberRouter {
@@ -122,9 +120,9 @@ class UberRouter {
           )
         );
 
-      case WhereToSearch.route:
+      case FavoritePlaceSearch.route:
         return MaterialPageRoute(
-          builder: (_) => WhereToSearch()
+          builder: (_) => FavoritePlaceSearch(type: settings.arguments as String,)
         );
 
         default:
