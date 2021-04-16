@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,6 +13,8 @@ class FirebaseStorageProvider {
   static Future<TaskSnapshot?> uploadPictureFromFile(File file) async {
 
     TaskSnapshot x = await storageReference.child("images/riders/${FirebaseAuth.instance.currentUser!.uid}").putFile(file);
+
+
 
     if(x.state == TaskState.running) {
       print('Running..');
@@ -29,6 +32,13 @@ class FirebaseStorageProvider {
 
     if(x.state == TaskState.success) {
       print('Success');
+      String url =  await x.ref.getDownloadURL();
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        transaction.update(FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid), {
+          'profilePictureUrl' : url
+        });
+      });
+      print('updated url');
     }
 
     return x;

@@ -142,7 +142,11 @@ class _HomeMapState extends State<HomeMap> {
             rotation: snapshot.get('heading'),
             flat: true,
             anchor: Offset(0.5, 0.5),
-            icon: isRed ? BitmapDescriptor.fromBytes(redCar!) : BitmapDescriptor.fromBytes(whiteCar!)
+            icon: isRed ? BitmapDescriptor.fromBytes(redCar!) : BitmapDescriptor.fromBytes(whiteCar!),
+            onTap: () {
+              print('klikno si me');
+            }
+
           ));
         }
         setState(() {
