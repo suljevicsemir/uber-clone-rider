@@ -35,7 +35,7 @@ class FirebaseStorageProvider {
       String url =  await x.ref.getDownloadURL();
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         transaction.update(FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid), {
-          'profilePictureUrl' : u rl
+          'profilePictureUrl' : url
         });
       });
       print('updated url');
