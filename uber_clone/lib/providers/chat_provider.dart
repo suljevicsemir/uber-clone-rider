@@ -105,8 +105,7 @@ class ChatProvider {
         chat_list.lastName                    : userData.lastName,
         //chat_list.lastMessage                 : '',
         //chat_list.lastMessageTimestamp        : null,
-        //chat_list.lastMessageSenderFirebaseId : null,
-        chat_list.phoneNumber                 : userData.phoneNumber
+        //chat_list.lastMessageSenderFirebaseId : null
       });
     });
 

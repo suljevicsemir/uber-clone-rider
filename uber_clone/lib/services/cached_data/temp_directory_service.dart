@@ -20,6 +20,24 @@ class TempDirectoryService {
     //picture does not exist, return null
     return null;
   }
+
+  static Future<bool> picturesExists() async {
+     try {
+       final Directory temp = await getTemporaryDirectory();
+       File picture = File('${temp.path}/${FirebaseAuth.instance.currentUser!.uid}');
+
+       if(await picture.exists())
+         return true;
+
+       return false;
+
+     }
+     catch(err) {
+       return false;
+     }
+  }
+
+
   static Future<File?> storeUserPicture(Uint8List list) async {
     try {
       final Directory temp = await getTemporaryDirectory();

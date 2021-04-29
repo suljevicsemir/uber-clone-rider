@@ -10,11 +10,17 @@ class FirebaseStorageProvider {
 
   static final Reference storageReference = FirebaseStorage.instance.ref();
 
+
+  static Future<bool> pictureExists() async {
+    Uint8List? x = await storageReference.child("images/riders/${FirebaseAuth.instance.currentUser!.uid}").getData();
+    return x != null;
+  }
+
+
+
   static Future<TaskSnapshot?> uploadPictureFromFile(File file) async {
 
     TaskSnapshot x = await storageReference.child("images/riders/${FirebaseAuth.instance.currentUser!.uid}").putFile(file);
-
-
 
     if(x.state == TaskState.running) {
       print('Running..');
@@ -35,7 +41,8 @@ class FirebaseStorageProvider {
       String url =  await x.ref.getDownloadURL();
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         transaction.update(FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid), {
-          'profilePictureUrl' : url
+          'profilePictureUrl' : url,
+          'profilePictureTimestamp' : Timestamp.now()
         });
       });
       print('updated url');
@@ -62,6 +69,18 @@ class FirebaseStorageProvider {
 
     if(x.state == TaskState.success) {
       print('Success');
+    }
+
+    if(x.state == TaskState.success) {
+      print('Success');
+      String url =  await x.ref.getDownloadURL();
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        transaction.update(FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid), {
+          'profilePictureUrl' : url,
+          'profilePictureTimestamp' : Timestamp.now()
+        });
+      });
+      print('updated url');
     }
   }
 

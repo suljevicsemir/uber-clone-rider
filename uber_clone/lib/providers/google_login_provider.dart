@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -55,7 +54,7 @@ class GoogleLoginProvider extends ChangeNotifier{
 
       final Map<String, dynamic> payloadMap = _parseGoogleToken(googleAuth.idToken!)!;
       Map<String, dynamic> createUserData = _userData(payloadMap, account);
-      userData = UserData.fromMap(createUserData);
+      userData = UserData.fromLocalStorage(createUserData);
       return userData;
     }
     on Exception catch(_) {
@@ -70,19 +69,29 @@ class GoogleLoginProvider extends ChangeNotifier{
       UserData? userData = await signIn().timeout(const Duration(seconds: 3));
       if(userData == null)
         return null;
+
       print(userData.toString());
-      await userDataService.saveUserData(userData);
-      await settingsService.saveRideVerification();
+
+      bool userAlreadyExists = await userDataService.userExists();
+
+      if( !userAlreadyExists) {
+        await userDataService.saveUserData(userData);
+        await settingsService.saveRideVerification();
+      }
       progress.savingData = true;
       notifyListeners();
 
-      Uri uri = Uri.parse(userData.profilePicture!);
+
+      Uri uri = Uri.parse(userData.profilePictureUrl);
       http.Response response = await http.get(uri);
 
+      bool isCached = await TempDirectoryService.picturesExists();
+
+      if(!isCached)
       File? picture = await TempDirectoryService.storeUserPicture(response.bodyBytes);
 
-
-      await FirebaseStorageProvider.uploadPictureFromFile(picture!);
+      if(!userAlreadyExists)
+        await FirebaseStorageProvider.uploadPictureFromList(response.bodyBytes);
       progress.storingPicture = true;
       progress.result = GoogleSignInResult.Success;
       notifyListeners();
@@ -129,11 +138,10 @@ class GoogleLoginProvider extends ChangeNotifier{
       user_data_fields.firstName : payloadMap["given_name"],
       user_data_fields.lastName  : payloadMap["family_name"],
       user_data_fields.email     : account.email,
-      user_data_fields.providerUserId : account.id,
       user_data_fields.profilePicture : account.photoUrl,
+      user_data_fields.providerUserId : account.id,
       user_data_fields.signedInType : SignedInType.Google.parseSignedInType(),
-      user_data_fields.firebaseUserId : FirebaseAuth.instance.currentUser!.uid,
-      user_data_fields.phoneNumber : 'THIS IS A MOCK PHONE NUMBER'
+      user_data_fields.firebaseUserId : FirebaseAuth.instance.currentUser!.uid
     };
   }
 

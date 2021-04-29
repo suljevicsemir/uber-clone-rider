@@ -94,6 +94,8 @@ class _HomeMapState extends State<HomeMap> {
     updateMarkerAndCircle(data);
   }
 
+  StreamSubscription<QuerySnapshot>? driverLocations;
+
   @override
   void didChangeDependencies() async{
     super.didChangeDependencies();
@@ -118,7 +120,7 @@ class _HomeMapState extends State<HomeMap> {
         redCar = redCarList;
       });
 
-       FirebaseFirestore.instance.collection('driver_locations').snapshots().listen((QuerySnapshot snapshot) {
+       driverLocations = FirebaseFirestore.instance.collection('driver_locations').snapshots().listen((QuerySnapshot snapshot) {
         List<QueryDocumentSnapshot> list = snapshot.docs;
         Set<Marker> tempMarkers = Set<Marker>();
 
@@ -196,6 +198,7 @@ class _HomeMapState extends State<HomeMap> {
   void dispose() {
     super.dispose();
     disposeController();
+    driverLocations!.cancel();
     //x.cancel();
   }
 }

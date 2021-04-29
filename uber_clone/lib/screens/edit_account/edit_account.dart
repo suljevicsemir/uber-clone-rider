@@ -68,30 +68,6 @@ class _EditAccountState extends State<EditAccount> {
                   SizedBox(height: 40,),
                   Text('Phone number', style: Theme.of(context).textTheme.headline5,),
                   SizedBox(height: 10,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: Image.asset(
-                          'icons/flags/png/ba.png', package: 'country_icons',
-                          scale: 2,
-                        ),
-                      ),
-                      Expanded(
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: FittedBox(
-                                fit: BoxFit.scaleDown,
-                                child: Text('  ${user.phoneNumber}', style: Theme.of(context).textTheme.headline6,)
-                            ),
-                          )
-                      ),
-
-                      Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: Text('Verified' ,style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.green, fontWeight: FontWeight.w300),))
-                    ],
-                  ),
                   SizedBox(height: 40,),
                   Text('Email', style: Theme.of(context).textTheme.headline5,),
                   SizedBox(height: 5,),

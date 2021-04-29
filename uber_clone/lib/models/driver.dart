@@ -1,10 +1,8 @@
-
-
 import 'dart:core';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uber_clone/constants/driver.dart' as fields;
 import 'package:uber_clone/models/chat_info.dart';
+
 class Driver{
 
 

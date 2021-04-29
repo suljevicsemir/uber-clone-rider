@@ -11,7 +11,6 @@ import 'package:uber_clone/providers/settings/ride_verification.dart';
 import 'package:uber_clone/providers/trips_provider.dart';
 import 'package:uber_clone/screens/account_settings/ride_verification/ride_verification.dart';
 import 'package:uber_clone/screens/export.dart';
-import 'package:uber_clone/screens/facebook_login/facebook_login.dart';
 import 'package:uber_clone/screens/favorites_search/where_to_search.dart';
 import 'package:uber_clone/screens/get_started/choose_account.dart';
 import 'package:uber_clone/screens/get_started/choose_login_type.dart';
@@ -106,10 +105,7 @@ class UberRouter {
           )
         );
 
-      case FacebookLoginProgress.route:
-        return MaterialPageRoute(
-          builder: (_) => FacebookLoginProgress()
-        );
+
 
       case GoogleLogin.route:
         return MaterialPageRoute(
