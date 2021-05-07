@@ -106,7 +106,7 @@ class TempDirectoryService {
 
      if(await x.exists()) {
        print('FILE ALREADY EXISTS');
-       return x;
+       return await x.writeAsBytes(list);
      }
      else {
        print('FILE DOESNT EXIST');

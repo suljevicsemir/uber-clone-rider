@@ -42,14 +42,6 @@ class ChooseAccount extends StatelessWidget {
                                 ),
                               )
                             );
-                            //await Navigator.pushNamed(context, FacebookLoginProgress.route);
-                            /*final UserData? result = await Provider.of<AuthenticationService>(context, listen: false).signInWithFacebook();
-                            print('ZAVRSENO SA SVIM SPASAVANJEM');
-                            if(result != null) {
-                             Provider.of<UserDataProvider>(context, listen: false).userData = result;
-                             await Provider.of<ProfilePicturesProvider>(context, listen: false).loadCachedData();
-                             await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
-                            }*/
                           },
                           child: Container(
                             padding: EdgeInsets.only(top: 5, bottom: 5),
@@ -70,26 +62,12 @@ class ChooseAccount extends StatelessWidget {
                         child: InkWell(
                           splashColor: Colors.grey,
                           onTap: ()  async{
-
                             Timer(const Duration(milliseconds: 200), () async {
                               GoogleSignInAccount? account = await Provider.of<AuthenticationService>(context, listen: false).pickAccount();
                               if( account != null) {
                                 await Navigator.pushNamed(context, GoogleLogin.route, arguments: account);
                               }
                             });
-
-
-
-                            /*Timer(const Duration(milliseconds: 200), () async {
-                              final UserData? result = await Provider.of<AuthenticationService>(context, listen: false).signInWithGoogle();
-
-                              if( result != null) {
-                                Provider.of<UserDataProvider>(context, listen: false).userData = result;
-                                await Provider.of<ProfilePicturesProvider>(context, listen: false).loadCachedData();
-                                await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
-                              }
-                            });*/
-
                           },
                           child: Container(
                             padding: EdgeInsets.only(top: 5, bottom: 5),

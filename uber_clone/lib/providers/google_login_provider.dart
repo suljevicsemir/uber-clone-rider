@@ -10,8 +10,10 @@ import 'package:uber_clone/models/google_sign_result.dart';
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/services/cached_data/temp_directory_service.dart';
+import 'package:uber_clone/services/firebase/firebase_service.dart';
 import 'package:uber_clone/services/firebase/ride_verification_service.dart';
 import 'package:uber_clone/services/firebase/storage/storage_provider.dart';
+import 'package:uber_clone/services/firebase/uber_auth.dart';
 import 'package:uber_clone/services/user_data_service.dart';
 import 'package:uber_clone/user_data_fields.dart' as user_data_fields;
 
@@ -24,7 +26,7 @@ class GoogleLoginProvider extends ChangeNotifier{
   final GoogleSignInAccount account;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   UserData? userData;
-
+  final UberAuth uberAuth = UberAuth();
   GoogleLoginProvider({required this.account}) {
     signInWithGoogle();
   }
@@ -32,8 +34,8 @@ class GoogleLoginProvider extends ChangeNotifier{
   Future<void> _signOut() async {
 
     await googleSignIn.signOut();
-    if(FirebaseAuth.instance.currentUser != null) {
-      await FirebaseAuth.instance.signOut();
+    if(FirebaseService.currentUser != null) {
+      await FirebaseService.authInstance.signOut();
     }
   }
 
@@ -47,7 +49,7 @@ class GoogleLoginProvider extends ChangeNotifier{
       progress.accountAuthentication = true;
       notifyListeners();
 
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      await FirebaseService.authInstance.signInWithCredential(credential);
 
       progress.uberSignIn = true;
       notifyListeners();
@@ -74,10 +76,11 @@ class GoogleLoginProvider extends ChangeNotifier{
 
       bool userAlreadyExists = await userDataService.userExists();
 
-      if( !userAlreadyExists) {
-        await userDataService.saveUserData(userData);
-        await settingsService.saveRideVerification();
-      }
+
+      await userDataService.saveUserData(userData);
+
+      await settingsService.saveRideVerification();
+
       progress.savingData = true;
       notifyListeners();
 

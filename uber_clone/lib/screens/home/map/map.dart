@@ -161,13 +161,14 @@ class _HomeMapState extends State<HomeMap> {
 
 
   final CameraPosition cameraPosition = CameraPosition(
-    target: LatLng(43.796705, 18.092931),
-    zoom: 15
+    target: LatLng(43.7971787003, 18.0917896843),
+    zoom: 16
   );
 
 
   @override
   Widget build(BuildContext context) {
+    FirebaseFirestore.instance.batch();
 
     if( /*marker == null || */ /*initialCameraPosition == null || */ mapStyle == null /*|| imageData == null*/) {
       return Container(
@@ -186,7 +187,7 @@ class _HomeMapState extends State<HomeMap> {
       zoomControlsEnabled: false,
       markers: markers,
       myLocationEnabled: true,
-      myLocationButtonEnabled: false,
+      myLocationButtonEnabled: true,
     );
   }
 

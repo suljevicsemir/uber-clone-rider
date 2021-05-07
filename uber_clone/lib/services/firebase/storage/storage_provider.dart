@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
 
 class FirebaseStorageProvider {
 
@@ -87,16 +86,7 @@ class FirebaseStorageProvider {
 
   static Future<Uint8List?> getDriverPicture(String driverId) async {
     print('skidanje slika sa storage ' + driverId );
-    return await storageReference.child("images/drivers/$driverId").getData(1000000000);
-  }
-
-
-  Future<void> uploadProfilePicture() async {
-
-    ImagePicker imagePicker = ImagePicker();
-    File image;
-
-
+    return await storageReference.child("images/drivers/$driverId").getData();
   }
 
    Future<Uint8List?> getCurrentUserPicture() async {
@@ -111,8 +101,6 @@ class FirebaseStorageProvider {
       print(err.toString());
       return null;
     }
-
-
   }
 
 

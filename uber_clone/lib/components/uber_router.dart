@@ -28,7 +28,7 @@ class UberRouter {
       case Chat.route:
         Map<String, dynamic> map = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-          builder: (_) => Provider(
+          builder: (_) => ChangeNotifierProvider(
               create: (context) => ChatProvider(driver: map['driver'], userData: map['user']),
               child: Chat(driver: map['driver'] as Driver)
           )
