@@ -171,8 +171,6 @@ class _ChatState extends State<Chat> {
                         itemBuilder: (context, index) =>
                             SentMessage(
                               message: Message.fromSnapshot(snapshot.data.docs[index]),
-                              nextMessage: index < docsLength - 1 ? Message.fromSnapshot(snapshot.data.docs[index + 1]) : null,
-                              isLast: index == docsLength - 1,
                               driver: driver)
                     ),
                   );
