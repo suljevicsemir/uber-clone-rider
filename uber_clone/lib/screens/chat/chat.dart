@@ -11,6 +11,7 @@ import 'package:uber_clone/models/message.dart';
 import 'package:uber_clone/providers/chat_provider.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/screens/chat/chat_app_bar.dart';
+import 'package:uber_clone/screens/chat/chat_keyboard.dart';
 import 'package:uber_clone/screens/driver_profile/driver_profile.dart';
 import 'package:uber_clone/services/firebase/firebase_service.dart';
 
@@ -32,30 +33,18 @@ class _ChatState extends State<Chat> {
   final TextEditingController textController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   File? picture;
-  bool hasText = false;
-
-
   bool shouldLoadPicture = false;
+
+  late Driver driver;
+
 
   @override
   void initState() {
     super.initState();
-
-    textController.addListener(() {
-      if(textController.text.isNotEmpty && !hasText) {
-        setState(() {
-          hasText = true;
-        });
-      }
-      if( textController.text.isEmpty && hasText) {
-        setState(() {
-          hasText = false;
-        });
-      }
-    });
-
     _scrollChatToBottom();
-
+    setState(() {
+      driver = widget.driver;
+    });
   }
 
   @override
@@ -69,6 +58,7 @@ class _ChatState extends State<Chat> {
       SchedulerBinding.instance!.addPostFrameCallback((timeStamp) async{
         setState(() {
           picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![widget.driver.id];
+          shouldLoadPicture = true;
         });
       });
 
@@ -94,25 +84,23 @@ class _ChatState extends State<Chat> {
               String url = driver.get('profilePictureUrl');
 
               transaction.update(FirebaseService.firestoreInstance.collection('chats').doc(chatId), {
-                  FirebaseService.id : url
+                FirebaseService.id : url
               });
             });
             return;
           }
 
           print('exists');
-            if( driverSnapshot.get('profilePictureUrl') != chatSnapshot.get(FirebaseService.id)) {
-              File? updatePicture = await Provider.of<ProfilePicturesProvider>(context, listen: false).
-              updateDriverPicture(driverId: widget.driver.id, chatId: chatId, url: driverSnapshot.get('profilePictureUrl'));
-              setState(() {
-                picture = updatePicture;
-              });
-            }
+          if( driverSnapshot.get('profilePictureUrl') != chatSnapshot.get(FirebaseService.id)) {
+            File? updatePicture = await Provider.of<ProfilePicturesProvider>(context, listen: false).
+            updateDriverPicture(driverId: widget.driver.id, chatId: chatId, url: driverSnapshot.get('profilePictureUrl'));
+            setState(() {
+              picture = updatePicture;
+            });
+          }
         });
       });
-      setState(() {
-        shouldLoadPicture = true;
-      });
+
     }
   }
 
@@ -131,6 +119,8 @@ class _ChatState extends State<Chat> {
   }
 
 
+  TextEditingController controller = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -138,10 +128,10 @@ class _ChatState extends State<Chat> {
       return Container();
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(56),
-        child: ChatAppBar(driver: widget.driver,),
-      ),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(60),
+          child: ChatAppBar(driver: widget.driver,),
+        ),
       body: Stack(
         children: [
           Positioned.fill(
@@ -186,74 +176,7 @@ class _ChatState extends State<Chat> {
               ),
             ),
           ),
-          Positioned(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 0,
-            right: 0,
-            child: Container(
-              decoration: BoxDecoration(
-                //color: Colors.blue,
-                  border: Border(
-                      top: BorderSide(
-                          width: 0.5,
-                          color: Colors.grey
-                      )
-                  )
-              ),
-              child: Container(
-                margin: EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Flexible(
-                          child: Container(
-                            margin: EdgeInsets.only(left: 8),
-                            child: TextField(
-                              controller: textController,
-                              decoration: InputDecoration(
-                                  hintText: 'Type a message...',
-                                  hintStyle: TextStyle(color: Colors.grey[500], fontSize: 19),
-                                  focusedBorder: InputBorder.none,
-                                  disabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.red, width: 3)
-                                  ),
-                                  enabledBorder: InputBorder.none
-                              ),
-                              cursorColor: Colors.yellow,
-                              cursorHeight: 26,
-                              cursorWidth: 2,
-                            ),
-                          ),
-                        ),
-                        textController.text.isNotEmpty  ?
-                        IconButton(
-                            splashColor: Colors.red,
-                            splashRadius: 25,
-                            padding: EdgeInsets.all(8),
-                            color: Colors.black87,
-                            onPressed: () async{
-                              Timestamp timestamp = Timestamp.now();
-                              Message message = Message(message: textController.text, timestamp: timestamp, firebaseUserId: FirebaseAuth.instance.currentUser!.uid);
-                              textController.clear();
-                              await Provider.of<ChatProvider>(context, listen: false).sendMessage(message);
-                              _scrollChatToBottom();
-                            },
-                            icon: Icon(Icons.send)
-                        ) : Container()
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
+          ChatKeyboard(),
         ],
       )
     );
@@ -303,5 +226,12 @@ class _ChatState extends State<Chat> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController.dispose();
+    controller.dispose();
   }
 }
