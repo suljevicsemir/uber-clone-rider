@@ -12,6 +12,7 @@ import 'package:uber_clone/providers/chat_provider.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/screens/chat/chat_app_bar.dart';
 import 'package:uber_clone/screens/chat/chat_keyboard.dart';
+import 'package:uber_clone/screens/chat/messages/received_message.dart';
 import 'package:uber_clone/screens/chat/messages/sent_message.dart';
 import 'package:uber_clone/screens/driver_profile/driver_profile.dart';
 import 'package:uber_clone/services/firebase/firebase_service.dart';
@@ -169,9 +170,17 @@ class _ChatState extends State<Chat> {
                         shrinkWrap: true,
                         itemCount: snapshot.data.docs.length,
                         itemBuilder: (context, index) =>
+                            snapshot.data.docs[index].get('firebaseUserId') != FirebaseService.id ?
+                            ReceivedMessage(
+                            message: Message.fromSnapshot(snapshot.data.docs[index]),
+                            nextMessage: index < docsLength - 1 ? Message.fromSnapshot(snapshot.data.docs[index + 1]) : null,
+                            isLast: index == docsLength - 1,
+                            driver: widget.driver,
+                            )
+                            :
                             SentMessage(
                               message: Message.fromSnapshot(snapshot.data.docs[index]),
-                              driver: driver)
+                            )
                     ),
                   );
                 },

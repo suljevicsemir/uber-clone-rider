@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/models/message.dart';
-
 
 @immutable
  class SentMessage extends StatelessWidget{
 
   const SentMessage({
-    required  this.message,
-    required  this.driver
+    required  this.message
   });
 
   final Message message;
-  final Driver driver;
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +20,7 @@ import 'package:uber_clone/models/message.dart';
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          padding: EdgeInsets.all(10),
           margin: EdgeInsets.only(right: 10, bottom: 10),
           decoration: BoxDecoration(
             color: const Color(0xffc8e1fd),
