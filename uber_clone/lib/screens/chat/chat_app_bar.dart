@@ -24,7 +24,10 @@ class ChatAppBar extends StatelessWidget {
     File? picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![driver.id];
 
     return AppBar(
-      elevation: 0.0,
+      brightness: Brightness.light,
+      backgroundColor: Colors.grey[50],
+      elevation: 8.0,
+      leading: BackButton(color: Colors.black,),
       title: GestureDetector(
         onTap: () async => await Navigator.pushNamed(context, DriverProfile.route, arguments: driver.id),
         child: Row(
@@ -36,7 +39,7 @@ class ChatAppBar extends StatelessWidget {
               backgroundColor: Colors.transparent,
             ),
             SizedBox(width: 10,),
-            Text(driver.firstName)
+            Text(driver.firstName, style: TextStyle(color: Colors.black),)
           ],
         ),
       ),
@@ -44,7 +47,7 @@ class ChatAppBar extends StatelessWidget {
         IconButton(
           padding: EdgeInsets.only(right: 10),
           onPressed: () async => app.callNumber(context, phoneNumber: driver.phoneNumber),
-          icon: const Icon(Icons.call),
+          icon: const Icon(Icons.call, color: Colors.black,),
         )
       ],
     );
