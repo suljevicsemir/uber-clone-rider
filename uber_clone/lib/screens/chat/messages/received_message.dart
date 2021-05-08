@@ -1,7 +1,6 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uber_clone/components/app_utils.dart' as app;
 import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/models/message.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
@@ -29,15 +28,11 @@ class ReceivedMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    String time = message.timestamp.toDate().hour.toString() + ":" + message.timestamp.toDate().minute.toString();
-
     bool isNextSent = false;
-
     if( nextMessage != null) {
       isNextSent = nextMessage!.firebaseUserId == FirebaseService.id;
     }
-
-    bool shouldHavePicture = (isNextSent) || isLast;
+    bool shouldHavePicture = isNextSent || isLast;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -70,7 +65,7 @@ class ReceivedMessage extends StatelessWidget {
             children: [
               Text(message.message, style: TextStyle(color: Colors.black, fontSize: 16),),
               SizedBox(width: 10,),
-              Text(time, style: TextStyle(fontSize: 12),)
+              Text(app.formatMessageTime(message.timestamp), style: TextStyle(fontSize: 12),)
             ],
           )
         )

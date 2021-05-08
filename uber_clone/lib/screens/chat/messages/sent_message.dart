@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:uber_clone/components/app_utils.dart' as app;
 import 'package:uber_clone/models/message.dart';
-
 @immutable
  class SentMessage extends StatelessWidget{
 
@@ -13,9 +13,6 @@ import 'package:uber_clone/models/message.dart';
 
   @override
   Widget build(BuildContext context) {
-
-    String time = message.timestamp.toDate().hour.toString() + ":" + message.timestamp.toDate().minute.toString();
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -35,7 +32,7 @@ import 'package:uber_clone/models/message.dart';
             children: [
               Text(message.message, style: TextStyle(color: Colors.black, fontSize: 16), maxLines: 3,),
               SizedBox(width: 10,),
-              Text(time, style: TextStyle(fontSize: 12),)
+              Text(app.formatMessageTime(message.timestamp), style: TextStyle(fontSize: 12),)
             ],
           )
         ),

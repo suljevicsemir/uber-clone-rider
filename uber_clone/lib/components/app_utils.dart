@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -81,3 +82,17 @@ import 'package:url_launcher/url_launcher.dart';
     );
   }
 
+  String formatMessageTime(Timestamp timestamp) {
+     int hour = timestamp.toDate().hour, minute = timestamp.toDate().minute;
+
+     String result = "";
+     if( hour < 10)
+       result = result + "0";
+    result = result + hour.toString() + ":";
+
+    if( minute < 10)
+      result = result + "0";
+
+    return result + minute.toString();
+
+  }
