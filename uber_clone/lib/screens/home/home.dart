@@ -7,7 +7,7 @@ import 'package:uber_clone/components/connectivity_notifier.dart';
 import 'package:uber_clone/providers/home_provider.dart';
 import 'package:uber_clone/screens/home/drawer/drawer.dart';
 import 'package:uber_clone/screens/home/drawer_menu_icon.dart';
-import 'package:uber_clone/screens/home/home_components/favorite_places.dart';
+import 'package:uber_clone/screens/home/home_components/favorite_places/favorite_places.dart';
 import 'package:uber_clone/screens/home/home_components/ride_now.dart';
 import 'package:uber_clone/screens/home/home_components/where_to.dart';
 class Home extends StatefulWidget {
