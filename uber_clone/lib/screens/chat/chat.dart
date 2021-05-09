@@ -57,7 +57,7 @@ class _ChatState extends State<Chat> {
     if( !shouldLoadPicture) {
       print('loading picture');
 
-      SchedulerBinding.instance!.addPostFrameCallback((timeStamp) async{
+      SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
         setState(() {
           picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![widget.driver.id];
           shouldLoadPicture = true;
@@ -69,6 +69,9 @@ class _ChatState extends State<Chat> {
       // sigurno postoji
       FirebaseFirestore.instance.collection('drivers').doc(widget.driver.id).snapshots().listen((DocumentSnapshot driverSnapshot) {
 
+
+
+        //chat sigurno postoji
         FirebaseFirestore.instance.collection('chats').doc(chatId).snapshots().listen((DocumentSnapshot chatSnapshot) async{
 
           // vjerovatno bi svakako error bio
@@ -78,7 +81,7 @@ class _ChatState extends State<Chat> {
           }
 
 
-          // prvi put se chat otvara
+          // prvi put se chat otvara od strane klijenta
           if( !chatSnapshot.data()!.containsKey(FirebaseService.id)) {
             print('ne postoji');
             await FirebaseService.firestoreInstance.runTransaction((transaction) async{
@@ -106,7 +109,7 @@ class _ChatState extends State<Chat> {
     }
   }
 
-  _scrollChatToBottom() {
+  void _scrollChatToBottom() {
 
     if(scrollController.hasClients) {
       scrollController.animateTo(

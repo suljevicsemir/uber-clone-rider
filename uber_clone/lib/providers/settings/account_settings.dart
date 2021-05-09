@@ -15,6 +15,7 @@ class FavoritePlacesProvider extends ChangeNotifier {
 
   FavoritePlacesProvider() {
     loadFavoritePlaces();
+    print('loading favorite places');
   }
 
   Future<void> loadFavoritePlaces() async {
@@ -27,6 +28,8 @@ class FavoritePlacesProvider extends ChangeNotifier {
     List<QueryDocumentSnapshot> list = snapshot.docs;
 
     for(int i = 0; i < list.length; i++) {
+      if(list.elementAt(i).metadata.isFromCache)
+        print('cache bato');
       if( list.elementAt(i).id == 'home') {
         home = GooglePlace.fromSnapshot(list.elementAt(i));
       }

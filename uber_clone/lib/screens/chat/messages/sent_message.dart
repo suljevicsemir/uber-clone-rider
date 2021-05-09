@@ -36,7 +36,6 @@ import 'package:uber_clone/models/message.dart';
             ],
           )
         ),
-
       ],
     );
   }

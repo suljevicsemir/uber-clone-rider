@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class DrawerMenu extends StatelessWidget {
@@ -8,15 +10,15 @@ class DrawerMenu extends StatelessWidget {
         top: 40.0,
         child: ClipOval(
           child: Material(
-            color: Colors.white,
+            color: Colors.transparent,
             child: InkWell(
               splashColor: Colors.black,
               child: SizedBox(
                 height: 55,
                 width: 55,
-                child: Icon(Icons.menu, size: 30,),
+                child: Icon(Icons.menu, size: 40, color: Colors.white,),
               ),
-              onTap: () => Scaffold.of(context).openDrawer(),
+              onTap: () => Timer(const Duration(milliseconds: 30), () => Scaffold.of(context).openDrawer()),
             ),
           ),
         )

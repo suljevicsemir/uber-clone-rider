@@ -7,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
@@ -55,7 +54,7 @@ class _HomeMapState extends State<HomeMap> {
   void initState() {
     super.initState();
 
-    tracker.onLocationChanged.listen((LocationData? data) async{
+    /*tracker.onLocationChanged.listen((LocationData? data) async{
       if(data == null || lastLocation == null)
         return;
 
@@ -75,9 +74,11 @@ class _HomeMapState extends State<HomeMap> {
               zoom: zoomLevel
             )
           ));
-          updateMarkerAndCircle(data);
+          //updateMarkerAndCircle(data);
         });
-    });
+    });*/
+
+    getCurrentLocation();
 
   }
 
@@ -91,10 +92,8 @@ class _HomeMapState extends State<HomeMap> {
       );
       lastLocation = data;
     });
-    updateMarkerAndCircle(data);
+    //updateMarkerAndCircle(data);
   }
-
-  StreamSubscription<QuerySnapshot>? driverLocations;
 
   @override
   void didChangeDependencies() async{
@@ -120,12 +119,15 @@ class _HomeMapState extends State<HomeMap> {
         redCar = redCarList;
       });
 
-       driverLocations = FirebaseFirestore.instance.collection('driver_locations').snapshots().listen((QuerySnapshot snapshot) {
+       FirebaseFirestore.instance.collection('driver_locations').where('status', isEqualTo: true).snapshots().listen((QuerySnapshot snapshot) {
+         print('osluskivanje');
         List<QueryDocumentSnapshot> list = snapshot.docs;
         Set<Marker> tempMarkers = Set<Marker>();
 
         for(int i = 0; i < list.length; i++) {
+
           DocumentSnapshot snapshot = list.elementAt(i);
+          print(snapshot.get('carColor'));
           GeoPoint geoPoint = snapshot.get('location');
 
           if(!snapshot.get('status')) {
@@ -168,14 +170,21 @@ class _HomeMapState extends State<HomeMap> {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseFirestore.instance.batch();
 
-    if( /*marker == null || */ /*initialCameraPosition == null || */ mapStyle == null /*|| imageData == null*/) {
+
+    if( mapStyle == null)
       return Container(
-        color: Colors.amberAccent,
+        child: Center(
+          child: Text('Map style is null'),
+        ),
       );
-    }
 
+    if(initialCameraPosition == null)
+      return Scaffold(
+        body: Center(
+          child: Text('Initial camera position is null'),
+        ),
+      );
 
     return GoogleMap(
       onTap: (LatLng latLng) => Provider.of<HomeProvider>(context, listen: false).updateOverlay(),
@@ -187,7 +196,7 @@ class _HomeMapState extends State<HomeMap> {
       zoomControlsEnabled: false,
       markers: markers,
       myLocationEnabled: true,
-      myLocationButtonEnabled: true,
+      myLocationButtonEnabled: false,
     );
   }
 
@@ -199,7 +208,6 @@ class _HomeMapState extends State<HomeMap> {
   void dispose() {
     super.dispose();
     disposeController();
-    driverLocations!.cancel();
     //x.cancel();
   }
 }

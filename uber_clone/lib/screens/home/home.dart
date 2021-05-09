@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -5,10 +7,9 @@ import 'package:uber_clone/components/connectivity_notifier.dart';
 import 'package:uber_clone/providers/home_provider.dart';
 import 'package:uber_clone/screens/home/drawer/drawer.dart';
 import 'package:uber_clone/screens/home/drawer_menu_icon.dart';
-import 'package:uber_clone/screens/home/home_components/pick_destination.dart';
+import 'package:uber_clone/screens/home/home_components/favorite_places.dart';
 import 'package:uber_clone/screens/home/home_components/ride_now.dart';
-import 'package:uber_clone/screens/home/map/map.dart';
-
+import 'package:uber_clone/screens/home/home_components/where_to.dart';
 class Home extends StatefulWidget {
   static const String route = '/home';
 
@@ -49,17 +50,51 @@ class _HomeState extends State<Home> {
             fit: StackFit.loose,
             children: [
 
-              HomeMap(),
+              //HomeMap(),
+
+
+             Positioned(
+               top: 0,
+               child: Container(
+                 width: MediaQuery.of(context).size.width,
+                 height: 250,
+                 decoration: BoxDecoration(
+                   color: const Color(0xff286ef0),
+                   borderRadius: BorderRadius.only(
+                     bottomRight: Radius.circular(150)
+                   )
+                 ),
+               ),
+             ),
+
+             Positioned(
+              top: 100,
+              left: 20,
+              child: RideNow(),
+            ),
+
+
+              HomeFavoritePlaces(),
+
+              Positioned(
+                top: MediaQuery.of(context).size.height * 0.27,
+                right: 0,
+                child: Transform.rotate(
+                    angle: - math.pi / 4,
+                    child: Image.asset('assets/images/white_car.png', scale: 9.5,)
+                ),
+              ),
 
 
 
-              Provider.of<HomeProvider>(context).isOverlayShown ?
-              //BOTTOM WHERE TO AND SAVED PLACE PART
-              PickDestination() : Container(),
 
-              Provider.of<HomeProvider>(context).isOverlayShown ?
-              //BLUE RIDE NOW PART
-              RideNow() : Container(),
+              Positioned(
+                top: 270,
+                left: 20,
+                right: 20,
+                child: WhereTo()
+              ),
+
 
               //Drawer Menu Icon
               DrawerMenu(),
@@ -69,7 +104,9 @@ class _HomeState extends State<Home> {
                 left: 80,
                 right: 0,
                 child: ConnectivityNotifier()
-              )
+              ),
+
+
 
 
             ]

@@ -2,9 +2,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:uber_clone/components/google_place_item.dart';
 import 'package:uber_clone/constants/api_key.dart' as api;
 import 'package:uber_clone/models/google_place.dart';
-import 'package:uber_clone/screens/favorites_search/google_place_item.dart';
 import 'package:uuid/uuid.dart';
 
 class FavoritePlaceSearch extends StatefulWidget {
