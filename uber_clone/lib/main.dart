@@ -1,4 +1,6 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
@@ -13,7 +15,11 @@ import 'package:uber_clone/theme/theme.dart';
 void main()  async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => MyApp(),
+      )
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -53,6 +59,8 @@ class _MyAppState extends State<MyApp> {
         )
       ],
       child: MaterialApp(
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
         theme: AppTheme.appTheme(),
         initialRoute: AuthenticationWrapper.route,
         onGenerateRoute: UberRouter.generateRoute,

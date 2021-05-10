@@ -26,7 +26,7 @@ class RideNow extends StatelessWidget {
                  Container(
                    margin: EdgeInsets.only(top: 10),
                    child: LimitedBox(
-                       maxWidth: MediaQuery.of(context).size.width * 0.7,
+                       maxWidth: MediaQuery.of(context).size.width * 0.6,
                        child: Text('Here to help you move safely in the new every day', style: TextStyle(color: Colors.white, fontSize: 16), maxLines: 2,)
                    ),
                  ),

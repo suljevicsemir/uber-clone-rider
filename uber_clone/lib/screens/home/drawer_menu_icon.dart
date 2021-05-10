@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +19,7 @@ class DrawerMenu extends StatelessWidget {
             width: 55,
             child: Icon(Icons.menu, size: 40, color: !isShown ? Colors.black : Colors.white,),
           ),
-          onTap: () => Timer(const Duration(milliseconds: 30), () => Scaffold.of(context).openDrawer()),
+          onTap: () => Scaffold.of(context).openDrawer(),
         ),
       ),
     );

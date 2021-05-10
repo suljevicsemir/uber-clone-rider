@@ -22,7 +22,7 @@ class _FavoritePlacesDisplayState extends State<FavoritePlacesDisplay> {
         FavoritePlaceBanner(location: 'home'),
         Divider(
           indent: 70,
-          height: 15,
+          height: 35,
           color: Colors.grey,
           thickness: 1,
         ),

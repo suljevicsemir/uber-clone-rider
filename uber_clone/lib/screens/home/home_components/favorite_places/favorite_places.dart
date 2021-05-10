@@ -15,7 +15,7 @@ class _HomeFavoritePlacesState extends State<HomeFavoritePlaces> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 340,
+      top: 300,
       left: 0,
       right: 0,
       child: Column(
