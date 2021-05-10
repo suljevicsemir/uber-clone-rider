@@ -12,6 +12,7 @@ import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/models/custom_marker_id.dart';
 import 'package:uber_clone/providers/home_provider.dart';
+import 'package:uber_clone/providers/map_snapshot_provider.dart';
 
 class HomeMap extends StatefulWidget {
   @override
@@ -88,7 +89,7 @@ class _HomeMapState extends State<HomeMap> {
     setState(() {
       initialCameraPosition = CameraPosition(
           target: LatLng(data.latitude!, data.longitude!),
-          zoom: 15
+          zoom: 16
       );
       lastLocation = data;
     });
@@ -172,32 +173,38 @@ class _HomeMapState extends State<HomeMap> {
   Widget build(BuildContext context) {
 
 
-    if( mapStyle == null)
-      return Container(
-        child: Center(
-          child: Text('Map style is null'),
-        ),
-      );
+        if( mapStyle == null)
+          return Container(
+            child: Center(
+              child: Text('Map style is null'),
+            ),
+          );
 
-    if(initialCameraPosition == null)
-      return Scaffold(
-        body: Center(
-          child: Text('Initial camera position is null'),
-        ),
-      );
+        if(initialCameraPosition == null)
+          return Center(
+              child: Text('Initial camera position is null'),
 
-    return GoogleMap(
-      onTap: (LatLng latLng) => Provider.of<HomeProvider>(context, listen: false).updateOverlay(),
-      initialCameraPosition: cameraPosition,
-      onMapCreated: (GoogleMapController controller) async{
-        controller.setMapStyle(mapStyle);
-        mapController.complete(controller);
-      },
-      zoomControlsEnabled: false,
-      markers: markers,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: false,
-    );
+          );
+
+        bool expandMap = Provider.of<HomeProvider>(context).isOverlayShown;
+
+
+        return GoogleMap(
+          onTap: (LatLng latLng) => Provider.of<HomeProvider>(context, listen: false).updateOverlay(),
+          initialCameraPosition: initialCameraPosition!,
+          onMapCreated: (GoogleMapController controller) async{
+            controller.setMapStyle(mapStyle);
+            mapController.complete(controller);
+            Timer(const Duration(seconds: 1), () async {
+              Uint8List? snapshot = await controller.takeSnapshot();
+              Provider.of<MapSnapshotProvider>(context, listen: false).setSnapshot(snapshot!);
+            });
+          },
+          zoomControlsEnabled: false,
+          markers: markers,
+          myLocationEnabled: true,
+          myLocationButtonEnabled: false,
+        );
   }
 
   Future<void> disposeController() async {

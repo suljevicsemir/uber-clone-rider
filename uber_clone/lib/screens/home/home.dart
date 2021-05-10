@@ -1,18 +1,14 @@
-import 'dart:math' as math;
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:uber_clone/components/connectivity_notifier.dart';
 import 'package:uber_clone/providers/home_provider.dart';
 import 'package:uber_clone/screens/home/drawer/drawer.dart';
-import 'package:uber_clone/screens/home/drawer_menu_icon.dart';
-import 'package:uber_clone/screens/home/home_components/favorite_places/favorite_places.dart';
-import 'package:uber_clone/screens/home/home_components/ride_now.dart';
-import 'package:uber_clone/screens/home/home_components/where_to.dart';
+
 class Home extends StatefulWidget {
   static const String route = '/home';
-
 
   @override
   _HomeState createState() => _HomeState();
@@ -22,15 +18,39 @@ class _HomeState extends State<Home> {
 
   final globalKey = GlobalKey<ScaffoldState>();
   Color statusBarColor = Colors.transparent;
+  bool firstRun = false;
+  bool expandMap = true;
 
   @override
   void initState() {
     super.initState();
-
   }
+
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if(!firstRun) {
+      expandMap = Provider.of<HomeProvider>(context).isOverlayShown;
+      setState(() {
+        firstRun = false;
+      });
+    }
+  }
+
+  Future<Uint8List> resizeMapSnapshot(Uint8List snapshot) async {
+    ui.Codec snapshotCodec = await ui.instantiateImageCodec(snapshot, targetWidth: 200, targetHeight: 50);
+    ui.FrameInfo snapshotFrameInfo = await snapshotCodec.getNextFrame();
+    Uint8List list = (await snapshotFrameInfo.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+    return list;
+  }
+
 
   @override
   Widget build(BuildContext context) {
+
+    //bool expandMap = Provider.of<HomeProvider>(context).isOverlayShown;
+
     return WillPopScope(
       onWillPop: () async {
         if(!Provider.of<HomeProvider>(context, listen: false).isOverlayShown) {
@@ -50,10 +70,37 @@ class _HomeState extends State<Home> {
             fit: StackFit.loose,
             children: [
 
-              //HomeMap(),
+              /*Positioned(
+                  top: expandMap ? 500 : 0 ,
+                  left: expandMap ? 20 : 0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      expandMap ? Container(margin: EdgeInsets.only(left: 20),  child: Text('Around you', style: TextStyle(fontSize: 20, fontFamily: 'OnePlusSans')),) : Container(),
+                      //HomeMap()
+                    ],
+                  )
+              ),*/
 
 
-             Positioned(
+             /* AnimatedPositioned(
+                duration: const Duration(milliseconds: 400),
+                top: expandMap ? 500 : 0,
+                left: expandMap ? 20 : 0,
+                child: SizedBox(
+                  width: expandMap ?  MediaQuery.of(context).size.width - 42 : MediaQuery.of(context).size.width,
+                  height: expandMap ?  120 : MediaQuery.of(context).size.height,
+                  child: HomeMap()
+                ),
+              ),*/
+
+
+
+
+
+
+             /* expandMap ?
+              Positioned(
                top: 0,
                child: Container(
                  width: MediaQuery.of(context).size.width,
@@ -65,17 +112,24 @@ class _HomeState extends State<Home> {
                    )
                  ),
                ),
-             ),
-
-             Positioned(
-              top: 100,
-              left: 20,
-              child: RideNow(),
-            ),
+             ) : Container(),*/
 
 
-              HomeFavoritePlaces(),
 
+            /*  expandMap ?
+              RideNow() :
+              Container(),*/
+
+
+
+              /*expandMap ?
+              HomeFavoritePlaces() : Container(),*/
+
+
+
+
+
+              /*expandMap ?
               Positioned(
                 top: MediaQuery.of(context).size.height * 0.27,
                 right: 0,
@@ -83,32 +137,25 @@ class _HomeState extends State<Home> {
                     angle: - math.pi / 4,
                     child: Image.asset('assets/images/white_car.png', scale: 9.5,)
                 ),
-              ),
+              ) : Container(),*/
 
-
-
-
+             /* expandMap ?
               Positioned(
                 top: 270,
                 left: 20,
                 right: 20,
                 child: WhereTo()
-              ),
-
+              ) : Container(),*/
 
               //Drawer Menu Icon
-              DrawerMenu(),
+              /*DrawerMenu(),*/
 
-              Positioned(
+              /*Positioned(
                 top: 50,
                 left: 80,
                 right: 0,
                 child: ConnectivityNotifier()
-              ),
-
-
-
-
+              ),*/
             ]
           ),
         ),
