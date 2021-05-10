@@ -4,9 +4,15 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:uber_clone/components/connectivity_notifier.dart';
 import 'package:uber_clone/providers/home_provider.dart';
 import 'package:uber_clone/screens/home/drawer/drawer.dart';
-
+import 'package:uber_clone/screens/home/drawer_menu_icon.dart';
+import 'package:uber_clone/screens/home/home_components/favorite_places/favorite_places.dart';
+import 'package:uber_clone/screens/home/home_components/ride/ride_now.dart';
+import 'package:uber_clone/screens/home/home_components/where_to.dart';
+import 'package:uber_clone/screens/home/map/map.dart';
+import 'dart:math' as math;
 class Home extends StatefulWidget {
   static const String route = '/home';
 
@@ -70,36 +76,28 @@ class _HomeState extends State<Home> {
             fit: StackFit.loose,
             children: [
 
-              /*Positioned(
+              //around you banner
+              Positioned(
                   top: expandMap ? 500 : 0 ,
                   left: expandMap ? 20 : 0,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      expandMap ? Container(margin: EdgeInsets.only(left: 20),  child: Text('Around you', style: TextStyle(fontSize: 20, fontFamily: 'OnePlusSans')),) : Container(),
-                      //HomeMap()
-                    ],
+                  child: Container(
+                    child: Text('Around you', style: TextStyle(fontSize: 20, fontFamily: 'OnePlusSans'))
                   )
-              ),*/
+              ),
 
 
-             /* AnimatedPositioned(
+              AnimatedPositioned(
                 duration: const Duration(milliseconds: 400),
-                top: expandMap ? 500 : 0,
+                top: expandMap ? 600 : 0,
                 left: expandMap ? 20 : 0,
                 child: SizedBox(
                   width: expandMap ?  MediaQuery.of(context).size.width - 42 : MediaQuery.of(context).size.width,
                   height: expandMap ?  120 : MediaQuery.of(context).size.height,
                   child: HomeMap()
                 ),
-              ),*/
+              ),
 
-
-
-
-
-
-             /* expandMap ?
+              expandMap ?
               Positioned(
                top: 0,
                child: Container(
@@ -112,24 +110,24 @@ class _HomeState extends State<Home> {
                    )
                  ),
                ),
-             ) : Container(),*/
+             ) : Container(),
 
 
 
-            /*  expandMap ?
+              expandMap ?
               RideNow() :
-              Container(),*/
+              Container(),
+
+
+              expandMap ?
+              HomeFavoritePlaces() : Container(),
 
 
 
-              /*expandMap ?
-              HomeFavoritePlaces() : Container(),*/
 
 
 
-
-
-              /*expandMap ?
+              expandMap ?
               Positioned(
                 top: MediaQuery.of(context).size.height * 0.27,
                 right: 0,
@@ -137,25 +135,21 @@ class _HomeState extends State<Home> {
                     angle: - math.pi / 4,
                     child: Image.asset('assets/images/white_car.png', scale: 9.5,)
                 ),
-              ) : Container(),*/
+              ) : Container(),
 
-             /* expandMap ?
+              expandMap ?
               Positioned(
                 top: 270,
                 left: 20,
                 right: 20,
                 child: WhereTo()
-              ) : Container(),*/
+              ) :
+              Container(),
 
               //Drawer Menu Icon
-              /*DrawerMenu(),*/
+              //DrawerMenu(),
 
-              /*Positioned(
-                top: 50,
-                left: 80,
-                right: 0,
-                child: ConnectivityNotifier()
-              ),*/
+
             ]
           ),
         ),
