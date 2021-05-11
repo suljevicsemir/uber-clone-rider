@@ -77,10 +77,10 @@ class ProfilePicturesProvider extends ChangeNotifier{
 
     // no need for transactions
 
-    await FirebaseFirestore.instance.collection('chats').doc(chatId).update({
+    /*await FirebaseFirestore.instance.collection('chats').doc(chatId).update({
       FirebaseService.id : url
-    });
-
+    });*/
+  notifyListeners();
 
     return driverProfilePictures![driverId];
   }

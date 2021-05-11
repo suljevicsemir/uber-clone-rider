@@ -69,41 +69,40 @@ class _ChatState extends State<Chat> {
       // sigurno postoji
       FirebaseFirestore.instance.collection('drivers').doc(widget.driver.id).snapshots().listen((DocumentSnapshot driverSnapshot) {
 
-
-
         //chat sigurno postoji
-        FirebaseFirestore.instance.collection('chats').doc(chatId).snapshots().listen((DocumentSnapshot chatSnapshot) async{
 
-          // vjerovatno bi svakako error bio
-          if(!chatSnapshot.exists) {
-            print('chat ne postoji');
-            return;
-          }
+      });
 
 
-          // prvi put se chat otvara od strane klijenta
-          if( !chatSnapshot.data()!.containsKey(FirebaseService.id)) {
-            print('ne postoji');
-            await FirebaseService.firestoreInstance.runTransaction((transaction) async{
-              DocumentSnapshot driver = await transaction.get(FirebaseService.firestoreInstance.collection('drivers').doc(widget.driver.id));
-              String url = driver.get('profilePictureUrl');
+      FirebaseFirestore.instance.collection('chats').doc(chatId).snapshots().listen((DocumentSnapshot chatSnapshot) async{
 
-              transaction.update(FirebaseService.firestoreInstance.collection('chats').doc(chatId), {
-                FirebaseService.id : url
-              });
+        // vjerovatno bi svakako error bio
+        if(!chatSnapshot.exists) {
+          print('chat ne postoji');
+          return;
+        }
+
+
+        // prvi put se chat otvara od strane klijenta
+        if( !chatSnapshot.data()!.containsKey(FirebaseService.id)) {
+          print('ne postoji');
+          await FirebaseService.firestoreInstance.runTransaction((transaction) async{
+
+            String url = driverSnapshot.get('profilePictureUrl');
+
+            transaction.update(FirebaseService.firestoreInstance.collection('chats').doc(chatId), {
+              FirebaseService.id : url
             });
-            return;
-          }
+          });
+          return;
+        }
 
-          print('exists');
-          if( driverSnapshot.get('profilePictureUrl') != chatSnapshot.get(FirebaseService.id)) {
-            File? updatePicture = await Provider.of<ProfilePicturesProvider>(context, listen: false).
-            updateDriverPicture(driverId: widget.driver.id, chatId: chatId, url: driverSnapshot.get('profilePictureUrl'));
-            setState(() {
-              picture = updatePicture;
-            });
-          }
-        });
+        print('exists');
+        if( driverSnapshot.get('profilePictureUrl') != chatSnapshot.get(FirebaseService.id)) {
+          File? updatePicture = await Provider.of<ProfilePicturesProvider>(context, listen: false).
+          updateDriverPicture(driverId: widget.driver.id, chatId: chatId, url: driverSnapshot.get('profilePictureUrl'));
+
+        }
       });
 
     }
