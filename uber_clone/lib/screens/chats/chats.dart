@@ -37,7 +37,7 @@ class _ChatsState extends State<Chats> {
         child: Container(
           child: StreamBuilder(
             stream: provider.chats,
-            builder: (context, AsyncSnapshot snapshot) {
+            builder: (context, AsyncSnapshot snapshot)  {
               if(snapshot.hasError)
                 return Text('There was an error!');
               if(!snapshot.hasData)

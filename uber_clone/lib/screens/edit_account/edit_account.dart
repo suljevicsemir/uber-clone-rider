@@ -74,7 +74,9 @@ class _EditAccountState extends State<EditAccount> {
                   Row(
                     children: [
                       Expanded(
-                          child: Text( user.email, style: Theme.of(context).textTheme.headline6, overflow: TextOverflow.ellipsis,)
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text( user.email + "sjkdhakjads", style: Theme.of(context).textTheme.headline6,))
                       ),
                      // Spacer(),
                       Container(

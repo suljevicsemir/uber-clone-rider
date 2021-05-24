@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +13,6 @@ import 'package:uber_clone/screens/chat/chat_app_bar.dart';
 import 'package:uber_clone/screens/chat/chat_keyboard.dart';
 import 'package:uber_clone/screens/chat/messages/received_message.dart';
 import 'package:uber_clone/screens/chat/messages/sent_message.dart';
-import 'package:uber_clone/screens/driver_profile/driver_profile.dart';
 import 'package:uber_clone/services/firebase/firebase_service.dart';
 
 class Chat extends StatefulWidget {
@@ -35,18 +33,21 @@ class _ChatState extends State<Chat> {
   final TextEditingController textController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   File? picture;
-  bool shouldLoadPicture = false;
+  bool isFirstRun = false;
 
   late Driver driver;
-
+  String? variable;
 
   @override
   void initState() {
     super.initState();
     _scrollChatToBottom();
+
     setState(() {
       driver = widget.driver;
     });
+
+
   }
 
   @override
@@ -54,56 +55,44 @@ class _ChatState extends State<Chat> {
     super.didChangeDependencies();
     print('did change depedencies');
 
-    if( !shouldLoadPicture) {
-      print('loading picture');
+    if( !isFirstRun) {
+      print('first load of the screen');
 
       SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+
         setState(() {
           picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![widget.driver.id];
-          shouldLoadPicture = true;
+          isFirstRun = true;
         });
       });
 
       String chatId = Provider.of<ChatProvider>(context, listen: false).chatId;
 
-      // sigurno postoji
-      FirebaseFirestore.instance.collection('drivers').doc(widget.driver.id).snapshots().listen((DocumentSnapshot driverSnapshot) {
 
-        //chat sigurno postoji
+     if(DateTime.now().hour >= 0 && DateTime.now().hour <= 23) {
+        SchedulerBinding.instance!.addPostFrameCallback((timeStamp) async {
+          print('getting driver document...');
 
-      });
-
-
-      FirebaseFirestore.instance.collection('chats').doc(chatId).snapshots().listen((DocumentSnapshot chatSnapshot) async{
-
-        // vjerovatno bi svakako error bio
-        if(!chatSnapshot.exists) {
-          print('chat ne postoji');
-          return;
-        }
+          DocumentSnapshot driver = await FirebaseService.firestoreInstance.collection('drivers').doc(widget.driver.id).get();
+          DocumentSnapshot cachedRider = await FirebaseService.firestoreInstance.collection('chats').doc(chatId).get();
 
 
-        // prvi put se chat otvara od strane klijenta
-        if( !chatSnapshot.data()!.containsKey(FirebaseService.id)) {
-          print('ne postoji');
-          await FirebaseService.firestoreInstance.runTransaction((transaction) async{
-
-            String url = driverSnapshot.get('profilePictureUrl');
-
-            transaction.update(FirebaseService.firestoreInstance.collection('chats').doc(chatId), {
-              FirebaseService.id : url
+          if(!cachedRider.data()!.containsKey(FirebaseService.id)) {
+            await cachedRider.reference.update({
+              FirebaseService.id : driver.get('profilePictureUrl')
             });
-          });
-          return;
-        }
+            await Provider.of<ProfilePicturesProvider>(context, listen: false).updateDriverPicture(driverId: driver.id, chatId: chatId, url: driver.get('profilePictureUrl'));
+          }
 
-        print('exists');
-        if( driverSnapshot.get('profilePictureUrl') != chatSnapshot.get(FirebaseService.id)) {
-          File? updatePicture = await Provider.of<ProfilePicturesProvider>(context, listen: false).
-          updateDriverPicture(driverId: widget.driver.id, chatId: chatId, url: driverSnapshot.get('profilePictureUrl'));
+          else if( driver.get('profilePictureUrl') != cachedRider.get(FirebaseService.id)) {
+              await Provider.of<ProfilePicturesProvider>(context, listen: false).
+              updateDriverPicture(driverId: driver.id, chatId: chatId, url: driver.get('profilePictureUrl'));
+          }
 
-        }
-      });
+        });
+      }
+
+
 
     }
   }
@@ -145,6 +134,7 @@ class _ChatState extends State<Chat> {
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance.collection('chats').doc(Provider.of<ChatProvider>(context, listen: false).chatId).collection('messages').orderBy('timestamp').limitToLast(20).snapshots(),
                 builder: (context, AsyncSnapshot snapshot)  {
+
                   if(!snapshot.hasData) {
                     return Center(
                       child: SizedBox(
@@ -171,17 +161,30 @@ class _ChatState extends State<Chat> {
                         controller: scrollController,
                         shrinkWrap: true,
                         itemCount: snapshot.data.docs.length,
-                        itemBuilder: (context, index) =>
-                            snapshot.data.docs[index].get('firebaseUserId') != FirebaseService.id ?
-                            ReceivedMessage(
-                              message: Message.fromSnapshot(snapshot.data.docs[index]),
-                              nextMessage: index < docsLength - 1 ? Message.fromSnapshot(snapshot.data.docs[index + 1]) : null,
-                              isLast: index == docsLength - 1,
-                              driver: widget.driver,
-                            ) :
-                            SentMessage(
-                              message: Message.fromSnapshot(snapshot.data.docs[index]),
-                            )
+                        itemBuilder: (context, index) {
+
+                          DocumentSnapshot x = snapshot.data.docs[index];
+                          if(x.metadata.isFromCache)
+                            print('from cached');
+                          else print('from server');
+
+                          return snapshot.data.docs[index].get('firebaseUserId') !=
+                              FirebaseService.id ?
+                          ReceivedMessage(
+                            message: Message.fromSnapshot(
+                                snapshot.data.docs[index]),
+                            nextMessage: index < docsLength - 1
+                                ? Message.fromSnapshot(
+                                snapshot.data.docs[index + 1])
+                                : null,
+                            isLast: index == docsLength - 1,
+                            driver: widget.driver,
+                          ) :
+                          SentMessage(
+                            message: Message.fromSnapshot(
+                                snapshot.data.docs[index]),
+                          );
+                        }
                     ),
                   );
                 },
@@ -189,55 +192,8 @@ class _ChatState extends State<Chat> {
             ),
           ),
           ChatKeyboard(),
-
         ],
       )
-    );
-  }
-
-  _buildMessage(BuildContext context, Message message, Message? nextMessage, bool isLast) {
-
-    bool isNextSent = false;
-    bool sentMessage = message.firebaseUserId == FirebaseAuth.instance.currentUser!.uid ? true : false;
-    if( nextMessage != null) {
-      isNextSent = nextMessage.firebaseUserId == FirebaseAuth.instance.currentUser!.uid;
-    }
-
-    bool shouldHavePicture = (isNextSent && !sentMessage) || (isLast && !sentMessage);
-
-
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: sentMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
-      children: [
-        shouldHavePicture ? GestureDetector(
-          onTap: () async {
-            await Navigator.pushNamed(context, DriverProfile.route, arguments: widget.driver.id);
-          },
-          child: Container(
-            margin: EdgeInsets.only(left: 5),
-            child: CircleAvatar(
-              radius: 13,
-              backgroundColor: Colors.transparent,
-              backgroundImage: FileImage(picture!),
-            ),
-          ),
-        ):
-        Container() ,
-        Container(
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-          margin: (sentMessage) ? EdgeInsets.only(right: 10, bottom: 10) : shouldHavePicture ? EdgeInsets.only(bottom: 10, left: 7) :  EdgeInsets.only(left: 39 , bottom: 10),
-          decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(20)
-          ),
-          constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width / 1.5
-          ),
-          child: Text(message.message, style: TextStyle(color: Colors.black, fontSize: 17),),
-        ),
-      ],
     );
   }
 

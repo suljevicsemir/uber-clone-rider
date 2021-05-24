@@ -32,6 +32,9 @@ class _HomeMapState extends State<HomeMap> {
   Set<CustomMarkerId> markerIds = Set<CustomMarkerId>();
   Uint8List? whiteCar, redCar;
 
+  bool isFirstRun = true;
+
+
   Future<void> updateMarkerAndCircle(LocationData data) async{
     LatLng latLng = LatLng(data.latitude!, data.longitude!);
     setState(() {
@@ -99,67 +102,75 @@ class _HomeMapState extends State<HomeMap> {
   @override
   void didChangeDependencies() async{
     super.didChangeDependencies();
-    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) async{
-      String value = await DefaultAssetBundle.of(context).loadString('assets/map/style.json');
 
-      ByteData whiteCarData = await DefaultAssetBundle.of(context).load('assets/images/white_car.png');
-      ByteData redCarData = await DefaultAssetBundle.of(context).load('assets/images/red_car.png');
+    if( isFirstRun) {
+      SchedulerBinding.instance!.addPostFrameCallback((timeStamp) async{
+        String value = await DefaultAssetBundle.of(context).loadString('assets/map/style.json');
 
-      ui.Codec whiteCarCodec = await ui.instantiateImageCodec(whiteCarData.buffer.asUint8List(), targetWidth: 120, targetHeight: 90);
-      ui.Codec redCarCodec = await ui.instantiateImageCodec(redCarData.buffer.asUint8List(), targetWidth: 120, targetHeight: 110);
+        ByteData whiteCarData = await DefaultAssetBundle.of(context).load('assets/images/white_car.png');
+        ByteData redCarData = await DefaultAssetBundle.of(context).load('assets/images/red_car.png');
 
-      ui.FrameInfo whiteCarFrameInfo = await whiteCarCodec.getNextFrame();
-      ui.FrameInfo redCarFrameInfo = await redCarCodec.getNextFrame();
+        ui.Codec whiteCarCodec = await ui.instantiateImageCodec(whiteCarData.buffer.asUint8List(), targetWidth: 120, targetHeight: 90);
+        ui.Codec redCarCodec = await ui.instantiateImageCodec(redCarData.buffer.asUint8List(), targetWidth: 120, targetHeight: 110);
 
-      Uint8List whiteCarList = (await whiteCarFrameInfo.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
-      Uint8List redCarList = (await redCarFrameInfo.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+        ui.FrameInfo whiteCarFrameInfo = await whiteCarCodec.getNextFrame();
+        ui.FrameInfo redCarFrameInfo = await redCarCodec.getNextFrame();
 
-      setState(() {
-        mapStyle = value;
-        whiteCar = whiteCarList;
-        redCar = redCarList;
-      });
+        Uint8List whiteCarList = (await whiteCarFrameInfo.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+        Uint8List redCarList = (await redCarFrameInfo.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
 
-       FirebaseFirestore.instance.collection('driver_locations').where('status', isEqualTo: true).snapshots().listen((QuerySnapshot snapshot) {
-         print('osluskivanje');
-        List<QueryDocumentSnapshot> list = snapshot.docs;
-        Set<Marker> tempMarkers = Set<Marker>();
+        setState(() {
+          mapStyle = value;
+          whiteCar = whiteCarList;
+          redCar = redCarList;
+        });
 
-        for(int i = 0; i < list.length; i++) {
+        FirebaseFirestore.instance.collection('driver_locations').where('status', isEqualTo: true).snapshots().listen((QuerySnapshot snapshot) {
+          print('osluskivanje');
+          List<QueryDocumentSnapshot> list = snapshot.docs;
+          Set<Marker> tempMarkers = Set<Marker>();
 
-          DocumentSnapshot snapshot = list.elementAt(i);
-          print(snapshot.get('carColor'));
-          GeoPoint geoPoint = snapshot.get('location');
+          for(int i = 0; i < list.length; i++) {
 
-          if(!snapshot.get('status')) {
-            continue;
-          }
+            DocumentSnapshot snapshot = list.elementAt(i);
+            print(snapshot.get('carColor'));
+            GeoPoint geoPoint = snapshot.get('location');
 
-          bool isRed = false;
-          if(snapshot.get('carColor') == 'red')
-            isRed = true;
-
-          tempMarkers.add(Marker(
-            markerId: MarkerId(snapshot.id),
-            position: LatLng(geoPoint.latitude, geoPoint.longitude),
-            draggable: false,
-            zIndex: 2,
-            rotation: snapshot.get('heading'),
-            flat: true,
-            anchor: Offset(0.5, 0.5),
-            icon: isRed ? BitmapDescriptor.fromBytes(redCar!) : BitmapDescriptor.fromBytes(whiteCar!),
-            onTap: () {
-              print('klikno si me');
+            if(!snapshot.get('status')) {
+              continue;
             }
 
-          ));
-        }
-        setState(() {
-          //markers.clear();
-          markers = tempMarkers;
+            bool isRed = false;
+            if(snapshot.get('carColor') == 'red')
+              isRed = true;
+
+            tempMarkers.add(Marker(
+                markerId: MarkerId(snapshot.id),
+                position: LatLng(geoPoint.latitude, geoPoint.longitude),
+                draggable: false,
+                zIndex: 2,
+                rotation: snapshot.get('heading'),
+                flat: true,
+                anchor: Offset(0.5, 0.5),
+                icon: isRed ? BitmapDescriptor.fromBytes(redCar!) : BitmapDescriptor.fromBytes(whiteCar!),
+                onTap: () {
+                  print('klikno si me');
+                }
+
+            ));
+          }
+          setState(() {
+            //markers.clear();
+            markers = tempMarkers;
+          });
         });
       });
-    });
+      setState(() {
+        isFirstRun = false;
+      });
+    }
+
+
   }
 
 

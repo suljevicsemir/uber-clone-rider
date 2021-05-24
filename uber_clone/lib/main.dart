@@ -15,11 +15,7 @@ import 'package:uber_clone/theme/theme.dart';
 void main()  async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => MyApp(),
-      )
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -59,8 +55,6 @@ class _MyAppState extends State<MyApp> {
         )
       ],
       child: MaterialApp(
-        locale: DevicePreview.locale(context),
-        builder: DevicePreview.appBuilder,
         theme: AppTheme.appTheme(),
         initialRoute: AuthenticationWrapper.route,
         onGenerateRoute: UberRouter.generateRoute,
