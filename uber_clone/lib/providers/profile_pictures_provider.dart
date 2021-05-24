@@ -1,14 +1,14 @@
-
-
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uber_clone/services/cached_data/temp_directory_service.dart';
+import 'package:uber_clone/services/firebase/firebase_service.dart';
 import 'package:uber_clone/services/firebase/storage/storage_provider.dart';
 
 class ProfilePicturesProvider extends ChangeNotifier{
@@ -67,6 +67,24 @@ class ProfilePicturesProvider extends ChangeNotifier{
 
 
   }
+
+
+  Future<File?> updateDriverPicture({required String driverId, required String chatId, required String url}) async {
+    Uint8List? list = await FirebaseStorageProvider.getDriverPicture(driverId);
+    driverProfilePictures![driverId] = (await TempDirectoryService.storeDriverPicture(driverId, list!))!;
+    //notifyListeners();
+
+
+    // no need for transactions
+
+    await FirebaseFirestore.instance.collection('chats').doc(chatId).update({
+      FirebaseService.id : url
+    });
+  notifyListeners();
+
+    return driverProfilePictures![driverId];
+  }
+
 
   Future<File?> getDriverPicture(String driverId) async{
     if(driverProfilePictures![driverId] != null) {

@@ -2,17 +2,18 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
-import 'package:uber_clone/components/app_utils.dart' as app;
 import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/models/message.dart';
-import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/providers/chat_provider.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
-import 'package:uber_clone/providers/user_data_provider.dart';
-import 'package:uber_clone/screens/driver_profile/driver_profile.dart';
+import 'package:uber_clone/screens/chat/chat_app_bar.dart';
+import 'package:uber_clone/screens/chat/chat_keyboard.dart';
+import 'package:uber_clone/screens/chat/messages/received_message.dart';
+import 'package:uber_clone/screens/chat/messages/sent_message.dart';
+import 'package:uber_clone/services/firebase/firebase_service.dart';
 
 class Chat extends StatefulWidget {
 
@@ -32,34 +33,71 @@ class _ChatState extends State<Chat> {
   final TextEditingController textController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   File? picture;
-  bool hasText = false;
+  bool isFirstRun = false;
+
+  late Driver driver;
+  String? variable;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollChatToBottom();
+
+    setState(() {
+      driver = widget.driver;
+    });
 
 
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    print('did change depedencies');
 
-    textController.addListener(() {
-      if(textController.text.isNotEmpty && !hasText) {
+    if( !isFirstRun) {
+      print('first load of the screen');
+
+      SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+
         setState(() {
-          hasText = true;
+          picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![widget.driver.id];
+          isFirstRun = true;
+        });
+      });
+
+      String chatId = Provider.of<ChatProvider>(context, listen: false).chatId;
+
+
+     if(DateTime.now().hour >= 0 && DateTime.now().hour <= 23) {
+        SchedulerBinding.instance!.addPostFrameCallback((timeStamp) async {
+          print('getting driver document...');
+
+          DocumentSnapshot driver = await FirebaseService.firestoreInstance.collection('drivers').doc(widget.driver.id).get();
+          DocumentSnapshot cachedRider = await FirebaseService.firestoreInstance.collection('chats').doc(chatId).get();
+
+
+          if(!cachedRider.data()!.containsKey(FirebaseService.id)) {
+            await cachedRider.reference.update({
+              FirebaseService.id : driver.get('profilePictureUrl')
+            });
+            await Provider.of<ProfilePicturesProvider>(context, listen: false).updateDriverPicture(driverId: driver.id, chatId: chatId, url: driver.get('profilePictureUrl'));
+          }
+
+          else if( driver.get('profilePictureUrl') != cachedRider.get(FirebaseService.id)) {
+              await Provider.of<ProfilePicturesProvider>(context, listen: false).
+              updateDriverPicture(driverId: driver.id, chatId: chatId, url: driver.get('profilePictureUrl'));
+          }
+
         });
       }
-      if( textController.text.isEmpty && hasText) {
-        setState(() {
-          hasText = false;
-        });
-      }
-    });
 
-    UserData x = Provider.of<UserDataProvider>(context, listen: false).userData!;
 
-    _scrollChatToBottom();
-    picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![widget.driver.id];
+
+    }
   }
 
-  _scrollChatToBottom() {
+  void _scrollChatToBottom() {
 
     if(scrollController.hasClients) {
       scrollController.animateTo(
@@ -74,6 +112,8 @@ class _ChatState extends State<Chat> {
   }
 
 
+  TextEditingController controller = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -81,30 +121,10 @@ class _ChatState extends State<Chat> {
       return Container();
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        elevation: 0.0,
-        title: GestureDetector(
-          onTap: () async => await Navigator.pushNamed(context, DriverProfile.route, arguments: widget.driver.id),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                radius: 17,
-                backgroundImage: FileImage(picture!),
-                backgroundColor: Colors.transparent,
-              ),
-              SizedBox(width: 10,),
-              Text(widget.driver.firstName)
-            ],
-          ),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(60),
+          child: ChatAppBar(driver: widget.driver,),
         ),
-        actions: [
-          IconButton(
-            onPressed: () async => await app.callNumber(context, phoneNumber: widget.driver.phoneNumber),
-            icon: Icon(Icons.call),
-          )
-        ],
-      ),
       body: Stack(
         children: [
           Positioned.fill(
@@ -112,8 +132,9 @@ class _ChatState extends State<Chat> {
             child: Container(
               margin: EdgeInsets.only(top: 10),
               child: StreamBuilder(
-                stream: FirebaseFirestore.instance.collection('chats').doc(Provider.of<ChatProvider>(context,listen: false).chatId).collection('messages').snapshots(),
+                stream: FirebaseFirestore.instance.collection('chats').doc(Provider.of<ChatProvider>(context, listen: false).chatId).collection('messages').orderBy('timestamp').limitToLast(20).snapshots(),
                 builder: (context, AsyncSnapshot snapshot)  {
+
                   if(!snapshot.hasData) {
                     return Center(
                       child: SizedBox(
@@ -136,135 +157,50 @@ class _ChatState extends State<Chat> {
                   int docsLength = snapshot.data.docs.length;
                   return Container(
                     child: ListView.builder(
+                        padding: EdgeInsets.zero,
                         controller: scrollController,
                         shrinkWrap: true,
                         itemCount: snapshot.data.docs.length,
-                        itemBuilder: (context, index) => _buildMessage(context, Message.fromSnapshot(snapshot.data.docs[index]),
-                            index < docsLength - 1 ? Message.fromSnapshot(snapshot.data.docs[index + 1]) : null,
-                            index == docsLength - 1)
+                        itemBuilder: (context, index) {
 
+                          DocumentSnapshot x = snapshot.data.docs[index];
+                          if(x.metadata.isFromCache)
+                            print('from cached');
+                          else print('from server');
+
+                          return snapshot.data.docs[index].get('firebaseUserId') !=
+                              FirebaseService.id ?
+                          ReceivedMessage(
+                            message: Message.fromSnapshot(
+                                snapshot.data.docs[index]),
+                            nextMessage: index < docsLength - 1
+                                ? Message.fromSnapshot(
+                                snapshot.data.docs[index + 1])
+                                : null,
+                            isLast: index == docsLength - 1,
+                            driver: widget.driver,
+                          ) :
+                          SentMessage(
+                            message: Message.fromSnapshot(
+                                snapshot.data.docs[index]),
+                          );
+                        }
                     ),
                   );
                 },
               ),
             ),
           ),
-          Positioned(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 0,
-            right: 0,
-            child: Container(
-              decoration: BoxDecoration(
-                //color: Colors.blue,
-                  border: Border(
-                      top: BorderSide(
-                          width: 0.5,
-                          color: Colors.grey
-                      )
-                  )
-              ),
-              child: Container(
-                margin: EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Flexible(
-                          child: Container(
-                            margin: EdgeInsets.only(left: 8),
-                            child: TextField(
-                              controller: textController,
-                              decoration: InputDecoration(
-                                  hintText: 'Type a message...',
-                                  hintStyle: TextStyle(color: Colors.grey[500], fontSize: 19),
-                                  focusedBorder: InputBorder.none,
-                                  disabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.red, width: 3)
-                                  ),
-                                  enabledBorder: InputBorder.none
-                              ),
-                              cursorColor: Colors.yellow,
-                              cursorHeight: 26,
-                              cursorWidth: 2,
-                            ),
-                          ),
-                        ),
-                        textController.text.isNotEmpty  ?
-                        IconButton(
-                            splashColor: Colors.red,
-                            splashRadius: 25,
-                            padding: EdgeInsets.all(8),
-                            color: Colors.black87,
-                            onPressed: () async{
-                              Timestamp timestamp = Timestamp.now();
-                              Message message = Message(message: textController.text, timestamp: timestamp, firebaseUserId: FirebaseAuth.instance.currentUser!.uid);
-                              textController.clear();
-                              await Provider.of<ChatProvider>(context, listen: false).sendMessage(message);
-                              _scrollChatToBottom();
-                            },
-                            icon: Icon(Icons.send)
-                        ) : Container()
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
+          ChatKeyboard(),
         ],
       )
     );
   }
 
-  _buildMessage(BuildContext context, Message message, Message? nextMessage, bool isLast) {
-
-    bool isNextSent = false;
-    bool sentMessage = message.firebaseUserId == FirebaseAuth.instance.currentUser!.uid ? true : false;
-    if( nextMessage != null) {
-      isNextSent = nextMessage.firebaseUserId == FirebaseAuth.instance.currentUser!.uid;
-    }
-
-    bool shouldHavePicture = (isNextSent && !sentMessage) || (isLast && !sentMessage);
-
-
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: sentMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
-      children: [
-        shouldHavePicture ? GestureDetector(
-          onTap: () async {
-            await Navigator.pushNamed(context, DriverProfile.route, arguments: widget.driver.id);
-          },
-          child: Container(
-            margin: EdgeInsets.only(left: 5),
-            child: CircleAvatar(
-              radius: 13,
-              backgroundColor: Colors.transparent,
-              backgroundImage: FileImage(picture!),
-            ),
-          ),
-        ):
-        Container() ,
-        Container(
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-          margin: (sentMessage) ? EdgeInsets.only(right: 10, bottom: 10) : shouldHavePicture ? EdgeInsets.only(bottom: 10, left: 7) :  EdgeInsets.only(left: 39 , bottom: 10),
-          decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(20)
-          ),
-          constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width / 1.5
-          ),
-          child: Text(message.message, style: TextStyle(color: Colors.black, fontSize: 17),),
-        ),
-      ],
-    );
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController.dispose();
+    controller.dispose();
   }
 }

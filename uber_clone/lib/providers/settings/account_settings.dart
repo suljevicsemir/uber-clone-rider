@@ -1,5 +1,7 @@
 
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +17,7 @@ class FavoritePlacesProvider extends ChangeNotifier {
 
   FavoritePlacesProvider() {
     loadFavoritePlaces();
+    print('loading favorite places');
   }
 
   Future<void> loadFavoritePlaces() async {
@@ -22,23 +25,29 @@ class FavoritePlacesProvider extends ChangeNotifier {
     if(FirebaseAuth.instance.currentUser == null)
       return;
 
-    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('account_settings').doc(FirebaseAuth.instance.currentUser!.uid).collection('favorites').get();
+    Timer(const Duration(milliseconds: 3200), () async{
+      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('account_settings').doc(FirebaseAuth.instance.currentUser!.uid).collection('favorites').get();
 
-    List<QueryDocumentSnapshot> list = snapshot.docs;
+      List<QueryDocumentSnapshot> list = snapshot.docs;
 
-    for(int i = 0; i < list.length; i++) {
-      if( list.elementAt(i).id == 'home') {
-        home = GooglePlace.fromSnapshot(list.elementAt(i));
+      for(int i = 0; i < list.length; i++) {
+        if(list.elementAt(i).metadata.isFromCache)
+          print('cache bato');
+        if( list.elementAt(i).id == 'home') {
+          home = GooglePlace.fromSnapshot(list.elementAt(i));
+        }
+        else if(list.elementAt(i).id == 'work') {
+          work = GooglePlace.fromSnapshot(list.elementAt(i));
+        }
+        else {
+          savedPlaces!.add(GooglePlace.fromSnapshot(list.elementAt(i)));
+        }
       }
-      else if(list.elementAt(i).id == 'work') {
-        work = GooglePlace.fromSnapshot(list.elementAt(i));
-      }
-      else {
-        savedPlaces!.add(GooglePlace.fromSnapshot(list.elementAt(i)));
-      }
-    }
-    haveLoaded = true;
-    notifyListeners();
+      haveLoaded = true;
+      notifyListeners();
+    });
+
+
 
   }
 

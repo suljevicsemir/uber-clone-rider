@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -11,8 +10,10 @@ import 'package:uber_clone/models/google_sign_result.dart';
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/services/cached_data/temp_directory_service.dart';
+import 'package:uber_clone/services/firebase/firebase_service.dart';
 import 'package:uber_clone/services/firebase/ride_verification_service.dart';
 import 'package:uber_clone/services/firebase/storage/storage_provider.dart';
+import 'package:uber_clone/services/firebase/uber_auth.dart';
 import 'package:uber_clone/services/user_data_service.dart';
 import 'package:uber_clone/user_data_fields.dart' as user_data_fields;
 
@@ -25,7 +26,7 @@ class GoogleLoginProvider extends ChangeNotifier{
   final GoogleSignInAccount account;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   UserData? userData;
-
+  final UberAuth uberAuth = UberAuth();
   GoogleLoginProvider({required this.account}) {
     signInWithGoogle();
   }
@@ -33,8 +34,8 @@ class GoogleLoginProvider extends ChangeNotifier{
   Future<void> _signOut() async {
 
     await googleSignIn.signOut();
-    if(FirebaseAuth.instance.currentUser != null) {
-      await FirebaseAuth.instance.signOut();
+    if(FirebaseService.currentUser != null) {
+      await FirebaseService.authInstance.signOut();
     }
   }
 
@@ -48,14 +49,14 @@ class GoogleLoginProvider extends ChangeNotifier{
       progress.accountAuthentication = true;
       notifyListeners();
 
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      await FirebaseService.authInstance.signInWithCredential(credential);
 
       progress.uberSignIn = true;
       notifyListeners();
 
       final Map<String, dynamic> payloadMap = _parseGoogleToken(googleAuth.idToken!)!;
       Map<String, dynamic> createUserData = _userData(payloadMap, account);
-      userData = UserData.fromMap(createUserData);
+      userData = UserData.fromLocalStorage(createUserData);
       return userData;
     }
     on Exception catch(_) {
@@ -70,19 +71,30 @@ class GoogleLoginProvider extends ChangeNotifier{
       UserData? userData = await signIn().timeout(const Duration(seconds: 3));
       if(userData == null)
         return null;
+
       print(userData.toString());
+
+      bool userAlreadyExists = await userDataService.userExists();
+
+
       await userDataService.saveUserData(userData);
+
       await settingsService.saveRideVerification();
+
       progress.savingData = true;
       notifyListeners();
 
-      Uri uri = Uri.parse(userData.profilePicture!);
+
+      Uri uri = Uri.parse(userData.profilePictureUrl);
       http.Response response = await http.get(uri);
 
+      bool isCached = await TempDirectoryService.picturesExists();
+
+      if(!isCached)
       File? picture = await TempDirectoryService.storeUserPicture(response.bodyBytes);
 
-
-      await FirebaseStorageProvider.uploadPictureFromFile(picture!);
+      if(!userAlreadyExists)
+        await FirebaseStorageProvider.uploadPictureFromList(response.bodyBytes);
       progress.storingPicture = true;
       progress.result = GoogleSignInResult.Success;
       notifyListeners();
@@ -129,11 +141,10 @@ class GoogleLoginProvider extends ChangeNotifier{
       user_data_fields.firstName : payloadMap["given_name"],
       user_data_fields.lastName  : payloadMap["family_name"],
       user_data_fields.email     : account.email,
-      user_data_fields.providerUserId : account.id,
       user_data_fields.profilePicture : account.photoUrl,
+      user_data_fields.providerUserId : account.id,
       user_data_fields.signedInType : SignedInType.Google.parseSignedInType(),
-      user_data_fields.firebaseUserId : FirebaseAuth.instance.currentUser!.uid,
-      user_data_fields.phoneNumber : 'THIS IS A MOCK PHONE NUMBER'
+      user_data_fields.firebaseUserId : FirebaseAuth.instance.currentUser!.uid
     };
   }
 

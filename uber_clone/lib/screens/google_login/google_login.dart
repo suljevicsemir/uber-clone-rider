@@ -30,11 +30,7 @@ class _GoogleLoginState extends State<GoogleLogin> {
   @override
   Widget build(BuildContext context) {
 
-
-
-
     if(Provider.of<GoogleLoginProvider>(context).progress.result == GoogleSignInResult.Cancelled) {
-
       return SignInFailed();
     }
 

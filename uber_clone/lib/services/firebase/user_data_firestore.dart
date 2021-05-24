@@ -19,8 +19,7 @@ class UserDataFirestore {
           transaction.set(FirebaseFirestore.instance.collection('users').doc(userData.firebaseUserId), {
             user_data_fields.firstName : userData.firstName,
             user_data_fields.lastName : userData.lastName,
-            user_data_fields.profilePicture: userData.profilePicture,
-            user_data_fields.phoneNumber: userData.phoneNumber,
+            //user_data_fields.profilePicture: userData.profilePictureUrl,
             user_data_fields.signedInType : userData.signedInType.parseSignedInType(),
             user_data_fields.providerUserId : userData.providerUserId,
             user_data_fields.email: userData.email
@@ -42,6 +41,17 @@ class UserDataFirestore {
     catch(err) {
       print(err.toString());
       return null;
+    }
+  }
+
+  Future<bool> userExists() async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get();
+      return snapshot.exists;
+    }
+    catch(err) {
+      print('there was an error');
+      return false;
     }
   }
 

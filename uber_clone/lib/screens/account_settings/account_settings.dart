@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
 import 'package:uber_clone/models/google_place.dart';
 import 'package:uber_clone/models/user_data.dart';
+import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/providers/settings/account_settings.dart';
 import 'package:uber_clone/providers/user_data_provider.dart';
 import 'package:uber_clone/screens/favorites_search//where_to_search.dart';
@@ -51,11 +52,11 @@ class _AccountSettingsState extends State<AccountSettings> {
                 margin: EdgeInsets.only(top: 20, bottom: 20),
                 child: Row(
                   children: [
-                    /*CircleAvatar(
+                    CircleAvatar(
                       radius: 30,
-                      backgroundImage: FileImage(picture),
+                      backgroundImage: FileImage(Provider.of<ProfilePicturesProvider>(context, listen: false).profilePicture!),
                       backgroundColor: Colors.transparent,
-                    ),*/
+                    ),
                     Container(
                       margin: EdgeInsets.only(left: 20),
                       child: Column(

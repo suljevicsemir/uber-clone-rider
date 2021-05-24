@@ -1,35 +1,61 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:uber_clone/components/connectivity_notifier.dart';
 import 'package:uber_clone/providers/home_provider.dart';
 import 'package:uber_clone/screens/home/drawer/drawer.dart';
-import 'package:uber_clone/screens/home/drawer_menu_icon.dart';
-import 'package:uber_clone/screens/home/home_components/pick_destination.dart';
-import 'package:uber_clone/screens/home/home_components/ride_now.dart';
+import 'package:uber_clone/screens/home/home_components/favorite_places/favorite_places.dart';
+import 'package:uber_clone/screens/home/home_components/ride/ride_now.dart';
+import 'package:uber_clone/screens/home/home_components/ride/ride_now_background.dart';
+import 'package:uber_clone/screens/home/home_components/ride/ride_now_icon.dart';
+import 'package:uber_clone/screens/home/home_components/where_to.dart';
 import 'package:uber_clone/screens/home/map/map.dart';
-
 class Home extends StatefulWidget {
   static const String route = '/home';
-
 
   @override
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
 
   final globalKey = GlobalKey<ScaffoldState>();
   Color statusBarColor = Colors.transparent;
+  bool firstRun = false;
+  bool expandMap = true;
 
   @override
   void initState() {
     super.initState();
-
   }
+
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if(!firstRun) {
+      expandMap = Provider.of<HomeProvider>(context).isOverlayShown;
+      setState(() {
+        firstRun = false;
+      });
+    }
+  }
+
+  Future<Uint8List> resizeMapSnapshot(Uint8List snapshot) async {
+    ui.Codec snapshotCodec = await ui.instantiateImageCodec(snapshot, targetWidth: 200, targetHeight: 50);
+    ui.FrameInfo snapshotFrameInfo = await snapshotCodec.getNextFrame();
+    Uint8List list = (await snapshotFrameInfo.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+    return list;
+  }
+
 
   @override
   Widget build(BuildContext context) {
+
+    //bool expandMap = Provider.of<HomeProvider>(context).isOverlayShown;
+
     return WillPopScope(
       onWillPop: () async {
         if(!Provider.of<HomeProvider>(context, listen: false).isOverlayShown) {
@@ -49,29 +75,48 @@ class _HomeState extends State<Home> {
             fit: StackFit.loose,
             children: [
 
-              HomeMap(),
 
 
 
-              Provider.of<HomeProvider>(context).isOverlayShown ?
-              //BOTTOM WHERE TO AND SAVED PLACE PART
-              PickDestination() : Container(),
-
-              Provider.of<HomeProvider>(context).isOverlayShown ?
-              //BLUE RIDE NOW PART
-              RideNow() : Container(),
-
-              //Drawer Menu Icon
-              DrawerMenu(),
 
               Positioned(
-                top: 50,
-                left: 80,
-                right: 0,
-                child: ConnectivityNotifier()
-              )
+                top: expandMap ? 470 : 0,
+                left: expandMap ? 20 : 0,
+                child: AnimatedSize(
+                  vsync: this,
+                  duration: const Duration(milliseconds: 500),
+                  child: SizedBox(
+                    width: expandMap ?  MediaQuery.of(context).size.width - 42 : MediaQuery.of(context).size.width,
+                    height: expandMap ?  MediaQuery.of(context).size.height - 480 : MediaQuery.of(context).size.height,
+                    child: HomeMap(),
+                  ),
+                ),
+              ),
+
+              // around you banner
+              expandMap ?
+              Positioned(
+                  top: expandMap ? 440 : 0 ,
+                  left: expandMap ? 20 : 0,
+                  child: Container(
+                      child: Text('Around you', style: TextStyle(fontSize: 20, fontFamily: 'OnePlusSans'))
+                  )
+              ) : Container(),
 
 
+              expandMap ?
+              RideNowBackground() : Container(),
+
+              expandMap ?
+              RideNow() : Container(),
+
+              expandMap ?
+              HomeFavoritePlaces() : Container(),
+
+              expandMap ?
+              RideNowIcon() : Container(),
+              expandMap ?
+              WhereTo() : Container(),
             ]
           ),
         ),

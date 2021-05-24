@@ -1,33 +1,11 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/screens/driver_contact/driver_contact.dart';
 
-class MockDriver {
-  final String firstName, lastName, id, phoneNumber;
-
-  MockDriver({required this.firstName, required this.lastName, required this.id, required this.phoneNumber});
-  MockDriver.fromSnapshot(DocumentSnapshot snapshot):
-      firstName = snapshot.get('firstName'),
-      lastName = snapshot.get('lastName'),
-      id = snapshot.id,
-      phoneNumber = snapshot.get('phoneNumber');
-
-  MockDriver.fromObject(MockDriver mockDriver):
-      firstName = mockDriver.firstName,
-      lastName = mockDriver.lastName,
-      id = mockDriver.id,
-      phoneNumber = mockDriver.phoneNumber;
-}
-
-
 class DriverSearchDelegate extends SearchDelegate {
 
-
   List<Driver> _drivers = [];
-
 
   DriverSearchDelegate() {
    _load();

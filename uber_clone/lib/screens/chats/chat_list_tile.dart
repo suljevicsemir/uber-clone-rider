@@ -21,6 +21,9 @@ class ChatListTile extends StatefulWidget {
 
 class _ChatListTileState extends State<ChatListTile> {
 
+  bool isFirstRun = true;
+
+
 
   @override
   void initState() {
@@ -29,11 +32,22 @@ class _ChatListTileState extends State<ChatListTile> {
 
 
   @override
-  Widget build(BuildContext context) {
-  File? picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![widget.chatInfo.firebaseUserId];
-  if(picture == null) {
-    picture = Provider.of<ProfilePicturesProvider>(context).driverProfilePictures![widget.chatInfo.firebaseUserId];
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if ( isFirstRun) {
+
+    }
+
   }
+
+  @override
+  Widget build(BuildContext context) {
+
+    File? picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![widget.chatInfo.firebaseUserId];
+    if(picture == null) {
+      picture = Provider.of<ProfilePicturesProvider>(context).driverProfilePictures![widget.chatInfo.firebaseUserId];
+    }
 
   return picture == null ? Container() :
   ElevatedButton(

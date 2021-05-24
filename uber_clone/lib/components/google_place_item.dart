@@ -48,7 +48,7 @@ class GooglePlaceItem extends StatelessWidget {
             )
         ),
         child: Row(
-          //crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
@@ -64,14 +64,17 @@ class GooglePlaceItem extends StatelessWidget {
               ),
             ),
             SizedBox(width: 30,),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              //mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(place.placeName, style: TextStyle(color: Colors.black),),
-                SizedBox(height: 5,),
-                place.state.isEmpty ? Text(place.country, style: TextStyle(color: Colors.grey[600]),) : Text(place.state + ', ' + place.country, style: TextStyle(color: Colors.grey[600]),)
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(place.placeName, style: TextStyle(color: Colors.black),),
+                  SizedBox(height: 5,),
+                  place.state.isEmpty ? Text(place.country, style: TextStyle(color: Colors.grey[600],), overflow: TextOverflow.ellipsis,)
+                  : Text(place.state + ', ' + place.country, style: TextStyle(color: Colors.grey[600]), overflow: TextOverflow.ellipsis,)
+                ],
+              ),
             ),
           ],
         ),

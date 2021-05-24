@@ -11,10 +11,9 @@ class SecureStorage {
       await _flutterSecureStorage.write(key: user_data_fields.providerUserId, value: userData.providerUserId);
       await _flutterSecureStorage.write(key: user_data_fields.firstName, value: userData.firstName);
       await _flutterSecureStorage.write(key: user_data_fields.lastName, value: userData.lastName);
-      await _flutterSecureStorage.write(key: user_data_fields.phoneNumber, value: userData.phoneNumber);
       await _flutterSecureStorage.write(key: user_data_fields.email, value: userData.email);
       await _flutterSecureStorage.write(key: user_data_fields.signedInType, value: userData.signedInType.parseSignedInType());
-      //await _flutterSecureStorage.write(key: user_data_fields.profilePicture, value: userData.profilePicture);
+      await _flutterSecureStorage.write(key: user_data_fields.profilePicture, value: userData.profilePictureUrl);
       await _flutterSecureStorage.write(key: user_data_fields.firebaseUserId, value: userData.firebaseUserId);
       return true;
     }
@@ -28,7 +27,11 @@ class SecureStorage {
     if(data.isEmpty)
       return null;
     print(data);
-    return UserData.fromMap(data);
+    return UserData.fromLocalStorage(data);
+  }
+
+  Future<void> updateProfileUrl(String url) async {
+    await _flutterSecureStorage.write(key: user_data_fields.firebaseUserId, value: url);
   }
 
 

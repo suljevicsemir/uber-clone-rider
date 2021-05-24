@@ -9,7 +9,6 @@ String
     providerUserId = "providerUserId",
     firstName      = "firstName",
     lastName       = "lastName",
-    phoneNumber    = "phoneNumber",
     email          = "email",
     signedInType   = "signedInType",
     profilePicture = "profilePicture",
