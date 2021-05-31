@@ -2,9 +2,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:uber_clone/components/google_place_item.dart';
 import 'package:uber_clone/constants/api_key.dart' as api;
 import 'package:uber_clone/models/google_place.dart';
+import 'package:uber_clone/providers/internet_connectivity_provider.dart';
+import 'package:uber_clone/providers/settings/account_settings.dart';
 import 'package:uuid/uuid.dart';
 
 class FavoritePlaceSearch extends StatefulWidget {
@@ -26,6 +29,8 @@ class _FavoritePlaceSearchState extends State<FavoritePlaceSearch> {
   List<GooglePlace> places = <GooglePlace>[];
   String inputValue = '';
   final String token = Uuid().v4();
+
+
   Future<void> getPlaces(String input) async{
 
     if(input.isEmpty) {
@@ -138,7 +143,16 @@ class _FavoritePlaceSearchState extends State<FavoritePlaceSearch> {
                 Expanded(
                   child: ListView.builder(
                     itemCount: places.length,
-                    itemBuilder: (context, int index) => GooglePlaceItem(place: places.elementAt(index), type: widget.type,)
+                    itemBuilder: (context, int index) =>
+                        InkWell(
+                          onTap: () async{
+                            if( Provider.of<ConnectivityProvider>(context, listen: false).isConnected()) {
+                              await Provider.of<FavoritePlacesProvider>(context, listen: false).setPlace(places.elementAt(index), widget.type);
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: GooglePlaceItem(place: places.elementAt(index))
+                        )
                   )
                 )
               ],

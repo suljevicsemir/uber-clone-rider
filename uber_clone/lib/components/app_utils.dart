@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
    Future<void> callNumber(BuildContext context, {required String phoneNumber}) async{
@@ -96,3 +97,50 @@ import 'package:url_launcher/url_launcher.dart';
     return result + minute.toString();
 
   }
+
+  String getDay(DateTime time) {
+     return DateFormat('EEEE').format(time).substring(0, 3);
+  }
+
+  String getMonth(DateTime dateTime) {
+     final df = DateFormat('dd-MMM-yyy');
+     List<String> array = df.format(dateTime).split('-');
+     return array[1];
+  }
+
+
+  String getDate (DateTime dateTime) {
+     return getDay(dateTime) + ", " + getMonth(dateTime) + " "  + dateTime.day.toString();
+  }
+
+
+  String _formatTime(DateTime time) {
+    String hour = "", minute = "";
+    hour = time.hour < 10 ? ('0' + time.hour.toString()) : time.hour.toString();
+    minute = time.minute < 10 ? ('0' + time.minute.toString()) : time.minute.toString();
+    return hour + ":" + minute;
+  }
+
+  String getTime(DateTime dateTime) {
+    DateTime startTime = dateTime.add(const Duration(minutes: 5));
+    while((startTime.minute) % 5 != 0) {
+      startTime = startTime.add(const Duration(minutes: 1));
+    }
+    DateTime endTime = startTime.add(const Duration(minutes: 10));
+    return _formatTime(startTime) + " - " +  _formatTime(endTime);
+  }
+
+  Map<String, dynamic> constructRideRequestMap({
+    required DateTime dateTime,
+    required GeoPoint location,
+    required GeoPoint destination,
+    required String token
+  }) {
+     return {
+       'dateTime'    : dateTime,
+       'location'    : location,
+       'destination' : destination,
+       'token'       : token
+     };
+  }
+

@@ -33,9 +33,9 @@ class WhereTo extends StatelessWidget {
             Spacer(),
             GestureDetector(
               onTap: () => showModalBottomSheet(
-                context: context ,
-                isScrollControlled: true,
-                builder: (context) => HomeBottomSheet()
+                  context: context ,
+                  isScrollControlled: true,
+                  builder: (context) => HomeBottomSheet()
               ),
               child: Container(
                 constraints: BoxConstraints(

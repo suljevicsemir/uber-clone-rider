@@ -16,7 +16,7 @@ class SetPickup extends StatelessWidget {
             )
           )
         ),
-        onPressed: () {},
+        onPressed: () => Navigator.pushNamed(context, '/pickup'),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -89,15 +90,30 @@ class _HomeMapState extends State<HomeMap> {
   Future<void> getCurrentLocation() async {
     await tracker.changeSettings(accuracy: LocationAccuracy.navigation);
     LocationData data = await tracker.getLocation();
-    setState(() {
-      initialCameraPosition = CameraPosition(
-          target: LatLng(data.latitude!, data.longitude!),
-          zoom: 16
-      );
-      lastLocation = data;
-    });
+
+    _setCurrentData(data);
+
+
     //updateMarkerAndCircle(data);
   }
+
+  Future<void> _setCurrentData(LocationData data) async{
+    if( this.mounted) {
+      setState(() {
+        initialCameraPosition = CameraPosition(
+            target: LatLng(data.latitude!, data.longitude!),
+            zoom: 16
+        );
+        lastLocation = data;
+      });
+    }
+    else Future.delayed(const Duration(milliseconds: 30), () => {
+      _setCurrentData(data)
+    });
+  }
+
+  late StreamSubscription locations;
+
 
   @override
   void didChangeDependencies() async{
@@ -125,45 +141,48 @@ class _HomeMapState extends State<HomeMap> {
           redCar = redCarList;
         });
 
-        FirebaseFirestore.instance.collection('driver_locations').where('status', isEqualTo: true).snapshots().listen((QuerySnapshot snapshot) {
-          print('osluskivanje');
-          List<QueryDocumentSnapshot> list = snapshot.docs;
-          Set<Marker> tempMarkers = Set<Marker>();
+        if( FirebaseAuth.instance.currentUser != null) {
+          locations = FirebaseFirestore.instance.collection('driver_locations').where('status', isEqualTo: true).snapshots().listen((QuerySnapshot snapshot) {
+            print('osluskivanje');
+            List<QueryDocumentSnapshot> list = snapshot.docs;
+            Set<Marker> tempMarkers = Set<Marker>();
 
-          for(int i = 0; i < list.length; i++) {
+            for(int i = 0; i < list.length; i++) {
 
-            DocumentSnapshot snapshot = list.elementAt(i);
-            print(snapshot.get('carColor'));
-            GeoPoint geoPoint = snapshot.get('location');
+              DocumentSnapshot snapshot = list.elementAt(i);
+              print(snapshot.get('carColor'));
+              GeoPoint geoPoint = snapshot.get('location');
 
-            if(!snapshot.get('status')) {
-              continue;
+              if(!snapshot.get('status')) {
+                continue;
+              }
+
+              bool isRed = false;
+              if(snapshot.get('carColor') == 'red')
+                isRed = true;
+
+              tempMarkers.add(Marker(
+                  markerId: MarkerId(snapshot.id),
+                  position: LatLng(geoPoint.latitude, geoPoint.longitude),
+                  draggable: false,
+                  zIndex: 2,
+                  rotation: snapshot.get('heading'),
+                  flat: true,
+                  anchor: Offset(0.5, 0.5),
+                  icon: isRed ? BitmapDescriptor.fromBytes(redCar!) : BitmapDescriptor.fromBytes(whiteCar!),
+                  onTap: () {
+                    print('klikno si me');
+                  }
+
+              ));
             }
-
-            bool isRed = false;
-            if(snapshot.get('carColor') == 'red')
-              isRed = true;
-
-            tempMarkers.add(Marker(
-                markerId: MarkerId(snapshot.id),
-                position: LatLng(geoPoint.latitude, geoPoint.longitude),
-                draggable: false,
-                zIndex: 2,
-                rotation: snapshot.get('heading'),
-                flat: true,
-                anchor: Offset(0.5, 0.5),
-                icon: isRed ? BitmapDescriptor.fromBytes(redCar!) : BitmapDescriptor.fromBytes(whiteCar!),
-                onTap: () {
-                  print('klikno si me');
-                }
-
-            ));
-          }
-          setState(() {
-            //markers.clear();
-            markers = tempMarkers;
+            setState(() {
+              //markers.clear();
+              markers = tempMarkers;
+            });
           });
-        });
+        }
+
       });
       setState(() {
         isFirstRun = false;
@@ -218,14 +237,12 @@ class _HomeMapState extends State<HomeMap> {
         );
   }
 
-  Future<void> disposeController() async {
-    await mapController.future.then((value) => value.dispose());
-  }
+
 
   @override
   void dispose() {
     super.dispose();
-    disposeController();
+    locations.cancel();
     //x.cancel();
   }
 }

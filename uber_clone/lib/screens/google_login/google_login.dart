@@ -116,6 +116,7 @@ class _GoogleLoginState extends State<GoogleLogin> {
                             Provider.of<UserDataProvider>(context, listen: false).userData = Provider.of<GoogleLoginProvider>(context, listen: false).userData;
                             await Provider.of<ProfilePicturesProvider>(context, listen: false).loadCachedData();
                             await Provider.of<FavoritePlacesProvider>(context, listen: false).loadFavoritePlaces();
+
                             await Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => AuthenticationWrapper()), (_) => false);
                           },
                           child: Center(child: Text('Continue', style: TextStyle(color: Colors.white),)),

@@ -1,43 +1,24 @@
-
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:uber_clone/screens/home/home_components/home_bottom_sheet/bottom_sheet_component.dart';
-import 'package:uber_clone/screens/home/home_components/home_bottom_sheet/set_pickup.dart';
+import 'package:uber_clone/components/app_utils.dart' as app;
 import 'package:uber_clone/screens/home/home_components/home_bottom_sheet/sheet_separator.dart';
+import 'package:uber_clone/screens/pickup/pickup.dart';
+class HomeBottomSheet extends StatefulWidget {
 
-class HomeBottomSheet extends StatelessWidget {
+  @override
+  _HomeBottomSheetState createState() => _HomeBottomSheetState();
+}
 
-  final DateTime dateTime = DateTime.now();
+class _HomeBottomSheetState extends State<HomeBottomSheet> {
+  DateTime dateTime = DateTime.now();
+  late String formattedDate, formattedTime;
 
-  String getDay() {
-    return DateFormat('EEEE').format(dateTime).substring(0, 3);
-  }
 
-  String getMonth() {
-    final df = DateFormat('dd-MMM-yyy');
-    List<String> array =  df.format(dateTime).split('-');
-    return array[1];
-  }
 
-  String getDate() {
-    return getDay() + ", " + getMonth() + " " + dateTime.day.toString();
-  }
-
-  String formatTime(DateTime time) {
-    String hour = "", minute = "";
-    hour = time.hour < 10 ? ('0' + time.hour.toString()) : time.hour.toString();
-    minute = time.minute < 10 ? ('0' + time.minute.toString()) : time.minute.toString();
-    return hour + ":" + minute;
-  }
-
-  String getTime() {
-    DateTime startTime = dateTime.add(const Duration(minutes: 5));
-    while((startTime.minute) % 5 != 0) {
-      startTime = startTime.add(const Duration(minutes: 1));
-    }
-    DateTime endTime = startTime.add(const Duration(minutes: 10));
-    return formatTime(startTime) + " - " +  formatTime(endTime);
+  @override
+  void initState() {
+    super.initState();
+    formattedDate = app.getDate(dateTime);
+    formattedTime = app.getTime(dateTime);
   }
 
   @override
@@ -47,16 +28,139 @@ class HomeBottomSheet extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SheetComponent(content: 'Schedule a ride', isFirst: true,),
-          SheetSeparator(hasMargin: false),
-          SheetComponent(content: getDate(), isFirst: false,),
-          SheetSeparator(hasMargin: true),
-          SheetComponent(content: getTime(), isFirst: false,),
-          SheetSeparator(hasMargin: false),
-          Spacer(),
-          SetPickup(),
-          Spacer()
+          Container(
+            height: 70,
+            child: InkWell(
+              splashColor: Colors.grey,
+              child: Center(
+                child: Text('Schedule a ride', style: TextStyle(fontSize: 30),),
+              ),
+            ),
 
+          ),
+          SheetSeparator(hasMargin: false),
+          Container(
+            height: 70,
+            child: InkWell(
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  firstDate: dateTime,
+                  initialDate: dateTime,
+                  lastDate: dateTime.add(const Duration(days: 100))
+                );
+
+                if( pickedDate == null)
+                  return;
+
+
+                setState(() {
+                  formattedDate = app.getDate(pickedDate);
+
+                  dateTime = DateTime(
+                    dateTime.year,
+                    pickedDate.month,
+                    pickedDate.day,
+                    dateTime.hour,
+                    dateTime.minute
+                  );
+                });
+
+
+
+              },
+              splashColor: Colors.grey,
+              child: Center(
+                child: Text(formattedDate, style: TextStyle(fontSize: 24),),
+              ),
+            ),
+          ),
+          SheetSeparator(hasMargin: true ),
+          Container(
+            height: 70,
+            child: InkWell(
+              onTap: () async{
+                TimeOfDay? selectedTime = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                    helpText: 'Pick a start time',
+                );
+
+
+                if( selectedTime == null ) {
+                  print('Selected time is null, exiting the function.');
+                  return;
+                }
+
+                DateTime checkPicked = DateTime(
+                  dateTime.year,
+                  dateTime.month,
+                  dateTime.day,
+                  selectedTime.hour,
+                  selectedTime.minute
+                );
+
+                if( checkPicked.compareTo(dateTime) < 0) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.red[700],
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text('Incorrect time, please try and pick again', style: TextStyle(fontSize: 100),),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  );
+                }
+
+                dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, selectedTime.hour, selectedTime.minute);
+                formattedTime = app.getTime(dateTime);
+
+                setState(() {
+
+                });
+
+              },
+              splashColor: Colors.grey,
+              child: Center(
+                child: Text(formattedTime, style: TextStyle(fontSize: 24),),
+              ),
+            ),
+          ),
+          SheetSeparator(hasMargin: false ),
+          Spacer(),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(0)
+                      )
+                  )
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                Navigator.pushNamed(context, Pickup.route, arguments: dateTime);
+
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Set pickup time', style: TextStyle(fontSize: 22),)
+                ],
+              ),
+            ),
+          ),
+          Spacer(),
         ],
       ),
     );

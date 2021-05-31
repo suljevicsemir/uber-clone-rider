@@ -15,6 +15,7 @@ import 'package:uber_clone/screens/favorites_search/where_to_search.dart';
 import 'package:uber_clone/screens/get_started/choose_account.dart';
 import 'package:uber_clone/screens/get_started/choose_login_type.dart';
 import 'package:uber_clone/screens/google_login/google_login.dart';
+import 'package:uber_clone/screens/pickup/pickup.dart';
 
 
 class UberRouter {
@@ -114,6 +115,11 @@ class UberRouter {
               create: (context) => GoogleLoginProvider( account: settings.arguments as GoogleSignInAccount),
               child: GoogleLogin()
           )
+        );
+
+      case Pickup.route:
+        return MaterialPageRoute(
+          builder: (_) => Pickup(dateTime: settings.arguments as DateTime,)
         );
 
       case FavoritePlaceSearch.route:
