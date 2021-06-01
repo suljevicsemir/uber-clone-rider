@@ -46,10 +46,6 @@ class RideRequest{
     print(app.getMonth(dateTime));
     return await FirebaseFirestore.instance.runTransaction((transaction) async {
       FirebaseFirestore.instance.collection('ride_requests')
-          .doc(dateTime.year.toString())
-          .collection( app.getMonth(dateTime))
-          .doc(  dateTime.day.toString())
-          .collection('requests')
           .add(_toMap());
     });
   }
