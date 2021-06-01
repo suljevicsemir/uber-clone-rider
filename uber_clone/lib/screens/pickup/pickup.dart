@@ -119,6 +119,16 @@ class _PickupState extends State<Pickup> {
   }
 
 
+  static Future<DocumentReference?> sendRequest(RideRequest request) async {
+
+   /* String? token = await FirebaseMessaging.instance.getToken();
+    geo.Location loc = (await geo.locationFromAddress(placeToSend!.placeName)).first;
+
+    */
+    DocumentReference? requestReference = await request.sendRequest();
+    return requestReference;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -274,7 +284,7 @@ class _PickupState extends State<Pickup> {
                             padding: EdgeInsets.symmetric(vertical: 20)
                         ),
                         onPressed: () async {
-
+                          await Future.delayed(const Duration(milliseconds: 500));
                           String? token = await FirebaseMessaging.instance.getToken();
                           geo.Location loc = (await geo.locationFromAddress(placeToSend!.placeName)).first;
 
@@ -286,14 +296,29 @@ class _PickupState extends State<Pickup> {
                               token: token!);
 
                           RideRequest rideRequest = RideRequest.fromMap(map);
-                          Future.delayed(const Duration(milliseconds: 2000), () => rideRequest.sendRequest());
-                          indexToSend = -1;
 
-                          //Isolate.spawn((message) { }, )
+                          rideRequest.sendRequest();
 
-                          setState(() {
 
+                          showDialog(context: context, builder: (context)  {
+                            return AlertDialog(
+                              title: const Text('Ride request'),
+                              content: const Text('Your ride request is submitted, we will notify you via notification.'),
+                              actions: [
+                                TextButton(onPressed: () => Navigator.pop(context), child: const Text('OK'))
+                              ],
+                            );
                           });
+
+
+
+
+
+
+
+
+
+
                         },
                         child: Text('Send request', style: TextStyle(fontSize: 24, letterSpacing: 1.0),),
                       ),
