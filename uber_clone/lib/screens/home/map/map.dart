@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:uber_clone/models/custom_marker_id.dart';
 import 'package:uber_clone/providers/home_provider.dart';
 import 'package:uber_clone/providers/map_snapshot_provider.dart';
+import 'package:uber_clone/screens/home/home_components/driver_bottom_sheet/driver_bottom_sheet.dart';
 
 class HomeMap extends StatefulWidget {
   @override
@@ -170,9 +171,11 @@ class _HomeMapState extends State<HomeMap> {
                   flat: true,
                   anchor: Offset(0.5, 0.5),
                   icon: isRed ? BitmapDescriptor.fromBytes(redCar!) : BitmapDescriptor.fromBytes(whiteCar!),
-                  onTap: () {
-                    print('klikno si me');
-                  }
+                  //on tap shows bottom scrollable sheet with some driver info
+                  onTap: () => showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) => DriverBottomSheet(driverId: snapshot.id,))
 
               ));
             }
