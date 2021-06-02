@@ -280,7 +280,7 @@ class _PickupState extends State<Pickup> {
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: const Color(0xff286ef0),
+                            primary: const Color( 0xff286ef0),
                             padding: EdgeInsets.symmetric(vertical: 20)
                         ),
                         onPressed: () async {
@@ -298,8 +298,6 @@ class _PickupState extends State<Pickup> {
                           RideRequest rideRequest = RideRequest.fromMap(map);
 
                           rideRequest.sendRequest();
-
-
                           showDialog(context: context, builder: (context)  {
                             return AlertDialog(
                               title: const Text('Ride request'),
@@ -309,16 +307,6 @@ class _PickupState extends State<Pickup> {
                               ],
                             );
                           });
-
-
-
-
-
-
-
-
-
-
                         },
                         child: Text('Send request', style: TextStyle(fontSize: 24, letterSpacing: 1.0),),
                       ),
