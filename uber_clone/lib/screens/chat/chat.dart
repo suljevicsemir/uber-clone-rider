@@ -47,8 +47,20 @@ class _ChatState extends State<Chat> {
       driver = widget.driver;
     });
 
+    chat = FirebaseFirestore.instance.collection('chats')
+        .doc('chat146wwBeaSGbod1Ynvn0eMUWmjhI2PqJfYn0UHydWJSUnViveamqf6JR2')
+        .collection('messages').orderBy('timestamp')
+        .limitToLast(20)
+        .snapshots();
+
+
 
   }
+
+  late String chatId;
+
+
+  late Stream<QuerySnapshot> chat;
 
   @override
   void didChangeDependencies() {
@@ -58,17 +70,23 @@ class _ChatState extends State<Chat> {
     if( !isFirstRun) {
       print('first load of the screen');
 
+
+
+
       SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
 
         setState(() {
           picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![widget.driver.id];
           isFirstRun = true;
+          this.chatId = Provider.of<ChatProvider>(context, listen: false).chatId;
+          //chat = FirebaseFirestore.instance.collection('chats').doc(this.chatId).collection('messages').orderBy('timestamp').limitToLast(20).snapshots();
         });
       });
 
       String chatId = Provider.of<ChatProvider>(context, listen: false).chatId;
 
 
+/*
      if(DateTime.now().hour >= 0 && DateTime.now().hour <= 23) {
         SchedulerBinding.instance!.addPostFrameCallback((timeStamp) async {
           print('getting driver document...');
@@ -92,7 +110,7 @@ class _ChatState extends State<Chat> {
         });
       }
 
-
+*/
 
     }
   }
@@ -132,7 +150,7 @@ class _ChatState extends State<Chat> {
             child: Container(
               margin: EdgeInsets.only(top: 10),
               child: StreamBuilder(
-                stream: FirebaseFirestore.instance.collection('chats').doc(Provider.of<ChatProvider>(context, listen: false).chatId).collection('messages').orderBy('timestamp').limitToLast(20).snapshots(),
+                stream: chat,
                 builder: (context, AsyncSnapshot snapshot)  {
 
                   if(!snapshot.hasData) {
@@ -164,9 +182,12 @@ class _ChatState extends State<Chat> {
                         itemBuilder: (context, index) {
 
                           DocumentSnapshot x = snapshot.data.docs[index];
-                          if(x.metadata.isFromCache)
-                            print('from cached');
-                          else print('from server');
+                          if(x.metadata.isFromCache) {
+                            print('from cache: ' + x.get('message'));
+                          }
+                          else {
+                            print('from server: ' + x.get('message'));
+                          }
 
                           return snapshot.data.docs[index].get('firebaseUserId') !=
                               FirebaseService.id ?
@@ -201,6 +222,7 @@ class _ChatState extends State<Chat> {
   void dispose() {
     super.dispose();
     scrollController.dispose();
+
     controller.dispose();
   }
 }

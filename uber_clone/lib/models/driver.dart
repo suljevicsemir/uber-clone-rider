@@ -6,11 +6,14 @@ import 'package:uber_clone/models/chat_info.dart';
 
 class Driver{
 
-  Map<String, String>? rating = {};
+  Map<String, int>? rating = {};
   int? numberOfTrips;
   bool? status;
   Timestamp? dateOfStart;
   List<String>? languages = [];
+  String? profilePictureUrl;
+  String? car;
+  String? registrationPlates;
 
   late String id,
       firstName,
@@ -30,14 +33,17 @@ class Driver{
     required this.lastName,
     required this.email,
     required this.phoneNumber,
-    required this.from
+    required this.from,
+    required this.profilePictureUrl,
+    required this.car,
+    required this.registrationPlates
   });
 
   factory Driver.fromSnapshot(DocumentSnapshot snapshot) {
-    Map<String, String> rating = {};
+    Map<String, int> rating = {};
     List<String> languages = [];
     snapshot.get(fields.rating).forEach((key, value) {
-      rating[key] = value.toString();
+      rating[key] = value;
     });
     snapshot.get(fields.language).forEach((element) {
       languages.add(element);
@@ -47,14 +53,18 @@ class Driver{
       id: snapshot.id,
       rating: rating,
       numberOfTrips: snapshot.get(fields.numberOfTrips),
-      status: snapshot.get(fields.status),
+      status: true,
       dateOfStart: snapshot.get(fields.dateOfStart),
       languages: languages,
       firstName: snapshot.get(fields.firstName),
       lastName: snapshot.get(fields.lastName),
       email: snapshot.get(fields.email),
       phoneNumber: snapshot.get(fields.phoneNumber),
-      from: snapshot.get(fields.from)
+      from: snapshot.get(fields.from),
+      profilePictureUrl: snapshot.get("profilePictureUrl"),
+      car: snapshot.get("car"),
+      registrationPlates: snapshot.get("registrationPlates")
+
     );
   }
 
@@ -65,6 +75,35 @@ class Driver{
     phoneNumber = chatInfo.phoneNumber;
 
   }
+
+
+  Map<String, String> timeInService() {
+    final Duration duration = DateTime.now().difference(dateOfStart!.toDate());
+    Map<String, String> map = {};
+
+    if( duration.inSeconds < 86400 * 30) {
+      map["timeSubtitle"] = "Days";
+      map["time"] = (duration.inSeconds ~/ 86400).toString();
+    }
+    else if( duration.inSeconds < 86400 * 30 * 12) {
+      map["timeSubtitle"] = "Months";
+      map["time"] =  (duration.inSeconds ~/ (86400 * 30)).toString();
+    }
+    else {
+
+      int years = (duration.inSeconds / (86400 * 365)).truncate();
+      double months = (duration.inSeconds - (years * 365 * 86400)) / (30 * 86400);
+      map["timeSubtitle"] = "Years";
+      map["time"] =  (years + months / 12).toStringAsFixed(1);
+    }
+
+    return map;
+
+
+  }
+
+
+
 
 
 

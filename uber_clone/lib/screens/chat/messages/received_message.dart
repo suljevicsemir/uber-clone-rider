@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/app_utils.dart' as app;
@@ -34,6 +36,9 @@ class ReceivedMessage extends StatelessWidget {
     }
     bool shouldHavePicture = isNextSent || isLast;
 
+    File? picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![driver.id];
+
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -44,7 +49,7 @@ class ReceivedMessage extends StatelessWidget {
            child:  CircleAvatar(
              radius: 13,
              backgroundColor: Colors.transparent,
-             backgroundImage:  FileImage(Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![driver.id]!),
+             backgroundImage:  FileImage(picture!),
            ),
          ),
         ) :
