@@ -77,6 +77,10 @@ class Driver{
   }
 
 
+  ///method that calculates time driver's time in service
+  ///format displays a message that can be either "days", "months" or "years"
+  ///that adds appropriate number of days, months or years
+
   Map<String, String> timeInService() {
     final Duration duration = DateTime.now().difference(dateOfStart!.toDate());
     Map<String, String> map = {};
