@@ -106,6 +106,21 @@ class Driver{
 
   }
 
+  String tripsToString() {
+
+    if( numberOfTrips == null)
+      return "0";
+
+    String convertedTrips = "";
+    int number = numberOfTrips as int;
+    if( number > 1000) {
+      convertedTrips = convertedTrips + (number ~/ 1000).toString() + ",";
+    }
+
+    return convertedTrips + (number % 1000).toString();
+
+  }
+
 
 
 

@@ -23,6 +23,8 @@ class DriverProfile extends StatefulWidget {
 class _DriverProfileState extends State<DriverProfile> {
 
   File? picture;
+  bool isFirstRun = true;
+  Driver? driver;
 
 
 
@@ -30,18 +32,26 @@ class _DriverProfileState extends State<DriverProfile> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    String driverId = Provider.of<DriverProfileProvider>(context, listen: false).id;
 
-    SchedulerBinding.instance!.addPostFrameCallback((_) async{
+    if( isFirstRun) {
+      String driverId = Provider.of<DriverProfileProvider>(context, listen: false).id;
+
+      SchedulerBinding.instance!.addPostFrameCallback((_) async {
         File x = (await Provider.of<ProfilePicturesProvider>(context, listen: false).getDriverPicture(driverId))!;
-
+        picture = x;
+        isFirstRun = false;
         setState(() {
-          picture = x;
+
         });
-    });
+      });
+    }
 
 
   }
+
+
+
+  late String time, timeSubtitle, trips;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +62,10 @@ class _DriverProfileState extends State<DriverProfile> {
       );
     }
 
+    Map<String, String> map = driver.timeInService();
+    time = map["time"]!;
+    timeSubtitle = map["timeSubtitle"]!;
+    trips = driver.tripsToString();
     return Scaffold(
       body: AnnotatedRegion(
         value: SystemUiOverlayStyle(
@@ -71,7 +85,12 @@ class _DriverProfileState extends State<DriverProfile> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TripsAndStart(numberOfTrips: driver.numberOfTrips!, dateOfStart: driver.dateOfStart!,),
+                    TripsAndStart(
+                      numberOfTrips: driver.numberOfTrips!,
+                      timeSubtitle: timeSubtitle,
+                      trips: trips,
+                      time: time,
+                    ),
                     Container(
                       margin: EdgeInsets.only(top: 15),
                       child: Row(

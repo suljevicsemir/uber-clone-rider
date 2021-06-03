@@ -22,7 +22,7 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
 
   Driver? driver;
   late double averageScore;
-
+  late String time, timeSubtitle, trips;
   @override
   void initState() {
     super.initState();
@@ -32,8 +32,15 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
       FirebaseService.firestoreInstance.collection('drivers').doc(widget.driverId).get().then((DocumentSnapshot driverSnapshot) {
         //Map<String, String> map = driverSnapshot.get("rating");
 
+        driver = Driver.fromSnapshot(driverSnapshot);
+
+        Map<String, String> map = driver!.timeInService();
+        time = map["time"]!;
+        timeSubtitle = map["timeSubtitle"]!;
+        trips = driver!.tripsToString();
         setState(() {
-          driver = Driver.fromSnapshot(driverSnapshot);
+
+
         });
       });
     });
@@ -84,7 +91,12 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
             ),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: TripsAndStart(numberOfTrips: driver!.numberOfTrips!, dateOfStart: driver!.dateOfStart!)
+              child: TripsAndStart(
+                  numberOfTrips: driver!.numberOfTrips!,
+                  time: time,
+                  timeSubtitle: timeSubtitle,
+                  trips: trips,
+                  )
             ),
             Spacer(),
             Container(

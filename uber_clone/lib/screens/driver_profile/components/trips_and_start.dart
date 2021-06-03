@@ -1,12 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class TripsAndStart extends StatelessWidget {
 
   final int numberOfTrips;
-  final Timestamp dateOfStart;
+  final String time, timeSubtitle, trips;
 
-  TripsAndStart({required this.numberOfTrips, required this.dateOfStart});
+  TripsAndStart({
+    required this.numberOfTrips,
+    required this.timeSubtitle,
+    required this.time,
+    required this.trips
+  });
 
   final TextStyle subtitle = TextStyle(
       fontSize: 18,
@@ -19,48 +23,16 @@ class TripsAndStart extends StatelessWidget {
       fontWeight: FontWeight.w400
   );
 
-  late String time, convertedTrips, timeSubtitle;
 
-  //converts the driver's date of start
-  //from timestamp into days, months or years
-  void convertTime() {
-    final Duration duration = DateTime.now().difference(dateOfStart.toDate());
-    if( duration.inSeconds < 86400 * 30) {
-      int value = 0;
-      timeSubtitle = "Days";
-      value = duration.inSeconds ~/ 86400;
-      time = value.toString();
-    }
-    else if( duration.inSeconds < 86400 * 30 * 12) {
-      int value = 0;
-      timeSubtitle = "Months";
-      value = duration.inSeconds ~/ (86400 * 30);
-      time = value.toString();
-    }
-    else {
-      double value = 0;
-      int years = (duration.inSeconds / (86400 * 365)).truncate();
-      double months = (duration.inSeconds - (years * 365 * 86400)) / (30 * 86400);
-      value = years + months / 12;
-      timeSubtitle = "Years";
-      time = value.toStringAsFixed(1);
 
-    }
-  }
 
-  void convertTrips() {
-    convertedTrips = "";
-    if(numberOfTrips > 1000)
-      convertedTrips = convertedTrips + (numberOfTrips ~/ 1000).toString() + ",";
 
-    convertedTrips = convertedTrips + (numberOfTrips % 1000).toString();
-  }
+
 
 
   @override
   Widget build(BuildContext context) {
-    convertTrips();
-    convertTime();
+
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
@@ -88,7 +60,7 @@ class TripsAndStart extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(convertedTrips, style: content),
+                Text(trips, style: content),
                 Text('Trips', style: subtitle)
               ],
             ),
