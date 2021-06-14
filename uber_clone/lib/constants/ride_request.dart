@@ -9,4 +9,5 @@ final String
     destination   = 'destination',
     endInterval   = 'endInterval',
     startInterval = 'startInterval',
+    isActive      = 'isActive',
     token         = 'token';

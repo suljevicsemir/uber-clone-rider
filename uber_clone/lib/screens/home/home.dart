@@ -113,8 +113,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
               expandMap ?
               HomeFavoritePlaces() : Container(),
 
+
+              // car icon overlay
               expandMap ?
               RideNowIcon() : Container(),
+
               expandMap ?
               WhereTo() : Container(),
             ]

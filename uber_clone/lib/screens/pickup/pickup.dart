@@ -291,7 +291,7 @@ class _PickupState extends State<Pickup> {
 
                           Map<String, dynamic> map = app.constructRideRequestMap(
                               dateTime: widget.dateTime,
-                              location: GeoPoint(locationData!.latitude!, locationData!.latitude!),
+                              location: GeoPoint(locationData!.latitude!, locationData!.longitude!),
                               destination: GeoPoint(loc.latitude, loc.longitude),
                               token: token!);
 

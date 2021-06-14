@@ -140,7 +140,8 @@ import 'package:url_launcher/url_launcher.dart';
        'dateTime'    : dateTime,
        'location'    : location,
        'destination' : destination,
-       'token'       : token
+       'token'       : token,
+       'isActive'    : true
      };
   }
 

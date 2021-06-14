@@ -60,7 +60,8 @@ class RideRequest{
       fields.destination   : this.destination,
       fields.endInterval   : this.endInterval,
       fields.startInterval : this.startInterval,
-      fields.token         : this.token
+      fields.token         : this.token,
+      fields.isActive      : true
     };
   }
 

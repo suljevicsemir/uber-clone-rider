@@ -109,7 +109,6 @@ class _DriverProfileState extends State<DriverProfile> {
                         ),
                         GestureDetector(
                             onTap: () {
-
                             },
                             child: Text('View all', style: TextStyle(color: Colors.blue[900], fontSize: 24),)
                         )

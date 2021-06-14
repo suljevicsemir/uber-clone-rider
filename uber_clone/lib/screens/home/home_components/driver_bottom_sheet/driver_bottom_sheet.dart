@@ -98,7 +98,8 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
                   trips: trips,
                   )
             ),
-            Spacer(),
+            //Spacer(),
+            SizedBox(height: 20,),
             Container(
               margin: EdgeInsets.only(left: 20),
               child: Row(
@@ -108,7 +109,7 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
                 ],
               ),
             ),
-            Spacer(),
+            //Spacer(),
             Container(
               margin: EdgeInsets.only(left: 20),
               child: Row(
@@ -118,7 +119,20 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
                 ],
               ),
             ),
-            Spacer()
+            Spacer(),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              child: ElevatedButton(
+                onPressed: () {},
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Call for ride', style: TextStyle(fontSize: 22),)
+                  ],
+                )
+              ),
+            ),
+           // Spacer()
 
           ],
         ),
