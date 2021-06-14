@@ -15,17 +15,17 @@ import 'package:uber_clone/screens/home/home_components/driver_bottom_sheet/driv
 
 class LocationProvider extends ChangeNotifier{
 
-
+  final BuildContext context;
   Location _location = Location();
-  LocationData? _lastLocation;
+  LatLng? _firstLocation;
   Completer<GoogleMapController> mapController = Completer();
   Uint8List? whiteCar, redCar;
   String? mapStyle;
   Set<Marker> markers = Set<Marker>();
   late StreamSubscription<GoogleMapController> locationTracker;
   late StreamSubscription<QuerySnapshot> driversListener;
-  final BuildContext context;
-  bool _didLoadDrivers = false;
+
+  bool _didLoadDrivers = false, _mapReady = false;
   int _availableDrivers = 0;
 
   LocationProvider(this.context) {
@@ -79,8 +79,11 @@ class LocationProvider extends ChangeNotifier{
   // needs further evaluating, it can become useless
   void _startLocationListener() {
     _location.onLocationChanged.listen((LocationData locationData) {
-        _lastLocation = locationData;
+      if( _firstLocation == null) {
+        _firstLocation = LatLng(locationData.latitude!, locationData.longitude!);
+        _mapReady = true;
         notifyListeners();
+      }
     });
   }
 
@@ -98,7 +101,7 @@ class LocationProvider extends ChangeNotifier{
     Uint8List whiteCarList = (await whiteCarFrameInfo.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
     Uint8List redCarList = (await redCarFrameInfo.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
 
-    whiteCar = whiteCar;
+    whiteCar = whiteCarList;
     redCar = redCarList;
   }
 
@@ -109,16 +112,15 @@ class LocationProvider extends ChangeNotifier{
   @override
   void dispose() {
     super.dispose();
-    print('disposing location tracker');
-    locationTracker.cancel().then((value) {
-      print('location tracker disposed');
-    });
+    print('Disposing LocationProvider');
+    locationTracker.cancel().then((value) => print('location tracker disposed'));
     driversListener.cancel().then((value) => print('drivers listener disposed'));
   }
 
   bool get didLoadDrivers => _didLoadDrivers;
+  bool get mapReady => _mapReady;
 
   int get availableDrivers => _availableDrivers;
 
-  LocationData? get lastLocation => _lastLocation;
+  LatLng? get lastLocation => _firstLocation;
 }
