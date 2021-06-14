@@ -73,7 +73,7 @@ class LocationProvider extends ChangeNotifier{
     _didLoadDrivers = true;
   }
 
-  //TODO add variable to pause/continue tracking for maximum control
+
   void _startLocationListener() {
     _location.onLocationChanged.listen((LocationData locationData) {
       if( _firstLocation == null) {
@@ -106,6 +106,18 @@ class LocationProvider extends ChangeNotifier{
     mapStyle = await DefaultAssetBundle.of(context).loadString('assets/map/style.json');
   }
 
+  void pauseDriverStream() {
+    driversListener.pause();
+  }
+  void resumeDriverStream() {
+    if(driversListener.isPaused) {
+      print('resuming driver listener');
+      driversListener.resume();
+      notifyListeners();
+    }
+  }
+
+
   @override
   void dispose() {
     super.dispose();
@@ -120,4 +132,5 @@ class LocationProvider extends ChangeNotifier{
   int get availableDrivers => _availableDrivers;
 
   LatLng? get lastLocation => _firstLocation;
+
 }

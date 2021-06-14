@@ -10,11 +10,13 @@ import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:location/location.dart' as location;
+import 'package:provider/provider.dart';
 import 'package:uber_clone/components/app_utils.dart' as app;
 import 'package:uber_clone/components/google_place_item.dart';
 import 'package:uber_clone/constants/api_key.dart' as api;
 import 'package:uber_clone/models/google_place.dart';
 import 'package:uber_clone/models/ride_request.dart';
+import 'package:uber_clone/providers/location_provider.dart';
 import 'package:uuid/uuid.dart';
 
 class Pickup extends StatefulWidget {
@@ -135,186 +137,192 @@ class _PickupState extends State<Pickup> {
     print('build is called');
 
 
-    return Scaffold(
-      body: AnnotatedRegion(
-        value: SystemUiOverlayStyle(
-          statusBarColor: Colors.black,
-        ),
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BackButton(),
-              Container(
-                margin: EdgeInsets.only(left: 43, right: 20),
-                width: MediaQuery.of(context).size.width - 70,
-                color: const Color(0xffededed),
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: Text(formattedDate, style: TextStyle(fontSize: 18),),
-              ),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 15, top: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ClipOval(
-                          child: Container(
+    return WillPopScope(
+      onWillPop: () async {
+        Provider.of<LocationProvider>(context, listen: false).resumeDriverStream();
+        return true;
+      },
+      child: Scaffold(
+        body: AnnotatedRegion(
+          value: SystemUiOverlayStyle(
+            statusBarColor: Colors.black,
+          ),
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BackButton(),
+                Container(
+                  margin: EdgeInsets.only(left: 43, right: 20),
+                  width: MediaQuery.of(context).size.width - 70,
+                  color: const Color(0xffededed),
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Text(formattedDate, style: TextStyle(fontSize: 18),),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 15, top: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ClipOval(
+                            child: Container(
+                              height: 8,
+                              width: 8,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          Container(
+                            height: 60,
+                            width: 2,
+                            color: Colors.black38,
+                          ),
+                          Container(
                             height: 8,
                             width: 8,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                        Container(
-                          height: 60,
-                          width: 2,
-                          color: Colors.black38,
-                        ),
-                        Container(
-                          height: 8,
-                          width: 8,
-                          color: Colors.black87,
-                        )
-                      ],
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(left: 20, right: 20),
-                        width: MediaQuery.of(context).size.width - 70,
-                        color: const Color(0xffededed),
-                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        child: placemark == null ? Text('Waiting for location...', style: TextStyle(fontSize: 18),) : Text( placemark!.street!, style: TextStyle(fontSize: 18),),
+                            color: Colors.black87,
+                          )
+                        ],
                       ),
-                      SizedBox(height: 10,),
-                      Container(
-                        margin: EdgeInsets.only(left: 20, right: 20),
-                        width: MediaQuery.of(context).size.width - 70,
-                        child: TextField(
-                          controller: controller,
-                          onChanged: (String text) {
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          width: MediaQuery.of(context).size.width - 70,
+                          color: const Color(0xffededed),
+                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                          child: placemark == null ? Text('Waiting for location...', style: TextStyle(fontSize: 18),) : Text( placemark!.street!, style: TextStyle(fontSize: 18),),
+                        ),
+                        SizedBox(height: 10,),
+                        Container(
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          width: MediaQuery.of(context).size.width - 70,
+                          child: TextField(
+                            controller: controller,
+                            onChanged: (String text) {
 
-                              if(inputValue.compareTo(text) != 0 || !shouldSend) {
-                                getPlaces(text);
-                                inputValue = text;
-                                if(shouldSend)
-                                  shouldSend = false;
-                              }
-                          },
-                          style: const TextStyle(color: Colors.black),
-                          cursorColor: Colors.teal.shade800,
-                          cursorHeight: 24,
-                          decoration: InputDecoration(
-                            floatingLabelBehavior: FloatingLabelBehavior.never,
-                            labelText: 'Where to?',
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                if (inputValue.compareTo('') == 0)
-                                  return;
-                                controller.clear();
-                                inputValue = '';
-                                places.clear();
-                                setState(() {
+                                if(inputValue.compareTo(text) != 0 || !shouldSend) {
+                                  getPlaces(text);
+                                  inputValue = text;
+                                  if(shouldSend)
+                                    shouldSend = false;
+                                }
+                            },
+                            style: const TextStyle(color: Colors.black),
+                            cursorColor: Colors.teal.shade800,
+                            cursorHeight: 24,
+                            decoration: InputDecoration(
+                              floatingLabelBehavior: FloatingLabelBehavior.never,
+                              labelText: 'Where to?',
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  if (inputValue.compareTo('') == 0)
+                                    return;
+                                  controller.clear();
+                                  inputValue = '';
+                                  places.clear();
+                                  setState(() {
 
-                                });
-                              },
-                              child: Icon(Icons.cancel_outlined, size: 28,),
+                                  });
+                                },
+                                child: Icon(Icons.cancel_outlined, size: 28,),
+                              ),
+                              contentPadding: EdgeInsets.only(left: 5, bottom: 5),
+                              isDense: true,
+                              filled: true,
+                              fillColor: const Color(0xffededed),
+                              border: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              hintText: 'New York',
+                              hintStyle: const TextStyle(color: Colors.grey, fontSize: 18)
+
                             ),
-                            contentPadding: EdgeInsets.only(left: 5, bottom: 5),
-                            isDense: true,
-                            filled: true,
-                            fillColor: const Color(0xffededed),
-                            border: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            hintText: 'New York',
-                            hintStyle: const TextStyle(color: Colors.grey, fontSize: 18)
-
                           ),
-                        ),
-                      )
+                        )
 
-                    ],
-                  )
-                ],
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: places.length,
-                  itemBuilder: (context, int index) =>
-                    InkWell(
-                      onTap: () async{
-
-                        inputValue = '';
-                        controller.text = places.elementAt(index).placeName;
-                        placeToSend = places.elementAt(index);
-                        places.clear();
-                        shouldSend = true;
-                        FocusScope.of(context).unfocus();
-                        setState(() {
-
-                        });
-
-                      },
-                      splashColor: Colors.grey,
-                      child: GooglePlaceItem(place: places.elementAt(index))
-                    ),
-                ),
-              ),
-              shouldSend ?
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: const Color( 0xff286ef0),
-                            padding: EdgeInsets.symmetric(vertical: 20)
-                        ),
-                        onPressed: () async {
-                          await Future.delayed(const Duration(milliseconds: 500));
-                          String? token = await FirebaseMessaging.instance.getToken();
-                          geo.Location loc = (await geo.locationFromAddress(placeToSend!.placeName)).first;
-
-
-                          Map<String, dynamic> map = app.constructRideRequestMap(
-                              dateTime: widget.dateTime,
-                              location: GeoPoint(locationData!.latitude!, locationData!.longitude!),
-                              destination: GeoPoint(loc.latitude, loc.longitude),
-                              token: token!);
-
-                          RideRequest rideRequest = RideRequest.fromMap(map);
-
-                          rideRequest.sendRequest();
-                          showDialog(context: context, builder: (context)  {
-                            return AlertDialog(
-                              title: const Text('Ride request'),
-                              content: const Text('Your ride request is submitted, we will notify you via notification.'),
-                              actions: [
-                                TextButton(onPressed: () => Navigator.pop(context), child: const Text('OK'))
-                              ],
-                            );
-                          });
-                        },
-                        child: Text('Send request', style: TextStyle(fontSize: 24, letterSpacing: 1.0),),
-                      ),
+                      ],
                     )
                   ],
                 ),
-              ): Container()
-            ],
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: places.length,
+                    itemBuilder: (context, int index) =>
+                      InkWell(
+                        onTap: () async{
+
+                          inputValue = '';
+                          controller.text = places.elementAt(index).placeName;
+                          placeToSend = places.elementAt(index);
+                          places.clear();
+                          shouldSend = true;
+                          FocusScope.of(context).unfocus();
+                          setState(() {
+
+                          });
+
+                        },
+                        splashColor: Colors.grey,
+                        child: GooglePlaceItem(place: places.elementAt(index))
+                      ),
+                  ),
+                ),
+                shouldSend ?
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: const Color( 0xff286ef0),
+                              padding: EdgeInsets.symmetric(vertical: 20)
+                          ),
+                          onPressed: () async {
+                            await Future.delayed(const Duration(milliseconds: 500));
+                            String? token = await FirebaseMessaging.instance.getToken();
+                            geo.Location loc = (await geo.locationFromAddress(placeToSend!.placeName)).first;
+
+
+                            Map<String, dynamic> map = app.constructRideRequestMap(
+                                dateTime: widget.dateTime,
+                                location: GeoPoint(locationData!.latitude!, locationData!.longitude!),
+                                destination: GeoPoint(loc.latitude, loc.longitude),
+                                token: token!);
+
+                            RideRequest rideRequest = RideRequest.fromMap(map);
+
+                            rideRequest.sendRequest();
+                            showDialog(context: context, builder: (context)  {
+                              return AlertDialog(
+                                title: const Text('Ride request'),
+                                content: const Text('Your ride request is submitted, we will notify you via notification.'),
+                                actions: [
+                                  TextButton(onPressed: () => Navigator.pop(context), child: const Text('OK'))
+                                ],
+                              );
+                            });
+                          },
+                          child: Text('Send request', style: TextStyle(fontSize: 24, letterSpacing: 1.0),),
+                        ),
+                      )
+                    ],
+                  ),
+                ): Container()
+              ],
+            ),
           ),
         ),
       ),
