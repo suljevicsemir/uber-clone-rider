@@ -47,7 +47,6 @@ dependencies:
   flutter_google_places: ^0.3.0
   intl: ^0.17.0
   geocoder: ^0.2.1
-  google_place: ^0.4.0
   shimmer: ^2.0.0
   device_preview: ^0.7.1
   firebase_messaging: ^10.0.0
