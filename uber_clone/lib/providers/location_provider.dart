@@ -1,0 +1,124 @@
+
+
+
+import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+import 'package:uber_clone/screens/home/home_components/driver_bottom_sheet/driver_bottom_sheet.dart';
+
+
+class LocationProvider extends ChangeNotifier{
+
+
+  Location _location = Location();
+  LocationData? _lastLocation;
+  Completer<GoogleMapController> mapController = Completer();
+  Uint8List? whiteCar, redCar;
+  String? mapStyle;
+  Set<Marker> markers = Set<Marker>();
+  late StreamSubscription<GoogleMapController> locationTracker;
+  late StreamSubscription<QuerySnapshot> driversListener;
+  final BuildContext context;
+  bool _didLoadDrivers = false;
+  int _availableDrivers = 0;
+
+  LocationProvider(this.context) {
+    _loadData(context);
+  }
+
+  Future<void> _loadData(BuildContext context) async {
+    await Future.wait([
+      _loadCarImages(context),
+      _loadMapStyle(context)
+    ]);
+    notifyListeners();
+    _startLocationListener();
+    Future.delayed(const Duration(milliseconds: 300), () => _startDriversListener());
+  }
+
+  void _startDriversListener() {
+
+    driversListener = FirebaseFirestore.instance
+        .collection('driver_locations')
+        .where('status', isEqualTo: true)
+        .limit(50)
+        .snapshots()
+        .listen((QuerySnapshot querySnapshot) {
+            List<DocumentSnapshot> list = querySnapshot.docs;
+            markers.clear();
+
+            for(int i = 0; i < list.length; i++) {
+              DocumentSnapshot snapshot = list[i];
+
+              markers.add(Marker(
+                  markerId: MarkerId(snapshot.id),
+                  position: LatLng( snapshot.get('location').latitude, snapshot.get('location').longitude),
+                  draggable: false,
+                  zIndex: 2,
+                  rotation: snapshot.get('heading'),
+                  anchor: Offset(0.5, 0.5),
+                  icon: snapshot.get('carColor') == 'red ' ? BitmapDescriptor.fromBytes(redCar!) : BitmapDescriptor.fromBytes(whiteCar!),
+                  onTap: () => showModalBottomSheet(
+                  context: context,
+                  builder: (context ) => DriverBottomSheet(driverId: snapshot.id))
+              ));
+            }
+            _availableDrivers = markers.length;
+            notifyListeners();
+        });
+
+    _didLoadDrivers = true;
+  }
+
+  // needs further evaluating, it can become useless
+  void _startLocationListener() {
+    _location.onLocationChanged.listen((LocationData locationData) {
+        _lastLocation = locationData;
+        notifyListeners();
+    });
+  }
+
+  Future<void> _loadCarImages(BuildContext context) async {
+
+    ByteData whiteCarData = await DefaultAssetBundle.of(context).load('assets/images/white_car.png');
+    ByteData redCarData = await DefaultAssetBundle.of(context).load('assets/images/red_car.png');
+
+    ui.Codec whiteCarCodec = await ui.instantiateImageCodec(whiteCarData.buffer.asUint8List(), targetWidth: 120, targetHeight: 90);
+    ui.Codec redCarCodec = await ui.instantiateImageCodec(redCarData.buffer.asUint8List(), targetWidth: 120, targetHeight: 110);
+
+    ui.FrameInfo whiteCarFrameInfo = await whiteCarCodec.getNextFrame();
+    ui.FrameInfo redCarFrameInfo = await redCarCodec.getNextFrame();
+
+    Uint8List whiteCarList = (await whiteCarFrameInfo.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+    Uint8List redCarList = (await redCarFrameInfo.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+
+    whiteCar = whiteCar;
+    redCar = redCarList;
+  }
+
+  Future<void> _loadMapStyle(BuildContext context) async {
+    mapStyle = await DefaultAssetBundle.of(context).loadString('assets/map/style.json');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print('disposing location tracker');
+    locationTracker.cancel().then((value) {
+      print('location tracker disposed');
+    });
+    driversListener.cancel().then((value) => print('drivers listener disposed'));
+  }
+
+  bool get didLoadDrivers => _didLoadDrivers;
+
+  int get availableDrivers => _availableDrivers;
+
+  LocationData? get lastLocation => _lastLocation;
+}

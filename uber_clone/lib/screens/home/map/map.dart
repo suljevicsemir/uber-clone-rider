@@ -37,65 +37,19 @@ class _HomeMapState extends State<HomeMap> {
   bool isFirstRun = true;
 
 
-  Future<void> updateMarkerAndCircle(LocationData data) async{
-    LatLng latLng = LatLng(data.latitude!, data.longitude!);
-    setState(() {
-      marker = Marker(
-        markerId: MarkerId("home"),
-        position: latLng,
-        rotation: data.heading!,
-        draggable: false,
-        zIndex: 2,
-        flat: true,
-        anchor: Offset(0.5, 0.5),
-        icon: BitmapDescriptor.fromBytes(imageData!),
-        onTap: () {}
-      );
-    });
-  }
-
   dynamic x;
 
   @override
   void initState() {
     super.initState();
-
-    /*tracker.onLocationChanged.listen((LocationData? data) async{
-      if(data == null || lastLocation == null)
-        return;
-
-      if(geolocator.Geolocator.distanceBetween(lastLocation!.latitude!, lastLocation!.longitude!, data.latitude!, data.longitude!) < 5)
-        return;
-
-      lastLocation = data;
-        await mapController.future.then((GoogleMapController controller) async {
-          if(data.longitude == null || data.latitude == null )
-            return;
-          double zoomLevel = await controller.getZoomLevel();
-          controller.animateCamera(CameraUpdate.newCameraPosition(
-            CameraPosition(
-              bearing: 0,
-              target: LatLng(data.latitude!, data.longitude!),
-              tilt: 0,
-              zoom: zoomLevel
-            )
-          ));
-          //updateMarkerAndCircle(data);
-        });
-    });*/
-
     getCurrentLocation();
-
   }
 
   Future<void> getCurrentLocation() async {
     await tracker.changeSettings(accuracy: LocationAccuracy.navigation);
     LocationData data = await tracker.getLocation();
-
     _setCurrentData(data);
 
-
-    //updateMarkerAndCircle(data);
   }
 
   Future<void> _setCurrentData(LocationData data) async{
@@ -143,7 +97,8 @@ class _HomeMapState extends State<HomeMap> {
         });
 
         if( FirebaseAuth.instance.currentUser != null) {
-          locations = FirebaseFirestore.instance.collection('driver_locations').where('status', isEqualTo: true).snapshots().listen((QuerySnapshot snapshot) {
+          locations = FirebaseFirestore.instance.collection('driver_locations').
+          where('status', isEqualTo: true).snapshots().listen((QuerySnapshot snapshot) {
             print('osluskivanje');
             List<QueryDocumentSnapshot> list = snapshot.docs;
             Set<Marker> tempMarkers = Set<Marker>();
