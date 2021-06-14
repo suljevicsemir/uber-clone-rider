@@ -1,6 +1,3 @@
-
-
-
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -63,7 +60,7 @@ class LocationProvider extends ChangeNotifier{
                   zIndex: 2,
                   rotation: snapshot.get('heading'),
                   anchor: Offset(0.5, 0.5),
-                  icon: snapshot.get('carColor') == 'red ' ? BitmapDescriptor.fromBytes(redCar!) : BitmapDescriptor.fromBytes(whiteCar!),
+                  icon: snapshot.get("carColor") == 'red' ? BitmapDescriptor.fromBytes(redCar!) : BitmapDescriptor.fromBytes(whiteCar!),
                   onTap: () => showModalBottomSheet(
                   context: context,
                   builder: (context ) => DriverBottomSheet(driverId: snapshot.id))
@@ -76,7 +73,7 @@ class LocationProvider extends ChangeNotifier{
     _didLoadDrivers = true;
   }
 
-  // needs further evaluating, it can become useless
+  //TODO add variable to pause/continue tracking for maximum control
   void _startLocationListener() {
     _location.onLocationChanged.listen((LocationData locationData) {
       if( _firstLocation == null) {
@@ -92,7 +89,7 @@ class LocationProvider extends ChangeNotifier{
     ByteData whiteCarData = await DefaultAssetBundle.of(context).load('assets/images/white_car.png');
     ByteData redCarData = await DefaultAssetBundle.of(context).load('assets/images/red_car.png');
 
-    ui.Codec whiteCarCodec = await ui.instantiateImageCodec(whiteCarData.buffer.asUint8List(), targetWidth: 120, targetHeight: 90);
+    ui.Codec whiteCarCodec = await ui.instantiateImageCodec(whiteCarData.buffer.asUint8List(), targetWidth: 120, targetHeight: 70);
     ui.Codec redCarCodec = await ui.instantiateImageCodec(redCarData.buffer.asUint8List(), targetWidth: 120, targetHeight: 110);
 
     ui.FrameInfo whiteCarFrameInfo = await whiteCarCodec.getNextFrame();

@@ -14,19 +14,8 @@ class HomeMap extends StatefulWidget {
 class _HomeMapState extends State<HomeMap> {
 
   Completer<GoogleMapController> mapController = Completer();
+
   Set<Marker> markers = Set<Marker>();
-
-
-
-
-
-
-  dynamic x;
-
-  late StreamSubscription locations;
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +37,7 @@ class _HomeMapState extends State<HomeMap> {
         mapController.complete(controller);
       },
       zoomControlsEnabled: false,
-      markers: markers,
+      markers: Provider.of<LocationProvider>(context).markers,
       myLocationEnabled: true,
       myLocationButtonEnabled: false,
     );
@@ -59,7 +48,5 @@ class _HomeMapState extends State<HomeMap> {
   @override
   void dispose() {
     super.dispose();
-    locations.cancel();
-    //x.cancel();
   }
 }
