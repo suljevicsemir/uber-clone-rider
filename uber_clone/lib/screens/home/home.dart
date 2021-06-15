@@ -1,6 +1,3 @@
-import 'dart:typed_data';
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -43,18 +40,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
     }
   }
 
-  Future<Uint8List> resizeMapSnapshot(Uint8List snapshot) async {
-    ui.Codec snapshotCodec = await ui.instantiateImageCodec(snapshot, targetWidth: 200, targetHeight: 50);
-    ui.FrameInfo snapshotFrameInfo = await snapshotCodec.getNextFrame();
-    Uint8List list = (await snapshotFrameInfo.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
-    return list;
-  }
-
-
   @override
   Widget build(BuildContext context) {
-
-    //bool expandMap = Provider.of<HomeProvider>(context).isOverlayShown;
 
     return WillPopScope(
       onWillPop: () async {
@@ -74,10 +61,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
           child: Stack(
             fit: StackFit.loose,
             children: [
-
-
-
-
 
               Positioned(
                 top: expandMap ? 470 : 0,
