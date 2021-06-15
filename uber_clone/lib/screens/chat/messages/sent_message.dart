@@ -17,8 +17,8 @@ import 'package:uber_clone/models/message.dart';
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
-          padding: EdgeInsets.all(10),
-          margin: EdgeInsets.only(right: 10, bottom: 5),
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+          margin: EdgeInsets.only(right: 10, bottom: 3),
           decoration: BoxDecoration(
             color: const Color(0xffc8e1fd),
             borderRadius: BorderRadius.circular(20)
@@ -31,8 +31,8 @@ import 'package:uber_clone/models/message.dart';
             crossAxisAlignment: WrapCrossAlignment.end,
             children: [
               Text(message.message, style: TextStyle(color: Colors.black, fontSize: 16), maxLines: 3,),
-              SizedBox(width: 10,),
-              Text(app.formatMessageTime(message.timestamp), style: TextStyle(fontSize: 12),)
+              SizedBox(width: 5,),
+              Text(app.formatMessageTime(message.timestamp), style: TextStyle(fontSize: 11),)
             ],
           )
         ),
