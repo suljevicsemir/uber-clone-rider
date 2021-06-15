@@ -9,6 +9,7 @@ import 'package:uber_clone/screens/home/home_components/ride/ride_now_background
 import 'package:uber_clone/screens/home/home_components/ride/ride_now_icon.dart';
 import 'package:uber_clone/screens/home/home_components/where_to.dart';
 import 'package:uber_clone/screens/home/map/map.dart';
+
 class Home extends StatefulWidget {
   static const String route = '/home';
 

@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:uber_clone/screens/get_started/choose_account.dart';
 class LoginTypePicker extends StatefulWidget {
 
   static const String route = '/pickLoginType';
@@ -83,16 +84,21 @@ class _LoginTypePickerState extends State<LoginTypePicker> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 20,),
+                      //SizedBox(height: 20,),
                       GestureDetector(
                         onTap: () async => Navigator.pushNamed(context, '/chooseAccount'),
                         child: Row(
-                          //crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(vertical: 20),
-                              child: Text('Or connect with social', style: TextStyle(color: Colors.indigoAccent[700], fontWeight: FontWeight.w600),)
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, ChooseAccount.route);
+                              },
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.fromLTRB(0, 30, 10, 30)
+                              ),
+                              child: Text('Or connect with social', style: TextStyle(color: Colors.indigoAccent[700], fontWeight: FontWeight.w600))
                             ),
+
                             Icon(Icons.arrow_right_alt, color: Colors.indigoAccent[700], size: 34,)
                           ],
                         ),
