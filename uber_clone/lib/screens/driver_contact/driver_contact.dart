@@ -41,9 +41,18 @@ class _DriverContactState extends State<DriverContact> with TickerProviderStateM
   Widget build(BuildContext context) {
 
     if( picture == null)
-      return Center(
-        child: CircularProgressIndicator(),
-    );
+      return Scaffold(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 40,
+              width: 40,
+              child: CircularProgressIndicator(),
+            )
+          ],
+    ),
+      );
 
     return Scaffold(
       body: AnnotatedRegion(
