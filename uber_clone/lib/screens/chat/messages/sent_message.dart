@@ -18,7 +18,7 @@ import 'package:uber_clone/models/message.dart';
       children: [
         Container(
           padding: EdgeInsets.all(10),
-          margin: EdgeInsets.only(right: 10, bottom: 10),
+          margin: EdgeInsets.only(right: 10, bottom: 5),
           decoration: BoxDecoration(
             color: const Color(0xffc8e1fd),
             borderRadius: BorderRadius.circular(20)
