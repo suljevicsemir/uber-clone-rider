@@ -80,6 +80,8 @@ class _PickupState extends State<Pickup> {
 
   }
 
+  bool isWaitingResponse = false;
+
 
   @override
   void initState() {
@@ -120,18 +122,6 @@ class _PickupState extends State<Pickup> {
 
   }
 
-
-  static Future<DocumentReference?> sendRequest(RideRequest request) async {
-
-   /* String? token = await FirebaseMessaging.instance.getToken();
-    geo.Location loc = (await geo.locationFromAddress(placeToSend!.placeName)).first;
-
-    */
-    DocumentReference? requestReference = await request.sendRequest();
-    return requestReference;
-  }
-
-
   @override
   Widget build(BuildContext context) {
     print('build is called');
@@ -142,7 +132,24 @@ class _PickupState extends State<Pickup> {
         Provider.of<LocationProvider>(context, listen: false).resumeDriverStream();
         return true;
       },
-      child: Scaffold(
+      child: isWaitingResponse ? Scaffold(
+        body: Container(
+          margin: EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 40,
+                width: 40,
+                child: CircularProgressIndicator()
+              ),
+              SizedBox(height: 20,),
+              Flexible(child: FittedBox(fit: BoxFit.scaleDown, child: Text('Processing your request, please wait...', style: TextStyle(fontSize: 28),)))
+
+            ],
+          ),
+        ),
+      ) :Scaffold(
         body: AnnotatedRegion(
           value: SystemUiOverlayStyle(
             statusBarColor: Colors.black,
@@ -304,8 +311,17 @@ class _PickupState extends State<Pickup> {
 
                             RideRequest rideRequest = RideRequest.fromMap(map);
 
-                            rideRequest.sendRequest();
-                            showDialog(context: context, builder: (context)  {
+                            setState(() {
+                              isWaitingResponse = true;
+                            });
+
+
+                            await rideRequest.sendRequest();
+
+                            setState(() {
+                              isWaitingResponse = false;
+                            });
+                            await showDialog(context: context, builder: (context)  {
                               return AlertDialog(
                                 title: const Text('Ride request'),
                                 content: const Text('Your ride request is submitted, we will notify you via notification.'),
@@ -314,6 +330,8 @@ class _PickupState extends State<Pickup> {
                                 ],
                               );
                             });
+                            Future.delayed(const Duration(milliseconds: 250), () => Navigator.pop(context));
+
                           },
                           child: Text('Send request', style: TextStyle(fontSize: 24, letterSpacing: 1.0),),
                         ),

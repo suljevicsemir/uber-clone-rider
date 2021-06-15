@@ -56,7 +56,7 @@ class ReceivedMessage extends StatelessWidget {
         Container(),
         Container(
           padding: EdgeInsets.all(10),
-          margin: shouldHavePicture ? EdgeInsets.only(bottom: 10, left: 7) :  EdgeInsets.only(left: 39 , bottom: 10),
+          margin: shouldHavePicture ? EdgeInsets.only(bottom: 5, left: 7) :  EdgeInsets.only(left: 39 , bottom: 5),
           decoration: BoxDecoration(
             color: Colors.grey[300],
             borderRadius: BorderRadius.circular(20)

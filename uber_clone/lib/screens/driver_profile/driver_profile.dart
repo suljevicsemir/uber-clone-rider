@@ -57,8 +57,17 @@ class _DriverProfileState extends State<DriverProfile> {
   Widget build(BuildContext context) {
     Driver? driver = Provider.of<DriverProfileProvider>(context).driver;
     if( picture == null || driver == null) {
-      return Center(
-        child: CircularProgressIndicator(),
+      return Scaffold(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 40,
+              width: 40,
+              child: CircularProgressIndicator(),
+            )
+          ],
+        )
       );
     }
 
