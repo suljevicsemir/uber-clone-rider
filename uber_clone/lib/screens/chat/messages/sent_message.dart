@@ -4,12 +4,11 @@ import 'package:uber_clone/models/message.dart';
 @immutable
  class SentMessage extends StatelessWidget{
 
+  final Message message;
+
   const SentMessage({
     required  this.message
   });
-
-  final Message message;
-
 
   @override
   Widget build(BuildContext context) {

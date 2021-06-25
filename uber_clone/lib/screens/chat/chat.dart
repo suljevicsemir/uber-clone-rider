@@ -33,7 +33,7 @@ class _ChatState extends State<Chat> {
   final TextEditingController textController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   File? picture;
-  bool isFirstRun = false;
+  bool isFirstRun = true;
 
   late Driver driver;
   String? variable;
@@ -43,17 +43,9 @@ class _ChatState extends State<Chat> {
     super.initState();
     _scrollChatToBottom();
 
-    setState(() {
-      driver = widget.driver;
-    });
-
-    chat = FirebaseFirestore.instance.collection('chats')
-        .doc('chat146wwBeaSGbod1Ynvn0eMUWmjhI2PqJfYn0UHydWJSUnViveamqf6JR2')
-        .collection('messages').orderBy('timestamp')
-        .limitToLast(20)
-        .snapshots();
 
 
+    driver = widget.driver;
 
   }
 
@@ -67,7 +59,7 @@ class _ChatState extends State<Chat> {
     super.didChangeDependencies();
     print('did change depedencies');
 
-    if( !isFirstRun) {
+    if( isFirstRun) {
       print('first load of the screen');
 
 
@@ -75,11 +67,12 @@ class _ChatState extends State<Chat> {
 
       SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
 
+        print('scheduler is called');
         setState(() {
           picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![widget.driver.id];
-          isFirstRun = true;
+          isFirstRun = false;
           this.chatId = Provider.of<ChatProvider>(context, listen: false).chatId;
-          //chat = FirebaseFirestore.instance.collection('chats').doc(this.chatId).collection('messages').orderBy('timestamp').limitToLast(20).snapshots();
+          chat = FirebaseFirestore.instance.collection('chats').doc(this.chatId).collection('messages').orderBy('timestamp').limit(20).snapshots();
         });
       });
 

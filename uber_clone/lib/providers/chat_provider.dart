@@ -30,22 +30,20 @@ class ChatProvider extends ChangeNotifier {
 
     Map<String, dynamic> snapshot = _buildMessage(message);
 
-     await _instance.runTransaction((transaction) async {
+    _chatReference.doc(chatId).collection('messages').add(snapshot);
 
-       transaction.set(_chatReference.doc(chatId).collection('messages').doc(DateTime.now().millisecondsSinceEpoch.toString()), snapshot);
+    _usersReference.doc(userData.firebaseUserId).collection('chats').doc(chatId).update({
+      chat_list.lastMessage                 : message.message,
+      chat_list.lastMessageTimestamp        : message.timestamp,
+      chat_list.lastMessageSenderFirebaseId : FirebaseAuth.instance.currentUser!.uid
+    });
 
-       transaction.update(_usersReference.doc(userData.firebaseUserId).collection('chats').doc(chatId), {
-         chat_list.lastMessage                 : message.message,
-         chat_list.lastMessageTimestamp        : message.timestamp,
-         chat_list.lastMessageSenderFirebaseId : FirebaseAuth.instance.currentUser!.uid
-       });
+    _driversReference.doc(driver.id).collection('chats').doc(chatId).update({
+      chat_list.lastMessage                 : message.message,
+      chat_list.lastMessageTimestamp        : message.timestamp,
+      chat_list.lastMessageSenderFirebaseId : FirebaseAuth.instance.currentUser!.uid
+    });
 
-       transaction.update(_driversReference.doc(driver.id).collection('chats').doc(chatId), {
-         chat_list.lastMessage                 : message.message,
-         chat_list.lastMessageTimestamp        : message.timestamp,
-         chat_list.lastMessageSenderFirebaseId : FirebaseAuth.instance.currentUser!.uid
-       });
-     });
   }
 
 
