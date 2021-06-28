@@ -118,8 +118,10 @@ class UberRouter {
         );
 
       case Pickup.route:
+        Map<String, dynamic> map = settings.arguments as Map<String, dynamic>;
+
         return MaterialPageRoute(
-          builder: (_) => Pickup(dateTime: settings.arguments as DateTime,)
+          builder: (_) => Pickup(dateTime: map['dateTime'] as DateTime, driverId: map['driverId'],)
         );
 
       case FavoritePlaceSearch.route:

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:uber_clone/components/app_utils.dart' as app;
-import 'package:uber_clone/providers/location_provider.dart';
 import 'package:uber_clone/screens/home/home_components/home_bottom_sheet/sheet_separator.dart';
 import 'package:uber_clone/screens/pickup/pickup.dart';
 class HomeBottomSheet extends StatefulWidget {
@@ -150,8 +148,14 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                   )
               ),
               onPressed: () async {
-                Provider.of<LocationProvider>(context, listen: false).pauseDriverStream();
-                Navigator.pushNamed(context, Pickup.route, arguments: dateTime);
+                //Provider.of<LocationProvider>(context, listen: false).pauseDriverStream();
+                Navigator.pushNamed(
+                    context,
+                    Pickup.route,
+                    arguments: {
+                      'dateTime' : dateTime,
+                      'driverId' : null
+                    });
 
               },
               child: Row(

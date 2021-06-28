@@ -2,10 +2,9 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:uber_clone/models/driver.dart';
-import 'package:uber_clone/providers/location_provider.dart';
 import 'package:uber_clone/screens/driver_profile/components/trips_and_start.dart';
+import 'package:uber_clone/screens/pickup/pickup.dart';
 import 'package:uber_clone/services/firebase/firebase_service.dart';
 
 class DriverBottomSheet extends StatefulWidget {
@@ -121,8 +120,15 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
             Container(
               margin: EdgeInsets.only(left: 10, right: 10, bottom: 15),
               child: ElevatedButton(
-                onPressed: () {
-                 print(Provider.of<LocationProvider>(context, listen: false).lastLocation!.latitude.toString());
+                onPressed: () async{
+                  Navigator.pushNamed(
+                      context,
+                      Pickup.route,
+                      arguments: {
+                        'dateTime' : DateTime.now(),
+                        'driverId' : widget.driverId
+                      });
+
 
                 },
                 style: ElevatedButton.styleFrom(

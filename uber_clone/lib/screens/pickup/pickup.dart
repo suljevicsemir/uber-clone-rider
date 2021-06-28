@@ -10,21 +10,24 @@ import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:location/location.dart' as location;
-import 'package:provider/provider.dart';
 import 'package:uber_clone/components/app_utils.dart' as app;
 import 'package:uber_clone/components/google_place_item.dart';
 import 'package:uber_clone/constants/api_key.dart' as api;
 import 'package:uber_clone/models/google_place.dart';
 import 'package:uber_clone/models/ride_request.dart';
-import 'package:uber_clone/providers/location_provider.dart';
 import 'package:uuid/uuid.dart';
 
 class Pickup extends StatefulWidget {
 
   static const String route = '/pickup';
   final DateTime dateTime;
+  final String? driverId;
 
-  Pickup({required this.dateTime});
+
+  Pickup({
+    required this.dateTime,
+    required this.driverId
+  });
 
   @override
   _PickupState createState() => _PickupState();
@@ -129,7 +132,7 @@ class _PickupState extends State<Pickup> {
 
     return WillPopScope(
       onWillPop: () async {
-        Provider.of<LocationProvider>(context, listen: false).resumeDriverStream();
+        //Provider.of<LocationProvider>(context, listen: false).resumeDriverStream();
         return true;
       },
       child: isWaitingResponse ? Scaffold(
@@ -315,8 +318,7 @@ class _PickupState extends State<Pickup> {
                               isWaitingResponse = true;
                             });
 
-
-                            await rideRequest.sendRequest();
+                            await rideRequest.sendRequest(widget.driverId);
 
                             setState(() {
                               isWaitingResponse = false;

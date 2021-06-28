@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:uber_clone/components/app_utils.dart' as app;
 import 'package:uber_clone/constants/ride_request.dart' as fields;
 import 'package:uber_clone/services/firebase/firebase_service.dart';
 
@@ -41,13 +40,21 @@ class RideRequest{
 
 
 
-  Future<DocumentReference?> sendRequest() async {
-    DateTime dateTime = DateTime.now();
-    print(app.getMonth(dateTime));
-    return await FirebaseFirestore.instance.runTransaction((transaction) async {
-      FirebaseFirestore.instance.collection('ride_requests')
-          .add(_toMap());
-    });
+  Future<DocumentReference?> sendRequest(String? driverId) async {
+
+    if( driverId == null) {
+      return await FirebaseFirestore.instance.runTransaction((transaction) async {
+        FirebaseFirestore.instance.collection('ride_requests')
+            .add(_toMap());
+      });
+    }
+
+    return await FirebaseFirestore.instance
+        .collection('drivers')
+        .doc(driverId)
+        .collection('direct_requests')
+        .add(_toMap());
+
   }
 
 

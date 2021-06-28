@@ -1,6 +1,4 @@
-import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,7 +11,7 @@ class LocationProvider extends ChangeNotifier{
   LatLng? _firstLocation;
   bool _mapReady = false;
 
-  late StreamSubscription<QuerySnapshot> driversListener;
+ // late StreamSubscription<QuerySnapshot> driversListener;
 
 
 
@@ -31,23 +29,23 @@ class LocationProvider extends ChangeNotifier{
     });
   }
 
-  void pauseDriverStream() {
+  /*void pauseDriverStream() {
     driversListener.pause();
-  }
+  }*/
 
-  void resumeDriverStream() {
+  /*void resumeDriverStream() {
     if(driversListener.isPaused) {
       print('resuming driver listener');
       driversListener.resume();
       notifyListeners();
     }
-  }
+  }*/
 
   @override
   void dispose() {
     super.dispose();
     print('Disposing LocationProvider');
-    driversListener.cancel().then((value) => print('drivers listener disposed'));
+    //driversListener.cancel().then((value) => print('drivers listener disposed'));
   }
 
   bool get mapReady => _mapReady;
