@@ -49,13 +49,10 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
   @override
   Widget build(BuildContext context) {
 
-
-
     return Container(
-      height: 450,
       color: const Color(0xff2e2e2e),
       child: driver == null ? Container() :  Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: EdgeInsets.only(top: 5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -66,13 +63,11 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
               backgroundImage: NetworkImage(driver!.profilePictureUrl!),
             ),
             Container(
-              margin: EdgeInsets.only(top: 10),
+              //margin: EdgeInsets.only(top: 10),
               child: Text(driver!.firstName + " " + driver!.lastName,
                 style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.w500, letterSpacing: 1.0)
               ),
             ),
-
-
             Container(
 
               margin: EdgeInsets.only(top: 10),
@@ -90,7 +85,7 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: TripsAndStart(
                   numberOfTrips: driver!.numberOfTrips!,
                   time: time,
@@ -99,7 +94,7 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
                   )
             ),
             //Spacer(),
-            SizedBox(height: 20,),
+           // SizedBox(height: 20,),
             Container(
               margin: EdgeInsets.only(left: 20),
               child: Row(
@@ -121,18 +116,25 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
             ),
             Spacer(),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
               child: ElevatedButton(
                 onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  onPrimary: Colors.black
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Call for ride', style: TextStyle(fontSize: 22),)
+                    Text('Call for ride', style: TextStyle(fontSize: 20),),
+
                   ],
-                )
+                ),
               ),
-            ),
-           // Spacer()
+            )
+
+
+
 
           ],
         ),

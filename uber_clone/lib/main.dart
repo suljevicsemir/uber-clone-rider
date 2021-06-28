@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
 import 'package:uber_clone/components/uber_router.dart';
@@ -62,11 +63,11 @@ class _MyAppState extends State<MyApp> {
           lazy: false,
         ),
         ChangeNotifierProvider(
-          create: (context) => LocationProvider(context),
+          create: (context) => LocationProvider(),
           lazy: false,
         )
       ],
-      child: MaterialApp(
+      child: GetMaterialApp(
         theme: AppTheme.appTheme(),
         initialRoute: AuthenticationWrapper.route,
         onGenerateRoute: UberRouter.generateRoute,
