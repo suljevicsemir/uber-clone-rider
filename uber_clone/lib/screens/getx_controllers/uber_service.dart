@@ -86,7 +86,7 @@ class UberService extends GetxController {
             onTap: () => Get.bottomSheet(
                 DriverBottomSheet(driverId: snapshot.id),
                 isScrollControlled: true,
-            enableDrag: true)
+                enableDrag: true)
         ));
       }
     });

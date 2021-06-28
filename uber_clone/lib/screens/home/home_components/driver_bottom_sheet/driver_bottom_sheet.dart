@@ -2,7 +2,9 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uber_clone/models/driver.dart';
+import 'package:uber_clone/providers/location_provider.dart';
 import 'package:uber_clone/screens/driver_profile/components/trips_and_start.dart';
 import 'package:uber_clone/services/firebase/firebase_service.dart';
 
@@ -48,11 +50,12 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-
+    print( ( 550 / MediaQuery.of(context).size.height));
     return Container(
+      height: 440,
       color: const Color(0xff2e2e2e),
       child: driver == null ? Container() :  Container(
-        margin: EdgeInsets.only(top: 5),
+        margin: EdgeInsets.only(top: 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -63,7 +66,7 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
               backgroundImage: NetworkImage(driver!.profilePictureUrl!),
             ),
             Container(
-              //margin: EdgeInsets.only(top: 10),
+              margin: EdgeInsets.only(top: 10),
               child: Text(driver!.firstName + " " + driver!.lastName,
                 style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.w500, letterSpacing: 1.0)
               ),
@@ -85,7 +88,7 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: TripsAndStart(
                   numberOfTrips: driver!.numberOfTrips!,
                   time: time,
@@ -114,11 +117,14 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
                 ],
               ),
             ),
-            Spacer(),
+           Spacer(),
             Container(
-              margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+              margin: EdgeInsets.only(left: 10, right: 10, bottom: 15),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                 print(Provider.of<LocationProvider>(context, listen: false).lastLocation!.latitude.toString());
+
+                },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.white,
                   onPrimary: Colors.black
