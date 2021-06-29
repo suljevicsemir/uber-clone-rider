@@ -9,6 +9,7 @@ import 'package:uber_clone/providers/location_provider.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/providers/settings/account_settings.dart';
 import 'package:uber_clone/providers/user_data_provider.dart';
+import 'package:uber_clone/screens/track_driver/track_driver.dart';
 import 'package:uber_clone/services/firebase/authentication_service.dart';
 import 'package:uber_clone/theme/theme.dart';
 
@@ -27,12 +28,23 @@ void main()  async{
   runApp(MyApp());
 }
 
+@pragma('vm:entry-point')
+void customEntryPoint() => runApp(
+  MaterialApp(
+    home: TrackDriver(openedFromNotification: true,),
+  )
+);
+
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +90,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
+
+
   }
 }
 

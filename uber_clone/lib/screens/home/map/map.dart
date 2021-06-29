@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
@@ -24,6 +25,14 @@ class _HomeMapState extends State<HomeMap> {
   @override
   void initState() {
     super.initState();
+    
+    Future.delayed(const Duration(seconds: 1), () {
+      FirebaseFirestore.instance
+          .collection('mocking')
+          .add({
+            'field' : 'value'
+          });
+    });
 
   }
 

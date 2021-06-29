@@ -67,7 +67,7 @@ class UberMessagingService:FirebaseMessagingService() {
         val contentTitle: String
         val contentText: String
 
-        // ride arrival
+        /*// ride arrival
         if ( message.data.containsKey("location")) {
             contentTitle = "Your ride is here";
             contentText = message.data["firstName"] + " " + message.data["lastName"] + " is here to pick you up!"
@@ -76,14 +76,16 @@ class UberMessagingService:FirebaseMessagingService() {
         else {
             contentTitle = "Driver answered your request."
             contentText = message.data["firstName"] + " " + message.data["lastName"] + " will pick you up in: " + message.data["expectedArrival"]
-        }
+        }*/
         
         val noticedDriverAction = Intent(this, DriverNoticedReceiver::class.java)
         val trackDriverAction = Intent(this, TrackDriverReceiver::class.java)
 
         noticedDriverAction.putExtra("notificationId", notificationId);
         trackDriverAction.putExtra("notificationId", notificationId);
-
+            
+        trackDriverAction.putExtra("rideId", "unique ajdentifikator")
+        trackDriverAction.putExtra("driverId", "unique drajver")
 
         val driverNoticed:PendingIntent = PendingIntent.getBroadcast(this, 1, noticedDriverAction, PendingIntent.FLAG_UPDATE_CURRENT)
         val trackDriver: PendingIntent = PendingIntent.getBroadcast(this, 2, trackDriverAction, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -91,17 +93,19 @@ class UberMessagingService:FirebaseMessagingService() {
         val builder = NotificationCompat.Builder(this, "RideArrival")
                 .setSmallIcon(R.drawable.app_icon)
                 .setColor(Color.BLACK)
-                .setContentTitle(contentTitle)
-                .setContentText(contentText)
+                .setContentTitle(message.data["title"])
+                .setContentText(message.data["message"])
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setAutoCancel(true)
                 .setContentIntent(PendingIntent.getActivity(this, 0, Intent(), 0))
 
-        if( message.data.containsKey("location")) {
-            builder.addAction(R.drawable.app_icon, "I see the driver", driverNoticed)
-                    .addAction(R.drawable.app_icon, "Track driver location", trackDriver)
-        }
+
+        builder
+            .addAction(R.drawable.app_icon, "I see the driver", driverNoticed)
+            .addAction(R.drawable.app_icon, "Track driver location", trackDriver)
+
         vibrate()
+
         with(NotificationManagerCompat.from(this)) {
             notify(notificationId, builder.build())
 
