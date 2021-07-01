@@ -1,12 +1,14 @@
 
+import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart' as getx;
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/google_place_item.dart';
 import 'package:uber_clone/constants/api_key.dart' as api;
+import 'package:uber_clone/getx_controllers/utils_controller.dart';
 import 'package:uber_clone/models/google_place.dart';
-import 'package:uber_clone/providers/internet_connectivity_provider.dart';
 import 'package:uber_clone/providers/settings/account_settings.dart';
 import 'package:uuid/uuid.dart';
 
@@ -23,6 +25,8 @@ class FavoritePlaceSearch extends StatefulWidget {
 
 class _FavoritePlaceSearchState extends State<FavoritePlaceSearch> {
 
+
+  final UtilsController utilsController = getx.Get.find();
 
 
   final TextEditingController controller = TextEditingController();
@@ -146,7 +150,7 @@ class _FavoritePlaceSearchState extends State<FavoritePlaceSearch> {
                     itemBuilder: (context, int index) =>
                         InkWell(
                           onTap: () async{
-                            if( Provider.of<ConnectivityProvider>(context, listen: false).isConnected()) {
+                            if( utilsController.connectivity.value == ConnectivityResult.wifi || utilsController.connectivity.value == ConnectivityResult.mobile) {
                               await Provider.of<FavoritePlacesProvider>(context, listen: false).setPlace(places.elementAt(index), widget.type);
                               Navigator.pop(context);
                             }

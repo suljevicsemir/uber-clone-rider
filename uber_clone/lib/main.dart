@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
 import 'package:uber_clone/components/uber_router.dart';
-import 'package:uber_clone/providers/internet_connectivity_provider.dart';
+import 'package:uber_clone/getx_controllers/utils_controller.dart';
 import 'package:uber_clone/providers/location_provider.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/providers/settings/account_settings.dart';
@@ -48,8 +48,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-
-
+  UtilsController controller = Get.put(UtilsController());
 
   @override
   Widget build(BuildContext context) {
@@ -76,10 +75,6 @@ class _MyAppState extends State<MyApp> {
           lazy: false,
         ),
         ChangeNotifierProvider(
-          create: (context) => ConnectivityProvider(),
-          lazy: false,
-        ),
-        ChangeNotifierProvider(
           create: (context) => LocationProvider(),
           lazy: false,
         )
@@ -92,12 +87,5 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-
-
-  }
 }
 
