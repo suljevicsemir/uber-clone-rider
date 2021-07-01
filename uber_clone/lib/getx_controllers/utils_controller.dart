@@ -12,6 +12,10 @@ class UtilsController extends GetxController {
 
   UtilsController() {
 
+    // if app is opened while there is no connectivity whatsoever the default listener won't work
+    // when app is opened, we manually check if there is connection, if not snackbar is shown
+    // then after that is finished connectivity listener is started
+
     Connectivity().checkConnectivity().then((ConnectivityResult initialConnectivity) {
 
       if( initialConnectivity == ConnectivityResult.none) {
