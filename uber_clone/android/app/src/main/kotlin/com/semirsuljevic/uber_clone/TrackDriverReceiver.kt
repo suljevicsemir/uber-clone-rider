@@ -24,9 +24,10 @@ class TrackDriverReceiver : BroadcastReceiver() {
 
         val startIntent = Intent(context, CustomLauncher::class.java)
         
-        startIntent.putExtra("rideId", intent.getStringExtra("rideId"))
         startIntent.putExtra("driverId", intent.getStringExtra("driverId"))
-
+        startIntent.putExtra("rideId", intent.getStringExtra("rideId"))
+        startIntent.putExtra("carColor", intent.getStringExtra("carColor"))
+        
         startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
         context.startActivity(startIntent, null)

@@ -5,6 +5,13 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 
+/**
+ * this action button will just open the app with main activity
+ * it has no actual purpose
+ * in the future, it needs to message the driver that the rider
+ * has spotted them
+*/
+
 class DriverNoticedReceiver:BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {

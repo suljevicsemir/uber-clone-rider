@@ -64,51 +64,40 @@ class UberMessagingService:FirebaseMessagingService() {
         val now = Date();
         val notificationId: Int = SimpleDateFormat("ddHHmmss", Locale.US).format(now).toInt();
 
-        val contentTitle: String
-        val contentText: String
 
-        /*// ride arrival
-        if ( message.data.containsKey("location")) {
-            contentTitle = "Your ride is here";
-            contentText = message.data["firstName"] + " " + message.data["lastName"] + " is here to pick you up!"
-        }
-        // driver answered request
-        else {
-            contentTitle = "Driver answered your request."
-            contentText = message.data["firstName"] + " " + message.data["lastName"] + " will pick you up in: " + message.data["expectedArrival"]
-        }*/
-        
         val noticedDriverAction = Intent(this, DriverNoticedReceiver::class.java)
         val trackDriverAction = Intent(this, TrackDriverReceiver::class.java)
 
-        noticedDriverAction.putExtra("notificationId", notificationId);
-        trackDriverAction.putExtra("notificationId", notificationId);
-            
-        trackDriverAction.putExtra("rideId", "unique ajdentifikator")
-        trackDriverAction.putExtra("driverId", "unique drajver")
+        trackDriverAction.putExtra("driverId",       message.data["driverId"])
+        trackDriverAction.putExtra("notificationId", notificationId)
+        trackDriverAction.putExtra("rideId",         message.data["rideId"])
+        trackDriverAction.putExtra("carColor",       message.data["carColor"])
 
+        noticedDriverAction.putExtra("notificationId", notificationId)
+        
         val driverNoticed:PendingIntent = PendingIntent.getBroadcast(this, 1, noticedDriverAction, PendingIntent.FLAG_UPDATE_CURRENT)
         val trackDriver: PendingIntent = PendingIntent.getBroadcast(this, 2, trackDriverAction, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val builder = NotificationCompat.Builder(this, "RideArrival")
                 .setSmallIcon(R.drawable.app_icon)
                 .setColor(Color.BLACK)
-                .setContentTitle(message.data["title"])
-                .setContentText(message.data["message"])
+                .setContentTitle(message.data["notificationTitle"])
+                .setContentText(message.data["notificationContent"])
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setAutoCancel(true)
                 .setContentIntent(PendingIntent.getActivity(this, 0, Intent(), 0))
-
-
-        builder
-            .addAction(R.drawable.app_icon, "I see the driver", driverNoticed)
-            .addAction(R.drawable.app_icon, "Track driver location", trackDriver)
-
+        
+        builder.addAction(R.drawable.app_icon, "Track driver location", trackDriver)
+        
+        // ride arrival, has additional button 
+        // to notify driver that the rider has spotted them
+        if( !message.data.containsKey("expectedArrival")) {
+            builder.addAction(R.drawable.app_icon, "I see the driver", driverNoticed)
+        }
         vibrate()
-
+        
         with(NotificationManagerCompat.from(this)) {
             notify(notificationId, builder.build())
-
         }
     }
 }

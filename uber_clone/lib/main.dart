@@ -29,11 +29,16 @@ void main()  async{
 }
 
 @pragma('vm:entry-point')
-void customEntryPoint() => runApp(
-  MaterialApp(
-    home: TrackDriver(openedFromNotification: true,),
-  )
-);
+void customEntryPoint() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(
+    MaterialApp(
+      home: TrackDriver(openedFromNotification: true,),
+    )
+  );
+}
+
 
 
 class MyApp extends StatefulWidget {
