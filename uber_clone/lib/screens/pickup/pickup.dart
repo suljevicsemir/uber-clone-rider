@@ -132,7 +132,6 @@ class _PickupState extends State<Pickup> {
 
     return WillPopScope(
       onWillPop: () async {
-        //Provider.of<LocationProvider>(context, listen: false).resumeDriverStream();
         return true;
       },
       child: isWaitingResponse ? Scaffold(
