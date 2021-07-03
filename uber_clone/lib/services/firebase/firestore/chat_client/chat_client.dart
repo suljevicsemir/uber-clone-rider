@@ -7,7 +7,6 @@ import 'package:uber_clone/getx_controllers/user_data.dart';
 import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/models/firestore_result.dart';
 import 'package:uber_clone/models/message.dart';
-import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/service_locator.dart';
 import 'package:uber_clone/services/firebase/authentication/authentication_client.dart';
 import 'package:uber_clone/services/firebase/firestore/firestore_client.dart';
@@ -68,18 +67,18 @@ class ChatClient extends FirestoreClient {
   }
 
 
-  Future<FirestoreResult> sendMessage(Message message) async {
+  Future<void> sendMessage(Message message) async {
 
-    chatReference.doc(chatId).collection("messages").add(message.toJson());
+    chatReference.doc(message.chatId).collection("messages").add(message.toJson());
 
 
-    usersReference.doc(userDataController.user.firebaseUserId).collection("chats").doc(chatId).update({
+    usersReference.doc(message.firebaseUserId).collection("chats").doc(message.chatId).update({
       chat_list_fields.lastMessage                  : message.message,
       chat_list_fields.lastMessageTimestamp         : message.timestamp,
       chat_list_fields.lastMessageSenderFirebaseId  : userDataController.user.firebaseUserId
     });
 
-    driversReference.doc(driverId).collection("chats").doc(chatId).update({
+    driversReference.doc(message.driverId).collection("chats").doc(message.chatId).update({
       chat_list_fields.lastMessage                  : message.message,
       chat_list_fields.lastMessageTimestamp         : message.timestamp,
       chat_list_fields.lastMessageSenderFirebaseId  : userDataController.user.firebaseUserId
