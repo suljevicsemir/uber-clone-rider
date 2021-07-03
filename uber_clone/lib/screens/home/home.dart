@@ -9,10 +9,12 @@ import 'package:uber_clone/screens/home/home_components/ride/ride_now_background
 import 'package:uber_clone/screens/home/home_components/ride/ride_now_icon.dart';
 import 'package:uber_clone/screens/home/home_components/where_to.dart';
 import 'package:uber_clone/screens/home/map/map.dart';
-import 'package:uber_clone/screens/track_driver/track_driver.dart';
+import 'package:uber_clone/service_locator.dart';
 
 class Home extends StatefulWidget {
   static const String route = '/home';
+
+
 
   @override
   _HomeState createState() => _HomeState();
@@ -28,6 +30,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
   @override
   void initState() {
     super.initState();
+    setupServiceLocator();
   }
 
 
@@ -112,9 +115,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
         drawer: HomeDrawer(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-                builder: (_) => TrackDriver(openedFromNotification: false)
-            ));
+            //locator.get<ChatClient>().createChatWithDriver();
           },
           child: Icon(Icons.open_in_browser),
         ),

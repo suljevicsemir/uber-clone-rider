@@ -72,7 +72,12 @@ class _ChatState extends State<Chat> {
           picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![widget.driver.id];
           isFirstRun = false;
           this.chatId = Provider.of<ChatProvider>(context, listen: false).chatId;
-          chat = FirebaseFirestore.instance.collection('chats').doc(this.chatId).collection('messages').orderBy('timestamp').limit(20).snapshots();
+          chat = FirebaseFirestore.instance
+              .collection('chats')
+              .doc(this.chatId)
+              .collection('messages')
+              .orderBy('timestamp').limitToLast(190)
+              .snapshots();
         });
       });
 

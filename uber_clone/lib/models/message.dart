@@ -23,4 +23,11 @@ class Message {
       firebaseUserId = snapshot.get(fields.firebaseUserId);
 
 
+  Map<String, dynamic> toJson() => {
+    "message"        : this.message,
+    "timestamp"      : this.timestamp,
+    "firebaseUserId" : this.firebaseUserId
+  };
+
+
 }

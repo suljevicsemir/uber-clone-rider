@@ -14,7 +14,7 @@ class UserDataProvider extends ChangeNotifier {
   UserData? _userData;
 
   UserDataProvider() {
-    print('user data provider konstruktor');
+    
     if(FirebaseAuth.instance.currentUser != null) {
       _loadUser();
     }
