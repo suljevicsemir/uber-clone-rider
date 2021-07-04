@@ -6,10 +6,11 @@ library user_data_storing_fields.globals;
 //last revised 26.2 16:52
 
 String
-    providerUserId = "providerUserId",
-    firstName      = "firstName",
-    lastName       = "lastName",
-    email          = "email",
-    signedInType   = "signedInType",
-    profilePicture = "profilePicture",
-    firebaseUserId = "firebaseUserId";
+    providerUserId          = "providerUserId",
+    firstName               = "firstName",
+    lastName                = "lastName",
+    email                   = "email",
+    signedInType            = "signedInType",
+    profilePictureUrl       = "profilePictureUrl",
+    firebaseUserId          = "firebaseUserId",
+    profilePictureTimestamp = "profilePictureTimestamp";

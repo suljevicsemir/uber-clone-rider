@@ -9,6 +9,7 @@ import 'package:uber_clone/services/firebase/firestore/firestore_client.dart';
 
 class UserSettingsClient extends FirestoreClient {
 
+  UserSettingsClient() : super();
 
   Future<FirestoreResult> createSettings() async {
 

@@ -47,4 +47,5 @@ abstract class FirestoreClient {
 
 
   DocumentReference get accountSettingsReference => _accountSettingsReference.doc(FirebaseService.id);
+  DocumentReference get accountReference => _usersReference.doc(FirebaseService.id);
 }
