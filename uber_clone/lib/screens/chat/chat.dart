@@ -15,7 +15,8 @@ import 'package:uber_clone/screens/chat/messages/received_message.dart';
 import 'package:uber_clone/screens/chat/messages/sent_message.dart';
 import 'package:uber_clone/service_locator.dart';
 import 'package:uber_clone/services/firebase/firebase_service.dart';
-import 'package:uber_clone/services/firebase/firestore/chat_client/chat_client.dart';
+
+import '../../services/firebase/firestore/chat_client.dart';
 
 class Chat extends StatefulWidget {
 
@@ -36,6 +37,7 @@ class _ChatState extends State<Chat> {
   final ScrollController scrollController = ScrollController();
   File? picture;
   bool isFirstRun = true;
+  TextEditingController controller = TextEditingController();
 
   late String chatId;
   String userId = FirebaseAuth.instance.currentUser!.uid;
@@ -56,19 +58,11 @@ class _ChatState extends State<Chat> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print('did change depedencies');
 
     if( isFirstRun) {
-      print('first load of the screen');
-
 
       SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
 
-        print('scheduler is called');
-
-        String userId = FirebaseAuth.instance.currentUser!.uid;
-
-        
         setState(() {
           picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![widget.driver.id];
           isFirstRun = false;
@@ -82,10 +76,11 @@ class _ChatState extends State<Chat> {
         });
       });
 
-      
+      // this was a take on updating the profile picture until FCM
+      // it is functional but not very practical
+      //
 
-
-/*
+      /*
      if(DateTime.now().hour >= 0 && DateTime.now().hour <= 23) {
         SchedulerBinding.instance!.addPostFrameCallback((timeStamp) async {
           print('getting driver document...');
@@ -127,9 +122,6 @@ class _ChatState extends State<Chat> {
       Timer(const Duration(milliseconds: 40), () => _scrollChatToBottom());
     }
   }
-
-
-  TextEditingController controller = TextEditingController();
 
 
   @override
@@ -216,7 +208,6 @@ class _ChatState extends State<Chat> {
   void dispose() {
     super.dispose();
     scrollController.dispose();
-
     controller.dispose();
   }
 }

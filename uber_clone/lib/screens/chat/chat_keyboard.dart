@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:uber_clone/models/message.dart';
 import 'package:uber_clone/service_locator.dart';
 import 'package:uber_clone/services/firebase/authentication/authentication_client.dart';
-import 'package:uber_clone/services/firebase/firestore/chat_client/chat_client.dart';
+
+import '../../services/firebase/firestore/chat_client.dart';
 
 class ChatKeyboard extends StatefulWidget {
 

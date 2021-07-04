@@ -53,8 +53,6 @@ class ChatClient extends FirestoreClient {
       })
       .timeout(const Duration(seconds: 3));
 
-
-
       return FirestoreResult(value: chatHistory);
     }
     on TimeoutException catch(error) {
