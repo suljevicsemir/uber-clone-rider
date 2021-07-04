@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:uber_clone/models/driver.dart';
@@ -49,7 +47,6 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    print( ( 550 / MediaQuery.of(context).size.height));
     return Container(
       height: 440,
       color: const Color(0xff2e2e2e),

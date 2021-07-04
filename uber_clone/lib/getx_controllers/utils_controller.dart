@@ -50,8 +50,6 @@ class UtilsController extends GetxController {
 
         if( result == ConnectivityResult.none) {
 
-          print('About to show offline snackbar');
-
           Get.snackbar(
               '',
               '',
@@ -78,10 +76,9 @@ class UtilsController extends GetxController {
         if( result == ConnectivityResult.wifi || result == ConnectivityResult.mobile) {
 
           if( connectivity.value == ConnectivityResult.none) {
-            print('Last value was none, closing snackbar');
             Get.back();
+
             Future.delayed(const Duration(milliseconds: 400), () {
-              print('showing back online snakcbar');
               Get.snackbar(
                   '',
                   '',
@@ -105,14 +102,11 @@ class UtilsController extends GetxController {
                   )
               );
             });
-
           }
         }
-
         connectivity.value = result;
       });
     });
-
   }
 
   @override

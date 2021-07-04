@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    print('main app rebuilded');
+
     return MultiProvider(
       providers: [
         Provider<AuthenticationService>(
