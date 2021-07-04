@@ -1,6 +1,3 @@
-
-
-
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,10 +9,7 @@ import 'package:uber_clone/user_data_fields.dart' as user_data_fields;
 
 class UserDataClient extends FirestoreClient {
 
-
   UserDataClient(): super();
-
-
 
   Future<FirestoreResult> syncUserData(UserData userData) async {
     try {
@@ -27,31 +21,17 @@ class UserDataClient extends FirestoreClient {
 
      await instance.runTransaction((transaction) async{
        transaction.set(accountReference, {
-         user_data_fields.firstName : userData.firstName,
-         user_data_fields.lastName : userData.lastName,
-         user_data_fields.profilePictureUrl: userData.profilePictureUrl,
-         user_data_fields.signedInType : userData.signedInType.parseSignedInType(),
-         user_data_fields.providerUserId : userData.providerUserId,
-         user_data_fields.email: userData.email
+         user_data_fields.firstName               : userData.firstName,
+         user_data_fields.lastName                : userData.lastName,
+         user_data_fields.profilePictureUrl       : userData.profilePictureUrl,
+         user_data_fields.profilePictureTimestamp : Timestamp.now(),
+         user_data_fields.signedInType            : userData.signedInType.parseSignedInType(),
+         user_data_fields.providerUserId          : userData.providerUserId,
+         user_data_fields.email                   : userData.email
        });
-     });
+     }).timeout(const Duration(seconds: 3));
 
-
-     
-
-
-
-     switch (result.value) {
-       case DocumentSnapshot:
-          if( !(result.value as DocumentSnapshot).exists) {
-            _saveUserData(userData);
-          }
-         break;
-       case TimeoutException:
-
-         break;
-       default:
-     }
+     return FirestoreResult(value: accountReference);
     }
     on TimeoutException catch(error) {
       return FirestoreResult(value: error);
@@ -61,40 +41,17 @@ class UserDataClient extends FirestoreClient {
     }
   }
 
-
-
-  Future<FirestoreResult> _userExists() async {
+  Future<FirestoreResult> loadUser() async {
     try {
-      DocumentSnapshot snapshot = await accountReference.get().timeout(const Duration(seconds: 3));
-      return FirestoreResult(value: snapshot);
-    }
-    on TimeoutException catch(error) {
-      return FirestoreResult(value: error);
-    }
-    on Exception catch(error) {
-      return FirestoreResult(value: error);
-    }
-  }
-
-  Future<FirestoreResult> _saveUserData(UserData userData) async {
-    try {
-      await instance.runTransaction((transaction) async{
-        transaction.set(accountReference, {
-          user_data_fields.firstName : userData.firstName,
-          user_data_fields.lastName : userData.lastName,
-          //user_data_fields.profilePicture: userData.profilePictureUrl,
-          user_data_fields.signedInType : userData.signedInType.parseSignedInType(),
-          user_data_fields.providerUserId : userData.providerUserId,
-          user_data_fields.email: userData.email
-        });
-      });
-      return FirestoreResult(value: accountReference);
+      DocumentSnapshot snapshot = await accountReference.get();
+      return FirestoreResult(value: UserData.fromFirestoreSnapshot(snapshot));
     }
     on TimeoutException catch (error) {
       return FirestoreResult(value: error);
     }
-    on Exception catch ( error) {
+    on Exception catch (error) {
       return FirestoreResult(value: error);
     }
   }
+
 }
