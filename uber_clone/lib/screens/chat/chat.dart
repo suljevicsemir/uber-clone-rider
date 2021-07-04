@@ -2,18 +2,21 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/models/message.dart';
-import 'package:uber_clone/providers/chat_provider.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/screens/chat/chat_app_bar.dart';
 import 'package:uber_clone/screens/chat/chat_keyboard.dart';
 import 'package:uber_clone/screens/chat/messages/received_message.dart';
 import 'package:uber_clone/screens/chat/messages/sent_message.dart';
+import 'package:uber_clone/service_locator.dart';
 import 'package:uber_clone/services/firebase/firebase_service.dart';
+
+import '../../services/firebase/firestore/chat_client.dart';
 
 class Chat extends StatefulWidget {
 
@@ -34,22 +37,20 @@ class _ChatState extends State<Chat> {
   final ScrollController scrollController = ScrollController();
   File? picture;
   bool isFirstRun = true;
+  TextEditingController controller = TextEditingController();
 
-  late Driver driver;
-  String? variable;
+  late String chatId;
+  String userId = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   void initState() {
     super.initState();
     _scrollChatToBottom();
-
-
-
-    driver = widget.driver;
+    chatId = "chat" + (widget.driver.id.compareTo(userId) < 0 ? (widget.driver.id + userId) : (userId + widget.driver.id));
 
   }
 
-  late String chatId;
+
 
 
   late Stream<QuerySnapshot> chat;
@@ -57,34 +58,29 @@ class _ChatState extends State<Chat> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print('did change depedencies');
 
     if( isFirstRun) {
-      print('first load of the screen');
-
-
-
 
       SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
 
-        print('scheduler is called');
         setState(() {
           picture = Provider.of<ProfilePicturesProvider>(context, listen: false).driverProfilePictures![widget.driver.id];
           isFirstRun = false;
-          this.chatId = Provider.of<ChatProvider>(context, listen: false).chatId;
+          
           chat = FirebaseFirestore.instance
               .collection('chats')
-              .doc(this.chatId)
+              .doc(chatId)
               .collection('messages')
               .orderBy('timestamp').limitToLast(190)
               .snapshots();
         });
       });
 
-      String chatId = Provider.of<ChatProvider>(context, listen: false).chatId;
+      // this was a take on updating the profile picture until FCM
+      // it is functional but not very practical
+      //
 
-
-/*
+      /*
      if(DateTime.now().hour >= 0 && DateTime.now().hour <= 23) {
         SchedulerBinding.instance!.addPostFrameCallback((timeStamp) async {
           print('getting driver document...');
@@ -128,9 +124,6 @@ class _ChatState extends State<Chat> {
   }
 
 
-  TextEditingController controller = TextEditingController();
-
-
   @override
   Widget build(BuildContext context) {
     if( picture == null)
@@ -162,7 +155,7 @@ class _ChatState extends State<Chat> {
                   }
                   if( snapshot.data.docs.isEmpty) {
                     //create chat in chats collection and in users-chats
-                    Provider.of<ChatProvider>(context, listen: false).createChat();
+                    locator.get<ChatClient>().createChatWithDriver(widget.driver);
                     return Center(
                       child: Text('No messages with ' + widget.driver.firstName + ' ' + widget.driver.lastName)
                     );
@@ -178,14 +171,6 @@ class _ChatState extends State<Chat> {
                         shrinkWrap: true,
                         itemCount: snapshot.data.docs.length,
                         itemBuilder: (context, index) {
-
-                          DocumentSnapshot x = snapshot.data.docs[index];
-                          if(x.metadata.isFromCache) {
-                            print('from cache: ' + x.get('message'));
-                          }
-                          else {
-                            print('from server: ' + x.get('message'));
-                          }
 
                           return snapshot.data.docs[index].get('firebaseUserId') !=
                               FirebaseService.id ?
@@ -210,7 +195,10 @@ class _ChatState extends State<Chat> {
               ),
             ),
           ),
-          ChatKeyboard(),
+          ChatKeyboard(
+            chatId: chatId,
+            driverId: widget.driver.id,
+          ),
         ],
       )
     );
@@ -220,7 +208,6 @@ class _ChatState extends State<Chat> {
   void dispose() {
     super.dispose();
     scrollController.dispose();
-
     controller.dispose();
   }
 }

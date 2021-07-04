@@ -1,12 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:uber_clone/models/message.dart';
-import 'package:uber_clone/providers/chat_provider.dart';
-import 'package:uber_clone/services/firebase/firebase_service.dart';
+import 'package:uber_clone/service_locator.dart';
+import 'package:uber_clone/services/firebase/authentication/authentication_client.dart';
+
+import '../../services/firebase/firestore/chat_client.dart';
 
 class ChatKeyboard extends StatefulWidget {
+
+  final String chatId;
+  final String driverId;
+
+  ChatKeyboard({
+    required this.chatId,
+    required this.driverId
+  });
+
   @override
   _ChatKeyboardState createState() => _ChatKeyboardState();
 }
@@ -73,8 +83,13 @@ class _ChatKeyboardState extends State<ChatKeyboard> {
                   padding: const EdgeInsets.all(8),
                   color: Colors.black87,
                   onPressed: () async {
-
-                    Provider.of<ChatProvider>(context, listen: false).sendMessage(Message(message: textController.text, timestamp: Timestamp.now(), firebaseUserId: FirebaseService.id));
+                    locator.get<ChatClient>().sendMessage(
+                        Message(
+                          message: textController.text,
+                          timestamp: Timestamp.now(),
+                          firebaseUserId: locator.get<AuthenticationClient>().id,
+                          chatId: widget.chatId,
+                          driverId: widget.driverId));
                     textController.clear();
                   },
                   icon: const Icon(Icons.send,)
