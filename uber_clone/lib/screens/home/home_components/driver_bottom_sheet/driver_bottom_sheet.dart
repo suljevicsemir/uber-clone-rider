@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/screens/driver_profile/components/trips_and_start.dart';
 import 'package:uber_clone/screens/pickup/pickup.dart';
-import 'package:uber_clone/services/firebase/firebase_service.dart';
+
 
 class DriverBottomSheet extends StatefulWidget {
 
@@ -30,7 +30,7 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
 
     //fetch driver
     Future.delayed(const Duration(milliseconds: 100), () async {
-      FirebaseService.firestoreInstance.collection('drivers').doc(widget.driverId).get().then((DocumentSnapshot driverSnapshot) {
+      FirebaseFirestore.instance.collection('drivers').doc(widget.driverId).get().then((DocumentSnapshot driverSnapshot) {
         //Map<String, String> map = driverSnapshot.get("rating");
 
         driver = Driver.fromSnapshot(driverSnapshot);

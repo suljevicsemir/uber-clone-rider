@@ -10,7 +10,6 @@ import 'package:uber_clone/models/google_sign_result.dart';
 import 'package:uber_clone/models/signed_in_type.dart';
 import 'package:uber_clone/models/user_data.dart';
 import 'package:uber_clone/services/cached_data/temp_directory_service.dart';
-import 'package:uber_clone/services/firebase/firebase_service.dart';
 import 'package:uber_clone/services/firebase/ride_verification_service.dart';
 import 'package:uber_clone/services/firebase/storage/storage_provider.dart';
 import 'package:uber_clone/services/firebase/uber_auth.dart';
@@ -34,9 +33,8 @@ class GoogleLoginProvider extends ChangeNotifier{
   Future<void> _signOut() async {
 
     await googleSignIn.signOut();
-    if(FirebaseService.currentUser != null) {
-      await FirebaseService.authInstance.signOut();
-    }
+    await FirebaseAuth.instance.signOut();
+
   }
 
   Future<UserData?> signIn() async{
@@ -49,7 +47,7 @@ class GoogleLoginProvider extends ChangeNotifier{
       progress.accountAuthentication = true;
       notifyListeners();
 
-      await FirebaseService.authInstance.signInWithCredential(credential);
+      await FirebaseAuth.instance.signInWithCredential(credential);
 
       progress.uberSignIn = true;
       notifyListeners();
