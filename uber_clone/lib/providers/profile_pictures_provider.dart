@@ -8,7 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uber_clone/services/cached_data/temp_directory_service.dart';
-import 'package:uber_clone/services/firebase/firebase_service.dart';
+import 'package:uber_clone/services/firebase/authentication/authentication_client.dart';
 import 'package:uber_clone/services/firebase/storage/storage_provider.dart';
 
 class ProfilePicturesProvider extends ChangeNotifier{
@@ -78,7 +78,7 @@ class ProfilePicturesProvider extends ChangeNotifier{
     // no need for transactions
 
     await FirebaseFirestore.instance.collection('chats').doc(chatId).update({
-      FirebaseService.id : url
+      AuthenticationClient.id : url
     });
   notifyListeners();
 

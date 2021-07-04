@@ -87,7 +87,7 @@ class _ChatKeyboardState extends State<ChatKeyboard> {
                         Message(
                           message: textController.text,
                           timestamp: Timestamp.now(),
-                          firebaseUserId: locator.get<AuthenticationClient>().id,
+                          firebaseUserId: AuthenticationClient.id,
                           chatId: widget.chatId,
                           driverId: widget.driverId));
                     textController.clear();

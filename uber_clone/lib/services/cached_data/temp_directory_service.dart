@@ -4,14 +4,14 @@ import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:uber_clone/services/firebase/firebase_service.dart';
+import 'package:uber_clone/services/firebase/authentication/authentication_client.dart';
 
 
 class TempDirectoryService {
 
    Future<File?> loadUserPicture() async {
     final Directory temp = await getTemporaryDirectory();
-    final File profilePicture = File('${temp.path}/${FirebaseService.id}');
+    final File profilePicture = File('${temp.path}/${AuthenticationClient.id}');
 
     //profile picture is in the temp directory
     if(await profilePicture.exists()) {

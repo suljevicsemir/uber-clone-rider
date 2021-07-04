@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uber_clone/constants/ride_request.dart' as fields;
-import 'package:uber_clone/services/firebase/firebase_service.dart';
+import 'package:uber_clone/services/firebase/authentication/authentication_client.dart';
 
 @immutable
 class RideRequest{
@@ -27,7 +27,7 @@ class RideRequest{
     String token = map['token'];
 
     return RideRequest(
-      riderId: FirebaseService.id,
+      riderId: AuthenticationClient.id,
       timestamp: Timestamp.now(),
       startInterval: Timestamp.fromDate(dateTime),
       endInterval: Timestamp.fromDate(dateTime.add(const Duration(minutes: 10))),

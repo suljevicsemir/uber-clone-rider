@@ -5,9 +5,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:uber_clone/service_locator.dart';
 import 'package:uber_clone/services/firebase/authentication/authentication_client.dart';
-import 'package:uber_clone/services/firebase/firebase_service.dart';
 
 abstract class FirestoreClient {
   final FirebaseFirestore instance = FirebaseFirestore.instance;
@@ -35,7 +33,7 @@ abstract class FirestoreClient {
   }
 
   DocumentReference getUserChat(String chatId) {
-    return _driversReference.doc(locator.get<AuthenticationClient>().id).collection("chats").doc(chatId);
+    return _driversReference.doc(AuthenticationClient.id).collection("chats").doc(chatId);
   }
 
   CollectionReference get driversReference => _driversReference;
@@ -46,6 +44,6 @@ abstract class FirestoreClient {
 
 
 
-  DocumentReference get accountSettingsReference => _accountSettingsReference.doc(FirebaseService.id);
-  DocumentReference get accountReference => _usersReference.doc(FirebaseService.id);
+  DocumentReference get accountSettingsReference => _accountSettingsReference.doc(AuthenticationClient.id);
+  DocumentReference get accountReference => _usersReference.doc(AuthenticationClient.id);
 }

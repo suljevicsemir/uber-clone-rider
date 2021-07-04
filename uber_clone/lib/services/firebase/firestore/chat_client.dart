@@ -7,7 +7,6 @@ import 'package:uber_clone/getx_controllers/user_data.dart';
 import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/models/firestore_result.dart';
 import 'package:uber_clone/models/message.dart';
-import 'package:uber_clone/service_locator.dart';
 import 'package:uber_clone/services/firebase/authentication/authentication_client.dart';
 import 'package:uber_clone/services/firebase/firestore/firestore_client.dart';
 
@@ -23,7 +22,7 @@ class ChatClient extends FirestoreClient {
 
   Future<FirestoreResult> createChatWithDriver(Driver driver) async {
 
-    String userId = locator.get<AuthenticationClient>().id;
+    String userId = AuthenticationClient.id;
     String chatId = "chat" + (driver.id.compareTo(userId) < 0 ? (driver.id + userId) : (userId + driver.id));
 
     try {

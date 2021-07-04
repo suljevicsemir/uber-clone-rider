@@ -7,7 +7,7 @@ import 'package:uber_clone/models/driver.dart';
 import 'package:uber_clone/models/message.dart';
 import 'package:uber_clone/providers/profile_pictures_provider.dart';
 import 'package:uber_clone/screens/driver_profile/driver_profile.dart';
-import 'package:uber_clone/services/firebase/firebase_service.dart';
+import 'package:uber_clone/services/firebase/authentication/authentication_client.dart';
 
 class ReceivedMessage extends StatelessWidget {
 
@@ -32,7 +32,7 @@ class ReceivedMessage extends StatelessWidget {
 
     bool isNextSent = false;
     if( nextMessage != null) {
-      isNextSent = nextMessage!.firebaseUserId == FirebaseService.id;
+      isNextSent = nextMessage!.firebaseUserId == AuthenticationClient.id;
     }
     bool shouldHavePicture = isNextSent || isLast;
 

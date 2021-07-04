@@ -6,9 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseService {
 
-  static String get id {
-    return FirebaseAuth.instance.currentUser!.uid;
-  }
+
 
   static FirebaseAuth get authInstance {
     return FirebaseAuth.instance;

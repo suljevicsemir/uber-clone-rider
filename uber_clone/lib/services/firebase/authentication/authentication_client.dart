@@ -14,7 +14,7 @@ class AuthenticationClient {
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   // is only used when the user is logged in
-  String get id => _instance.currentUser!.uid;
+  static String get id => FirebaseAuth.instance.currentUser!.uid;
 
   
 

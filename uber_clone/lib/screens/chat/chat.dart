@@ -14,7 +14,7 @@ import 'package:uber_clone/screens/chat/chat_keyboard.dart';
 import 'package:uber_clone/screens/chat/messages/received_message.dart';
 import 'package:uber_clone/screens/chat/messages/sent_message.dart';
 import 'package:uber_clone/service_locator.dart';
-import 'package:uber_clone/services/firebase/firebase_service.dart';
+import 'package:uber_clone/services/firebase/authentication/authentication_client.dart';
 
 import '../../services/firebase/firestore/chat_client.dart';
 
@@ -173,7 +173,7 @@ class _ChatState extends State<Chat> {
                         itemBuilder: (context, index) {
 
                           return snapshot.data.docs[index].get('firebaseUserId') !=
-                              FirebaseService.id ?
+                              AuthenticationClient.id ?
                           ReceivedMessage(
                             message: Message.fromSnapshot(
                                 snapshot.data.docs[index]),
