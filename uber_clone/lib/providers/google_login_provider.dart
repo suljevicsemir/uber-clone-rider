@@ -141,7 +141,7 @@ class GoogleLoginProvider extends ChangeNotifier{
       user_data_fields.firstName : payloadMap["given_name"],
       user_data_fields.lastName  : payloadMap["family_name"],
       user_data_fields.email     : account.email,
-      user_data_fields.profilePicture : account.photoUrl,
+      user_data_fields.profilePictureUrl : account.photoUrl,
       user_data_fields.providerUserId : account.id,
       user_data_fields.signedInType : SignedInType.Google.parseSignedInType(),
       user_data_fields.firebaseUserId : FirebaseAuth.instance.currentUser!.uid

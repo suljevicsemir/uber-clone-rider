@@ -18,7 +18,7 @@ class UserData {
       email = map[globals.email],
       providerUserId = map[globals.providerUserId],
       firebaseUserId = map[globals.firebaseUserId],
-      profilePictureUrl = map[globals.profilePicture],
+      profilePictureUrl = map[globals.profilePictureUrl],
       signedInType = map[globals.signedInType] == "Google" ? SignedInType.Google : SignedInType.Facebook;
 
 
@@ -31,7 +31,7 @@ class UserData {
       email = snapshot[globals.email],
       providerUserId = snapshot[globals.providerUserId],
       firebaseUserId = snapshot.id,
-      profilePictureUrl = snapshot[globals.profilePicture],
+      profilePictureUrl = snapshot[globals.profilePictureUrl],
       signedInType = snapshot[globals.signedInType] == "Google" ? SignedInType.Google : SignedInType.Facebook;
 
 

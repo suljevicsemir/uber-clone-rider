@@ -14,22 +14,14 @@ class UserSettingsClient extends FirestoreClient {
   Future<FirestoreResult> createSettings() async {
 
     try {
-      print('Before creating settings');
 
-
-      DocumentSnapshot data = await accountSettingsReference
-          .get()
-          .timeout(const Duration(seconds: 3));
-
-
-
+      DocumentSnapshot data = await accountSettingsReference.get().timeout(const Duration(seconds: 3));
 
       if ( data.exists) {
         print("Account settings already exist, will not be overwritten");
         return FirestoreResult(value: data);
       }
 
-      print('BEFORE SETTING');
       await instance.runTransaction((transaction) async {
         transaction.set(accountSettingsReference, {
           settings_fields.isNightTimeOnly : false,
@@ -38,11 +30,7 @@ class UserSettingsClient extends FirestoreClient {
 
       });
 
-
-
-      print('AFTER SETTING');
-
-      return FirestoreResult(value: data );
+      return FirestoreResult(value: accountSettingsReference );
     }
     on TimeoutException catch (error) {
       return FirestoreResult(value: error);
