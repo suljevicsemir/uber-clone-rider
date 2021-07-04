@@ -68,7 +68,6 @@ class ChatClient extends FirestoreClient {
 
     chatReference.doc(message.chatId).collection("messages").add(message.toJson());
 
-
     usersReference.doc(message.firebaseUserId).collection("chats").doc(message.chatId).update({
       chat_list_fields.lastMessage                  : message.message,
       chat_list_fields.lastMessageTimestamp         : message.timestamp,
@@ -80,7 +79,6 @@ class ChatClient extends FirestoreClient {
       chat_list_fields.lastMessageTimestamp         : message.timestamp,
       chat_list_fields.lastMessageSenderFirebaseId  : userDataController.user.firebaseUserId
     });
-
   }
 
 

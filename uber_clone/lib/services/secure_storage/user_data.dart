@@ -30,9 +30,26 @@ class SecureStorage {
     return UserData.fromLocalStorage(data);
   }
 
-  Future<void> updateProfileUrl(String url) async {
-    await _flutterSecureStorage.write(key: user_data_fields.firebaseUserId, value: url);
+
+
+  Future<void> updateFirstName({required String firstName}) async {
+    await _flutterSecureStorage.write(key: user_data_fields.firstName, value: firstName);
   }
+
+  Future<void> updateLastName({required String lastName}) async {
+    await _flutterSecureStorage.write(key: user_data_fields.firstName, value: lastName);
+  }
+
+  Future<void> updateEmail({ required String email}) async {
+    await _flutterSecureStorage.write(key: user_data_fields.email, value: email);
+  }
+
+  Future<void> updateProfilePictureUrl({required String profilePictureUrl}) async {
+    await _flutterSecureStorage.write(key: user_data_fields.profilePictureUrl, value: profilePictureUrl);
+  }
+
+
+
 
 
 }
