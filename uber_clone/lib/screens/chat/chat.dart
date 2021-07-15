@@ -20,8 +20,7 @@ class Chat extends StatefulWidget {
   static const route = '/chat';
 
   final Driver driver;
-
-
+  
   Chat({required this.driver});
 
   @override

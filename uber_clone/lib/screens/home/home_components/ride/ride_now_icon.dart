@@ -7,10 +7,10 @@ class RideNowIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 155,
-      right: 0,
+      top: 130,
+      right: 25,
       child: Transform.rotate(
-          angle: - math.pi / 4,
+          angle: math.pi / 4,
           child: Image.asset('assets/images/white_car.png', scale: 9.5,)
       ),
     );

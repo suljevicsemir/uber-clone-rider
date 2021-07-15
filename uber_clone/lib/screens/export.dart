@@ -1,11 +1,20 @@
 export 'account_settings/account_settings.dart';
+export 'account_settings/account_settings.dart';
+export 'account_settings/ride_verification/ride_verification.dart';
 export 'chat/chat.dart';
 export 'chats/chats.dart';
 export 'driver_contact/driver_contact.dart';
 export 'driver_profile/driver_profile.dart';
 export 'edit_account/edit_account.dart';
+export 'favorites_search/where_to_search.dart';
+export 'get_started/choose_account.dart';
+export 'get_started/choose_login_type.dart';
 export 'get_started/get_started.dart';
+export 'google_login/google_login.dart';
 export 'help/help.dart';
 export 'home/home.dart';
+export 'pickup/pickup.dart';
+export 'track_driver/track_driver.dart';
 export 'user_trips/trips.dart';
 export 'wallet/wallet.dart';
+
