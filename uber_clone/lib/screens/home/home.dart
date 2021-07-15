@@ -9,7 +9,6 @@ import 'package:uber_clone/screens/home/home_components/ride/ride_now_background
 import 'package:uber_clone/screens/home/home_components/ride/ride_now_icon.dart';
 import 'package:uber_clone/screens/home/home_components/where_to.dart';
 import 'package:uber_clone/screens/home/map/map.dart';
-import 'package:uber_clone/screens/track_driver/track_driver.dart';
 
 class Home extends StatefulWidget {
   static const String route = '/home';
@@ -110,14 +109,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
           ),
         ),
         drawer: HomeDrawer(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-                builder: (_) => TrackDriver(openedFromNotification: false)
-            ));
-          },
-          child: Icon(Icons.open_in_browser),
-        ),
       ),
     );
   }

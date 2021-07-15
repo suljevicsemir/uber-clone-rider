@@ -31,9 +31,14 @@ class TrackDriver extends StatefulWidget {
 
 class _TrackDriverState extends State<TrackDriver> {
 
-  static const platform = const MethodChannel("RideIdFetcher");
-  String? carColor;
+  String? carColor, mapStyle;
   Uint8List? car;
+  CameraPosition? initialCameraPosition;
+  Completer<GoogleMapController> mapController = Completer<GoogleMapController>();
+  Marker? marker;
+
+
+  static const platform = const MethodChannel("RideIdFetcher");
 
   Future<String?> getRideId() async {
     try {
@@ -64,18 +69,11 @@ class _TrackDriverState extends State<TrackDriver> {
     }
   }
 
-  CameraPosition? initialCameraPosition;
-  Completer<GoogleMapController> mapController = Completer<GoogleMapController>();
-
-  Marker? marker;
-
-  String? mapStyle;
 
   @override
   void initState() {
     super.initState();
 
-    //
     if(widget.openedFromNotification) {
 
       getDriverId().then((String? driverId) async{

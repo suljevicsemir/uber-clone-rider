@@ -4,18 +4,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_clone/components/authentication_wrapper.dart';
 import 'package:uber_clone/models/driver.dart';
-import 'package:uber_clone/providers/chat_provider.dart';
-import 'package:uber_clone/providers/driver_profile_provider.dart';
-import 'package:uber_clone/providers/google_login_provider.dart';
-import 'package:uber_clone/providers/settings/ride_verification.dart';
-import 'package:uber_clone/providers/trips_provider.dart';
-import 'package:uber_clone/screens/account_settings/ride_verification/ride_verification.dart';
+import 'package:uber_clone/providers/export.dart';
 import 'package:uber_clone/screens/export.dart';
-import 'package:uber_clone/screens/favorites_search/where_to_search.dart';
-import 'package:uber_clone/screens/get_started/choose_account.dart';
-import 'package:uber_clone/screens/get_started/choose_login_type.dart';
-import 'package:uber_clone/screens/google_login/google_login.dart';
-import 'package:uber_clone/screens/pickup/pickup.dart';
 
 
 class UberRouter {
@@ -30,7 +20,9 @@ class UberRouter {
         Map<String, dynamic> map = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (_) => ChangeNotifierProvider(
-              create: (context) => ChatProvider(driver: map['driver'], userData: map['user']),
+              create: (context) => ChatProvider(
+                  driver: map['driver'],
+                  userData: map['user']),
               child: Chat(driver: map['driver'] as Driver)
           )
         );
